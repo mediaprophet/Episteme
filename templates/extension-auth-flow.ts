@@ -19,7 +19,7 @@ export async function loginWithExtension(oidcIssuer: string) {
       oidcIssuer,
       redirectUrl,
       clientName: "Solid WebClip Extension",
-      handleRedirect: (authUrl) => {
+      handleRedirect: (authUrl: string) => {
         // 3. Instead of redirecting the tab, we pass the URL to the Chrome Identity API
         chrome.identity.launchWebAuthFlow(
           {

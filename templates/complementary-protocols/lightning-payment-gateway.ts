@@ -16,8 +16,10 @@ async function verifyMacaroonAndPreimage(macaroon: string, preimage: string): Pr
 }
 
 export const requireMicropayment = async (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'];
-  
+  // Normalize header: it may be string or string[]
+  const rawHeader = req.headers['authorization'];
+  const authHeader = Array.isArray(rawHeader) ? rawHeader[0] : rawHeader;
+
   if (!authHeader || !authHeader.startsWith('LSAT ')) {
     // Return 402 Payment Required with the invoice
     return res.status(402).json({

@@ -17,7 +17,7 @@ async function runMigration() {
   await session.login({
     oidcIssuer: 'https://solidcommunity.net',
     clientName: 'Webize Migration Script',
-    handleRedirect: (url) => {
+    handleRedirect: (url: string) => {
       console.log(`\nPlease visit this URL to authenticate the migration script:\n${url}\n`);
     }
   });

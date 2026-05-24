@@ -9,7 +9,7 @@ import { Session } from '@inrupt/solid-client-authn-browser';
  */
 
 export default class SolidPlugin extends Plugin {
-  solidSession: Session;
+  solidSession!: Session;
 
   async onload() {
     this.solidSession = new Session();
@@ -48,7 +48,7 @@ export default class SolidPlugin extends Plugin {
       redirectUrl: 'obsidian://solid-auth',
       clientName: 'Obsidian Solid Sync',
       // 4. IMPORTANT: Do NOT redirect the Obsidian window. Open the system browser instead.
-      handleRedirect: (authUrl) => {
+      handleRedirect: (authUrl: string) => {
         window.open(authUrl); 
       }
     });

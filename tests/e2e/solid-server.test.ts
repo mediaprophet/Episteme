@@ -1,8 +1,9 @@
 import { describe, it, beforeAll, afterAll, expect } from 'vitest';
+import type { ChildProcess } from 'child_process';
 import { startLocalCSS, stopLocalCSS } from '../../utils/testing/setup-local-css.js';
 
 describe('E2E Solid Server Integration', () => {
-  let cssProcess;
+  let cssProcess: ChildProcess | null = null;
 
   beforeAll(async () => {
     console.log('🚀 Starting E2E Solid Server test environment...');
