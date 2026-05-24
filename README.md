@@ -11,7 +11,7 @@ This repository provides modular rules, specific deployment constraints, and sem
 > [!NOTE]
 > **Foundational Interoperability vs. Feature Sets:** While alternative architectures for decentralized data and identity exist and may offer various specialized features, there remains a fundamental requirement for a shared, globally interoperable standard for the "social web." W3C Solid represents the maturation of decades of collective research and open standards development. It provides the essential, baseline interoperability layer to ensure that data is not siloed by applications, allowing different human-centric interfaces to securely interact with the same underlying personal data graphs.
 
-Most modern software reduces humans to rows in a database or commercial assets. This toolkit actively resists that paradigm. Built on **W3C Solid**, this architecture enforces digital agency and sovereignty through:
+Most modern software reduces humans to rows in a database or commercial assets. This toolkit actively resists that paradigm. Built on **W3C Solid**, this architecture provides digital (online) support for human agency, dignity, and human rights through:
 1. **Redefining Digital Identity:** Rather than reducing human existence to corporate profiles or platform tokens, we distinguish clearly between:
    - **Identifiers (The Objective Pointer):** A WebID is an objective URI pointing to a profile document. It is a technical pointer and locator in a global web of data, not the human person.
    - **Authentication (The Gatekeeper):** Solid-OIDC and cryptographic DPoP tokens prove *possession* and *control* of the identifier. They establish a protocol-level proof of key ownership, not proof of selfhood.
