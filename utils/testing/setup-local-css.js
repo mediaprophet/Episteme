@@ -1,24 +1,40 @@
 import { spawn } from 'child_process';
 import { setTimeout as sleep } from 'timers/promises';
 
+/**
+ * Starts an ephemeral Community Solid Server for E2E tests with robust health checking.
+ */
+
 let cssProcess = null;
 
-async function isServerReady(port) {
-  const url = `http://localhost:${port}/.well-known/solid`;
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 2000);
+async function isServerReady(port = 3001) {
+  const urls = [
+    `http://localhost:${port}/`,
+    `http://localhost:${port}/.well-known/solid`
+  ];
 
-    const response = await fetch(url, {
-      signal: controller.signal,
-      method: 'HEAD',
-    });
+  for (const url of urls) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-    clearTimeout(timeout);
-    return response.ok;
-  } catch {
-    return false;
+      const response = await fetch(url, {
+        method: 'GET',
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      console.log(`[Health Check] ${url} → ${response.status}`);
+
+      if (response.ok || response.status === 404) {
+        return true;
+      }
+    } catch (err) {
+      // Ignore connection errors during startup
+    }
   }
+  return false;
 }
 
 export async function startLocalCSS(port = 3001) {
@@ -28,37 +44,42 @@ export async function startLocalCSS(port = 3001) {
 
       cssProcess = spawn('npx', [
         '@solid/community-server',
-        '-p', port.toString(),
-        '-l', 'info'
+        '--port', port.toString(),
+        '--loggingLevel', 'info'
       ], {
         stdio: 'inherit',
         env: { ...process.env, FORCE_JAVA: 'true' }
       });
 
       cssProcess.on('error', (err) => {
-        console.error('❌ Failed to start CSS process:', err);
+        console.error('❌ Failed to spawn CSS process:', err);
         reject(err);
       });
 
-      const MAX_WAIT = 30000;
-      const CHECK_INTERVAL = 800;
+      const MAX_WAIT = 120000; // 2 minutes for CI
+      const CHECK_INTERVAL = 1000;
       let elapsed = 0;
+
+      console.log('⏳ Waiting for CSS to start...');
 
       while (elapsed < MAX_WAIT) {
         if (await isServerReady(port)) {
-          console.log(`✅ Community Solid Server is ready on port ${port}`);
+          console.log(`✅ Community Solid Server ready on http://localhost:${port}`);
           resolve(cssProcess);
           return;
         }
 
         await sleep(CHECK_INTERVAL);
         elapsed += CHECK_INTERVAL;
+
+        if (elapsed % 10000 === 0) {
+          console.log(`⏳ Still waiting... (${Math.round(elapsed/1000)}s)`);
+        }
       }
 
       console.error('❌ CSS failed to start within timeout');
       if (cssProcess) cssProcess.kill();
-      reject(new Error(`Community Solid Server did not start within ${MAX_WAIT}ms`));
-
+      reject(new Error(`CSS did not start within ${MAX_WAIT}ms`));
     } catch (error) {
       console.error('❌ Error starting CSS:', error);
       if (cssProcess) cssProcess.kill();
@@ -72,7 +93,7 @@ export async function stopLocalCSS() {
     console.log('🛑 Stopping Community Solid Server...');
     cssProcess.kill();
     cssProcess = null;
-    await sleep(1000);
+    await sleep(2000);
     console.log('✅ Server stopped.');
   }
 }
