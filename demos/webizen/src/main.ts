@@ -30,17 +30,21 @@ const adpDnsOutput = document.getElementById('adp-dns-output') as HTMLElement;
 const adpDnsCode = document.getElementById('adp-dns-code') as HTMLElement;
 
 // Project Co-Stewardship Elements
-const openProjectModalBtn  = document.getElementById('open-project-modal-btn') as HTMLButtonElement;
-const projectModal         = document.getElementById('project-modal') as HTMLElement;
-const projectNameInput     = document.getElementById('project-name') as HTMLInputElement;
-const projectDescInput     = document.getElementById('project-description') as HTMLTextAreaElement;
-const projectHomepageInput = document.getElementById('project-homepage') as HTMLInputElement;
-const coStewardSelect      = document.getElementById('co-steward-select') as HTMLSelectElement;
-const projectPolicySelect  = document.getElementById('project-policy-select') as HTMLSelectElement;
-const projectValuesSelect  = document.getElementById('project-values-select') as HTMLSelectElement;
-const cancelProjectBtn     = document.getElementById('cancel-project-btn') as HTMLButtonElement;
-const mintProjectBtn       = document.getElementById('mint-project-btn') as HTMLButtonElement;
-const projectListEl        = document.getElementById('project-list') as HTMLElement;
+const openProjectModalBtn    = document.getElementById('open-project-modal-btn') as HTMLButtonElement;
+const projectModal           = document.getElementById('project-modal') as HTMLElement;
+const projectNameInput       = document.getElementById('project-name') as HTMLInputElement;
+const projectDescInput       = document.getElementById('project-description') as HTMLTextAreaElement;
+const projectHomepageInput   = document.getElementById('project-homepage') as HTMLInputElement;
+const coStewardSelect        = document.getElementById('co-steward-select') as HTMLSelectElement;
+const projectPolicySelect    = document.getElementById('project-policy-select') as HTMLSelectElement;
+const projectValuesSelect    = document.getElementById('project-values-select') as HTMLSelectElement;
+const projectProviderSelect  = document.getElementById('project-provider-select') as HTMLSelectElement;
+const providerDetailsContainer = document.getElementById('provider-details-container') as HTMLElement;
+const providerNameInput      = document.getElementById('provider-name') as HTMLInputElement;
+const providerUriInput       = document.getElementById('provider-uri') as HTMLInputElement;
+const cancelProjectBtn       = document.getElementById('cancel-project-btn') as HTMLButtonElement;
+const mintProjectBtn         = document.getElementById('mint-project-btn') as HTMLButtonElement;
+const projectListEl          = document.getElementById('project-list') as HTMLElement;
 
 let currentSession: any;
 let targetAgentForAgreement: Contact | null = null;
@@ -169,9 +173,23 @@ openProjectModalBtn.addEventListener('click', () => {
   projectModal.classList.remove('hidden');
 });
 
+projectProviderSelect.addEventListener('change', () => {
+  if (projectProviderSelect.value === 'other') {
+    providerDetailsContainer.classList.remove('hidden');
+  } else {
+    providerDetailsContainer.classList.add('hidden');
+  }
+});
+
 cancelProjectBtn.addEventListener('click', () => {
   projectModal.classList.add('hidden');
   projectNameInput.value = '';
+  projectDescInput.value = '';
+  projectHomepageInput.value = '';
+  projectProviderSelect.value = 'self';
+  providerDetailsContainer.classList.add('hidden');
+  providerNameInput.value = '';
+  providerUriInput.value = '';
 });
 
 mintProjectBtn.addEventListener('click', async () => {
@@ -180,6 +198,10 @@ mintProjectBtn.addEventListener('click', async () => {
   const homepageUrl = projectHomepageInput.value.trim();
   const selectedOptions = Array.from(coStewardSelect.selectedOptions);
   const stewards = selectedOptions.map(opt => opt.value);
+  
+  const providerType = projectProviderSelect.value as 'self' | 'other';
+  const providerName = providerNameInput.value.trim();
+  const providerUri = providerUriInput.value.trim();
 
   if (!projectName) {
     alert("Please enter a project name.");
@@ -187,6 +209,10 @@ mintProjectBtn.addEventListener('click', async () => {
   }
   if (stewards.length === 0) {
     alert("Please select at least one co-steward from the address book.");
+    return;
+  }
+  if (providerType === 'other' && !providerName) {
+    alert("Please enter the name of the hosting platform/organisation.");
     return;
   }
 
@@ -203,7 +229,12 @@ mintProjectBtn.addEventListener('click', async () => {
       coStewardsWebIds: stewards,
       policyType:       projectPolicySelect.value as 'co-authorship' | 'delegated',
       valueConstraint:  projectValuesSelect.value,
+      providerType,
+      providerName:     providerType === 'other' ? providerName : undefined,
+      providerUri:      providerType === 'other' && providerUri ? providerUri : undefined,
     });
+
+    const providerLabel = providerType === 'self' ? 'Self (Personal Pod)' : providerName;
 
     alert(`Project '${projectName}' minted as doap:Project + schema:Project with ODRL & HEF equity graph on your Pod!`);
 
@@ -216,7 +247,7 @@ mintProjectBtn.addEventListener('click', async () => {
         ${description ? `<p style="font-size:0.85rem; color:var(--text-secondary); margin: 0.3rem 0;">${description}</p>` : ''}
         <small style="color: var(--text-secondary);">
           ODRL: <strong>${projectPolicySelect.value}</strong> &nbsp;|&nbsp;
-          Rights: <strong>${projectValuesSelect.value}</strong> &nbsp;|&nbsp;
+          Host: <strong>${providerLabel}</strong> &nbsp;|&nbsp;
           Co-Stewards: <strong>${stewards.length}</strong>
         </small>
         ${homepageUrl ? `<br/><a href="${homepageUrl}" target="_blank" style="font-size:0.8rem; color:var(--accent-color);">${homepageUrl}</a>` : ''}
@@ -235,5 +266,9 @@ mintProjectBtn.addEventListener('click', async () => {
   projectNameInput.value = '';
   projectDescInput.value = '';
   projectHomepageInput.value = '';
+  projectProviderSelect.value = 'self';
+  providerDetailsContainer.classList.add('hidden');
+  providerNameInput.value = '';
+  providerUriInput.value = '';
 });
 

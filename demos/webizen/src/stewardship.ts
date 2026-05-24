@@ -46,6 +46,9 @@ export interface StewardshipProjectInput {
   coStewardsWebIds: string[];
   policyType: 'co-authorship' | 'delegated';
   valueConstraint: string; // e.g. 'UDHR', 'CRC', 'CRPD'
+  providerType: 'self' | 'other';
+  providerName?: string;
+  providerUri?: string;
 }
 
 // ─── Value Constraint → UN Instrument URI map ─────────────────────────────────
@@ -78,6 +81,9 @@ export async function createCoStewardshipProject(
     coStewardsWebIds,
     policyType,
     valueConstraint,
+    providerType,
+    providerName,
+    providerUri,
   } = input;
 
   const projectId  = `project-${Date.now()}`;
@@ -113,6 +119,26 @@ export async function createCoStewardshipProject(
     .addUrl(`${ODRL}hasPolicy`,  `#${policyId}`)
     // HEF claim procedure link
     .addUrl(`${HEF_CLAIMS}hasClaimProcess`, `#${claimId}`);
+
+  // Platform Hosting Provider
+  let providerThing: any = null;
+  if (providerType === 'self') {
+    projectBuilder = projectBuilder.addUrl(`${SCHEMA}hostingProvider`, creatorWebId);
+  } else {
+    const providerSubject = providerUri || `#provider`;
+    projectBuilder = projectBuilder.addUrl(`${SCHEMA}hostingProvider`, providerSubject);
+
+    // Build the nested provider details as a schema:Organization resource
+    let providerBuilder = providerUri
+      ? buildThing(createThing({ url: providerUri }))
+      : buildThing(createThing({ name: 'provider' }));
+
+    providerBuilder = providerBuilder
+      .addUrl(`${RDF}type`, `${SCHEMA}Organization`)
+      .addStringNoLocale(`${SCHEMA}name`, providerName || 'Unnamed Provider');
+
+    providerThing = providerBuilder.build();
+  }
 
   // doap:homepage and schema:url (optional)
   if (homepageUrl) {
@@ -193,6 +219,9 @@ export async function createCoStewardshipProject(
   dataset = setThing(dataset, licenseThing);
   dataset = setThing(dataset, claimThing);
   dataset = setThing(dataset, costThing);
+  if (providerThing) {
+    dataset = setThing(dataset, providerThing);
+  }
 
   // Mint to Pod: /projects/<id>.ttl
   const storageUrl = new URL(creatorWebId).origin + `/projects/${projectId}.ttl`;

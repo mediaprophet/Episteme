@@ -140,6 +140,7 @@ describe('SHACL Shape Discovery & Validation', () => {
       const thing = buildThing({ url: resourceUri })
         .addUrl('http://usefulinc.com/ns/doap#name', 'My Project')
         .addUrl('http://usefulinc.com/ns/doap#maintainer', 'https://pod.example/alice#me')
+        .addUrl('https://schema.org/hostingProvider', 'https://pod.example/alice#me')
         .build();
       
       let dataset = createSolidDataset();
@@ -154,7 +155,7 @@ describe('SHACL Shape Discovery & Validation', () => {
       const resourceUri = 'https://pod.example/project1';
       const shapeUri = 'https://raw.githubusercontent.com/mediaprophet/Episteme/main/utils/shapes/project-shape.ttl';
 
-      // Missing doap:maintainer
+      // Missing doap:maintainer and schema:hostingProvider
       const thing = buildThing({ url: resourceUri })
         .addUrl('http://usefulinc.com/ns/doap#name', 'My Project')
         .build();
@@ -165,6 +166,7 @@ describe('SHACL Shape Discovery & Validation', () => {
       const result = await validateResource(resourceUri, dataset, shapeUri);
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('SHACL Violation: doap:maintainer must point to a maintainer WebID.');
+      expect(result.errors).toContain('SHACL Violation: schema:hostingProvider must point to a hosting provider WebID/IRI.');
     });
 
     it('should fall back to data-driven structure validation if no shape is found', async () => {

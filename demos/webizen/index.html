@@ -132,6 +132,20 @@
               <option value="CRPD">Convention on the Rights of Persons with Disabilities (CRPD)</option>
             </select>
 
+            <label for="project-provider-select">Platform Provider <small style="color:var(--text-secondary);">(schema:hostingProvider)</small></label>
+            <select id="project-provider-select" style="width: 100%;">
+              <option value="self">Self (Personal / Host on my Pod)</option>
+              <option value="other">Other (Platform or Organisation)</option>
+            </select>
+
+            <div id="provider-details-container" class="hidden" style="margin-top: 0.5rem; border-left: 2px solid var(--accent-color); padding-left: 10px;">
+              <label for="provider-name">Provider Name <span style="color:#c084fc;">*</span></label>
+              <input type="text" id="provider-name" placeholder="e.g. Webizen Coop" style="width: 100%; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: white; font-family: var(--font-sans); margin-bottom: 0.5rem;">
+
+              <label for="provider-uri">Provider URI / WebID</label>
+              <input type="url" id="provider-uri" placeholder="https://coop.example/profile/card#me" style="width: 100%; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: white; font-family: var(--font-sans);">
+            </div>
+
             <div class="modal-actions">
               <button id="cancel-project-btn" class="btn secondary-btn">Cancel</button>
               <button id="mint-project-btn" class="btn primary-btn">Mint Project Graph</button>

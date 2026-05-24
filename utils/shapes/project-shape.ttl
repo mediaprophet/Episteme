@@ -93,6 +93,14 @@ ep:ProjectShape
         sh:nodeKind sh:IRI ;
         sh:minCount 1 ;
         sh:message  "prov:wasAttributedTo must link to the creator's WebID." ;
+    ] ;
+
+    # ── Hosting Provider ──────────────────────────────────────────────────────
+    sh:property [
+        sh:path     schema:hostingProvider ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+        sh:message  "Project must specify a schema:hostingProvider IRI." ;
     ] .
 
 # ─── ODRL Policy Shape ────────────────────────────────────────────────────────

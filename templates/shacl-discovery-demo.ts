@@ -165,6 +165,10 @@ export async function validateResource(
     if (!maintainer) {
       errors.push("SHACL Violation: doap:maintainer must point to a maintainer WebID.");
     }
+    const provider = getUrl(thing, "https://schema.org/hostingProvider");
+    if (!provider) {
+      errors.push("SHACL Violation: schema:hostingProvider must point to a hosting provider WebID/IRI.");
+    }
   }
 
   return {
