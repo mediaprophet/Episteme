@@ -84,6 +84,7 @@ This project maintains specialized rule files in `/.agents/rules/` for deep-dive
 - `solid-permissions.md`: Rules enforcing the `universalAccess` API to safely bridge WAC and ACP systems.
 - `solid-ui-binding.md`: Rules for handling asynchronous data fetching, latency, and graceful degradation in UI components.
 - `solid-vocabularies.md`: Rules forbidding custom JSON keys and enforcing the use of standard ontologies.
+- `solid-data-modelling.md`: RDF triples, Turtle syntax, vocabulary reuse, and graph database modelling guidelines.
 - `solid-testing.md`: Rules instructing the AI to test against a local `Community Solid Server` (CSS).
 - `solid-shape-trees.md`: RDF validation using Shape Trees and SHACL.
 - `solid-notifications.md`: Real-time updates via WebSockets and Webhooks.
