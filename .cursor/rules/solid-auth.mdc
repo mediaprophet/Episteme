@@ -1,0 +1,34 @@
+---
+description: Authentication (Solid-OIDC, DPoP), session handling, and access control (WAC/ACP via universalAccess) rules in W3C Solid.
+globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+alwaysApply: false
+---
+# Solid Authentication and Access Control Rules
+
+Solid applications authenticate users via WebIDs and Solid-OIDC, and govern access control using Web Access Control (WAC) or Access Control Policies (ACP).
+
+## 1. Authentication & Session Management
+- **No Custom JWTs:** Never implement custom JWT handlers or standard OAuth2 flows. Solid Identity Providers (IdPs) require compliant Solid-OIDC flows.
+- **DPoP (Proof-of-Possession):** Ensure DPoP tokens are used in all network requests to bind tokens to the client and prevent replay attacks.
+- **Session API (adhere to stack in AGENTS.md):**
+  - **Inrupt (`@inrupt/solid-client-authn-browser` / `solid-client-authn-node`):**
+    - You must manage the active Session instance.
+    - Always call `handleIncomingRedirect({ restorePreviousSession: true })` on app load/init.
+    - Capture the authenticated `fetch` function from the active session and pass it to all `@inrupt/solid-client` calls.
+  - **LDO (`@ldo/solid-react`):**
+    - Wrap the application root in `<BrowserSolidLdoProvider>`.
+    - Use the `useSolidAuth()` hook in components to retrieve session state, WebID, login, and logout.
+- **WebID Discovery:** The WebID (a URI) is the entry point. Always query the WebID profile document to discover resource storage roots (`pim:storage`) and type indexes dynamically; never assume hardcoded storage paths.
+
+## 2. Access Control & Permissions
+- **Never Write Raw ACL/ACP Graph Data:** Do not attempt to read/write `.acl` files or ACP ACR graphs directly using RDF operations.
+- **Default to `universalAccess`:** Use the `universalAccess` API from `@inrupt/solid-client` for agent and public access sharing. It automatically detects and bridges WAC and ACP systems.
+- **Access Modes:** Explicitly specify all boolean flags: `read`, `append`, `write`, `controlRead`, `controlWrite`.
+- **Append vs Write:** Use `append: true` (with `write: false`) for inboxes and public write-only folders (like Linked Data Notifications inboxes) to let clients add resources without permission to modify or delete existing ones.
+- **Least Privilege:** Apply permissions to the narrowest possible resource URL. Verify target WebIDs before sharing access.
+
+## 3. Platform-Specific Target Constraints
+- **Browser Extensions (MV3):** Use `chrome.identity.launchWebAuthFlow` for the OAuth flow and store tokens securely using `chrome.storage.local`.
+- **Obsidian Plugins:** Handle redirect loops back into Obsidian using the custom protocol handler `obsidian://`.
+- **Headless/IoT Daemons:** Authenticate autonomously using Client Credentials Grant. Cache the tokens locally, regenerating on expiration.
+- **Mobile Native & Desktop Electron:** Polyfill cryptographic functions for DPoP generation. Catch redirects using native OS-level deep linking / loopback servers.

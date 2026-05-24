@@ -1,0 +1,39 @@
+---
+description: Rules for RDF graph data modeling, Turtle serialization, ontology reuse, stack selection, and validation (SHACL/Shape Trees) in W3C Solid.
+globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.ttl", "**/*.json"]
+alwaysApply: false
+---
+# Solid RDF, Vocabularies, and Data Validation Rules
+
+All data in the Solid ecosystem is modeled as Linked Data graphs in RDF (Triples: Subject, Predicate, Object), decoupled from applications. 
+
+## 1. Stack Selection (adhere to stack in AGENTS.md)
+- **If `@inrupt/solid-client`:**
+  - Immutability and pure functions. Fetch `SolidDataset`s, extract `Thing`s, mutate/build with `setThing`, save via `saveSolidDatasetAt`.
+  - Pass the authenticated `fetch` function from the session to all data operations.
+- **If `LDO` (@ldo/solid-react / Linked Data Objects):**
+  - Uses ShEx schemas to generate TypeScript interfaces. Interact with data as standard JSON-like JS proxy objects (e.g., mutate fields directly and call commit).
+- **If `Soukai Solid`:**
+  - Active-Record ODM. Extend `SolidModel` and use typical active record methods (e.g. `Profile.find`, `.save()`).
+
+## 2. Turtle Serialization Rules
+- **Prefix Declarations:** Always define standard `@prefix` declarations at the top of Turtle documents.
+- **Chaining:** Use semicolons (`;`) to chain multiple predicates for the same subject; use commas (`,`) for multiple objects under the same predicate.
+- **Type Shorthand:** Use `a` as the shorthand for `rdf:type`.
+
+## 3. Well-Known Vocabularies & Ontology Reuse
+- **Never Hallucinate Predicates:** Do not invent arbitrary JSON keys or private property IRIs (e.g., `my-app:userName`). Reuse standard W3C and industry ontologies:
+  - **FOAF** (`http://xmlns.com/foaf/0.1/`): for profiles, people, and social graphs (e.g. `foaf:name`, `foaf:knows`).
+  - **VCARD** (`http://www.w3.org/2006/vcard/ns#`): for contact details (e.g. `vcard:fn`, `vcard:hasPhoto`, `vcard:hasEmail`).
+  - **SCHEMA** (`http://schema.org/`): for metadata, creative works, organizations, projects (e.g. `schema:Person`, `schema:Date`).
+  - **LDP** (`http://www.w3.org/ns/ldp#`): for containers and file descriptors (e.g. `ldp:Container`, `ldp:contains`).
+  - **SOLID** (`http://www.w3.org/ns/solid/terms#`): for private/public type indexes, account info.
+  - **PIM** (`http://www.w3.org/ns/pim/space#`): for storage roots (`pim:storage`).
+  - **DCTERMS** (`http://purl.org/dc/terms/`): for generic metadata (e.g. `dct:created`, `dct:modified`).
+- Use `@inrupt/vocab-common-rdf` and `@inrupt/vocab-solid` helper libraries.
+
+## 4. SHACL & Shape Trees
+- **No JSON Schema:** Never validate Solid RDF datasets using JSON Schema (`ajv`, etc.). Use SHACL (`rdf-validate-shacl`) or Shape Trees.
+- **Open Shapes:** Maintain the Open World Assumption. Never use `sh:closed true` unless strictly required for security/system designs. Other apps must be able to enrich resources.
+- **Link Shapes to Resources:** Declare governing shape trees or shapes in resource metadata or `Link: <shape-uri>; rel="describedby"` headers so clients can dynamically discover schemas.
+- **Graceful Fallbacks:** If validation fails, do not crash. Log validation errors and render a degraded UI with the fields that *are* present.

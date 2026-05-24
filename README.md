@@ -88,7 +88,11 @@ Open `AGENTS.md` and declare your technological stack so the AI knows exactly wh
 - **Deployment Target:** `mobile-native`
 
 ### Step 3: Inject the Context into your IDE/AI
-If using **Antigravity**, **Cursor**, or **Windsurf**, the system will natively detect the `.agents/rules/` folder. For IDEs like **VSCode (Copilot)**, keep `AGENTS.md` open in a tab and `@-mention` the file. If using web-based LLMs, upload the rules folder.
+This repository features out-of-the-box support for modern AI-assisted IDEs:
+- **Antigravity:** Native compatibility via modular rules under `.agents/rules/`.
+- **Cursor:** Automatically loads the custom `.mdc` rules files in `.cursor/rules/` (`solid-core.mdc`, `solid-data.mdc`, `solid-auth.mdc`, `solid-modes.mdc`) based on active file extensions, as well as the root-level legacy `.cursorrules` file.
+- **Windsurf:** Automatically reads the root `.windsurfrules` file to apply the core Solid directives and coordinate system modes during code editing.
+- **Other IDEs (VSCode Copilot, Web LLMs, etc.):** Keep `AGENTS.md` open in an active tab and `@-mention` the file or the `.agents/rules/` directory when prompting.
 
 ### Step 4: Trigger a Mode
 Start your conversation.

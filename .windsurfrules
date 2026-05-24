@@ -1,0 +1,42 @@
+# Windsurf Project Rules: Episteme W3C Solid Development
+
+This file defines project-specific rules and system modes for Windsurf AI agents developing within the Episteme repository.
+
+## 🛑 PRE-FLIGHT CHECK
+Before writing any code or analyzing modular rules, check the `custom-addons/` directory. Any custom instructions there (such as specialized authentication setups or blockchain hooks) completely override standard W3C Solid rules.
+
+## 1. Core Development Directives
+- **RDF Graph Database Modeling:** All data is Linked Data graphs modeled in RDF (triples of Subject-Predicate-Object). Do not use traditional relational database concepts, SQL, or local application database stores. Use absolute web URLs (IRIs) to link resources.
+- **Decentralized Identity:** Authenticate using WebIDs and Solid-OIDC. Applications must not cache user credentials or profile state permanently.
+- **Dynamic Pod Storage Discovery:** Never hardcode paths like `/my-app/data.ttl`. Query the user's WebID profile (`pim:storage`) or Type Indexes at runtime to locate datasets.
+- **Standard Vocabularies Only:** Never invent custom JSON keys or property IRIs. Reuse standard vocabularies (FOAF, VCARD, SCHEMA, LDP, PIM, DCTERMS) and their corresponding `@inrupt/vocab-common-rdf` constants.
+- **Open Shapes Validation:** Use SHACL shapes (`rdf-validate-shacl`) or Shape Trees for schema validation. Avoid JSON Schema. Do not seal shapes with `sh:closed true` unless strictly required, maintaining the Open World Assumption.
+
+## 2. Active Stack Definition
+Check `AGENTS.md` to see which library is declared for:
+- **Authentication:** Inrupt (`@inrupt/solid-client-authn-browser` / `node`) OR LDO (`@ldo/solid-react`).
+- **Data Manipulation:** Inrupt (`@inrupt/solid-client`) OR LDO (`ldo`) OR Soukai (`soukai-solid`).
+
+## 3. Legal and Terminology Boundaries (semantic-dictionary.json)
+Consult `semantic-dictionary.json` to ensure alignment with human rights and legal personhood:
+- **People are not Assets:** Respect human dignity and legal personhood; do not reduce natural persons to corporate asset schemas.
+- **No Data Property/Ownership:** Frame access control as "Agency" or "Access Control Rights", not "Data Ownership".
+- **Rule of Law:** Support decentralized architectures that operate within and strengthen the Rule of Law. Do not suggest anti-governance schemas.
+- **Micropayments:** Use micropayments (e.g. Lightning, Solana) only for compensating infrastructure costs (storage, bandwidth); never monetize personal data.
+
+## 4. Windsurf Agent Trigger Modes
+Pivoting to specialized modes when you detect these trigger phrases:
+- **App Architect Mode** (`"Design a new app"`, `"Enter Architect Mode"`): Halt code generation. Run a Q&A spec design session and output `functional-spec.md` and `technical-spec.md`.
+- **Refactoring Mode** (`"Review this codebase"`, `"Enter Refactoring Mode"`): Audit existing code for modularity, vocabulary constants, and permissions. Do not write new features.
+- **Webize Mode** (`"Webize this project"`, `"Webize [component]"`): Transition legacy client-server state to decentralized RDF graph fetching and WebID auth.
+- **Data Liberation Mode** (`"Liberate this data"`, `"Transform this [CSV/PDF/ZIP]"`): Parse siloed/unstructured files and map them to standard RDF, discarding legacy API tokens.
+- **Ontology Creation Mode** (`"Create ontology"`, `"Map this ontology"`): Construct personal/natural-world ontologies using SHACL validation shapes.
+
+## 5. Modular Rule Index
+For deep-dive topics, consult:
+- `.agents/rules/solid-auth.md` (Authentication and sessions)
+- `.agents/rules/solid-data.md` (Dataset CRUD operations)
+- `.agents/rules/solid-permissions.md` (WAC/ACP via universalAccess)
+- `.agents/rules/solid-vocabularies.md` (Standard RDF vocabs)
+- `.agents/rules/solid-shape-trees.md` (SHACL & validation)
+- `.agents/rules/target-platforms/` (Browser extension, Electron, Obsidian, Mobile, IoT guidelines)

@@ -1,0 +1,42 @@
+# Episteme W3C Solid App Development Rules
+
+This file guides Cursor AI and other LLM developer agents in building decentralized Solid applications in the Episteme repository.
+
+## 🛑 PRE-FLIGHT CHECK
+Before writing any code or reading rules, check `custom-addons/`. Any custom instructions there (e.g. custom authentication, blockchain integrations) completely override the vanilla W3C Solid rules below.
+
+## 1. Core Directives
+1. **No Relational/SQL Database Thinking:** All data is Linked Data modeled in RDF graphs. Use URIs/IRIs instead of numeric IDs or foreign keys to link resources.
+2. **Decentralized Identity:** Authenticate via WebIDs and Solid-OIDC. Never store WebID profiles or session credentials permanently on application servers.
+3. **Dynamic Discovery:** Never hardcode storage endpoints (e.g., `/my-app/data.ttl`). Resolve storage locations dynamically from the user's WebID profile (`pim:storage`) or Type Indexes.
+4. **Vocabulary Reuse:** Do not invent arbitrary JSON keys or property IRIs. Reuse standard vocabularies like FOAF, VCARD, SCHEMA, LDP, PIM, and DCTERMS.
+5. **No JSON Schema:** Use SHACL shapes (`rdf-validate-shacl`) or Shape Trees for data validation. Do not use JSON Schema.
+
+## 2. Active Stack
+Check `AGENTS.md` for the declared libraries:
+- **Authentication:** Inrupt (`@inrupt/solid-client-authn-browser` / `node`) OR LDO (`@ldo/solid-react`).
+- **Data Manipulation:** Inrupt (`@inrupt/solid-client`) OR LDO (`ldo`) OR Soukai (`soukai-solid`).
+
+## 3. Linguistic Boundaries (semantic-dictionary.json)
+Adhere strictly to the legal and terminology boundaries in `semantic-dictionary.json`:
+- **People are not Assets:** Avoid commercial CRM mapping for humans; respect legal personhood and dignity.
+- **No Data Ownership:** Frame data access as "Agency", "Access Control Rights", or "Data Portability", not "Ownership" or "Property".
+- **Rule of Law:** Frame decentralized capabilities as tools that operate within the Rule of Law to protect civil rights and systemic accountability. Do not support anti-governance architectures.
+- **Micropayments:** Micropayments (e.g., Lightning, Solana) are only for infrastructure cost compensation; never monetize identity or personal data.
+
+## 4. System Modes & Triggers
+Pivoting to specialized modes when you detect these trigger phrases:
+- **App Architect Mode** (`"Design a new app"`, `"Enter Architect Mode"`): Halt code generation and run a Q&A spec design session.
+- **Refactoring Mode** (`"Review this codebase"`, `"Enter Refactoring Mode"`): Audit existing code for modularity, vocabulary constants, and permissions. Do not write new features.
+- **Webize Mode** (`"Webize this project"`, `"Webize [component]"`): Migrate legacy client-server state to decentralized RDF graph fetching and WebID auth.
+- **Data Liberation Mode** (`"Liberate this data"`, `"Transform this [CSV/PDF/ZIP]"`): Parse siloed data and map to standard RDF. Discard Web 2.0 credentials immediately.
+- **Ontology Creation Mode** (`"Create ontology"`, `"Map this ontology"`): Construct personal/natural-world ontologies using SHACL validation shapes.
+
+## 5. Modular Rule Index
+For deep-dive topics, consult:
+- `.agents/rules/solid-auth.md` (Authentication and sessions)
+- `.agents/rules/solid-data.md` (Dataset CRUD operations)
+- `.agents/rules/solid-permissions.md` (WAC/ACP via universalAccess)
+- `.agents/rules/solid-vocabularies.md` (Standard RDF vocabs)
+- `.agents/rules/solid-shape-trees.md` (SHACL & validation)
+- `.agents/rules/target-platforms/` (Browser extension, Electron, Obsidian, Mobile, IoT guidelines)

@@ -1,0 +1,60 @@
+---
+description: Activates specialized AI reasoning modes (Architect, Refactoring, Webize, Data Liberation, Ontology Creation) based on user trigger phrases.
+globs: ["*"]
+alwaysApply: true
+---
+# Episteme System Modes
+
+To coordinate complex tasks, this project defines specialized AI system modes. When you detect one of the trigger phrases, you must pivot your reasoning and adhere strictly to that mode's core rules.
+
+---
+
+## 1. App Architect Mode
+- **Trigger Phrases:** `"Design a new app"`, `"Enter Architect Mode"`, `"Let's plan this application"`
+- **Objective:** Design a new decentralized Solid application.
+- **Core Rules:**
+  1. **Halt Code Generation:** Stop writing active implementation code.
+  2. **Q&A Design Flow:** Initiate a structured Q&A session with the user to define functional and technical specifications.
+  3. **Output Specs:** Document the finalized specifications as `functional-spec.md` and `technical-spec.md` using the project's standard architecture templates, explicitly mapping flows to Solid ontologies.
+
+---
+
+## 2. Refactoring & Review Mode
+- **Trigger Phrases:** `"Review this codebase"`, `"Enter Refactoring Mode"`, `"Evaluate structural modularity"`, `"Review this codebase, fix errors then push"`
+- **Objective:** Audit, clean, and modularize the existing code.
+- **Core Rules:**
+  1. **Halt and Catch Fire:** Do not generate any new features or unrelated code.
+  2. **Modularity Audit:** Split monolithic files, isolate React/UI views from Solid data-fetching/auth services, and clean up duplicate helpers.
+  3. **Semantic Review:** Audit RDF vocabulary uses. Replace hardcoded string keys with standard vocabulary constants (e.g. from `@inrupt/vocab-common-rdf`).
+  4. **Security Check:** Inspect how access permissions are handled, ensuring no overly permissive public access is granted.
+
+---
+
+## 3. Webize Mode
+- **Trigger Phrases:** `"Webize this project"`, `"Enter Webize Mode"`, `"Webize [component/feature]"`
+- **Objective:** Migrate traditional client/server or local mock-data projects to a decentralized Solid environment.
+- **Core Rules:**
+  1. **The Domain Shift:** Refactor centralized nouns (e.g., User Account, RDBMS Row) into decentralized concepts (e.g., Autonomous WebID, Linked Data RDF Node).
+  2. **The State Shift:** Replace local UI state (`useState`, Redux, or static JSON arrays) with asynchronous graph fetching.
+  3. **The Identity Shift:** Replace local login tables, passwords, and sessions with standard Solid-OIDC WebID authentication.
+  4. **Component Isolation Pattern:** Break list views into URI-driven micro-components. The parent lists URLs; child components individually fetch and render their respective resource graphs.
+
+---
+
+## 4. Data Liberation Mode (ETL)
+- **Trigger Phrases:** `"Liberate this data"`, `"Enter Liberation Mode"`, `"Transform this [CSV/PDF/ZIP] for Solid"`
+- **Objective:** Extract siloed, proprietary, or unstructured data and map it into standardized RDF Linked Data.
+- **Core Rules:**
+  1. **Ingestion & Disposal:** Write localized Node.js/TypeScript scripts to parse files or legacy APIs, and immediately discard legacy authentication tokens after extraction.
+  2. **Ontology Mapping:** Do not invent custom predicates. Map data to existing standard vocabularies (e.g. SOSA for sensors, FHIR RDF for health/medical logs, schema.org for events).
+  3. **Output Generation:** Write a script to process data locally, compile it into standard `SolidDataset`s, and write it to the user's Pod.
+
+---
+
+## 5. Ontology Creation Mode
+- **Trigger Phrases:** `"Create ontology"`, `"Enter Ontology Mode"`, `"Map this ontology"`
+- **Objective:** Define new personal or natural-world ontologies or map existing ones, prioritizing human rights and dignity.
+- **Core Rules:**
+  1. **The Sovereignty Principle:** People are not assets. Avoid inheriting from asset-oriented enterprise schemas when modeling human qualities.
+  2. **SHACL over OWL:** Use SHACL (Shapes Constraint Language) shapes to define data validation constraints and graph rules rather than rigid OWL class hierarchies.
+  3. **Defensive Mapping:** Keep clean boundaries between custom terms and legacy ones (e.g. link a human doctor to a place, but do not subclass/conflate `foaf:Person` with a commercial organization schema).
