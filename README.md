@@ -6,10 +6,13 @@ This repository provides modular rules, specific deployment constraints, and sem
 
 ---
 
-## 🌟 The Philosophy: Human-Centric Data Agency
+## 🌟 The Philosophy: Human-Centric Digital Agency
 
-Most modern software reduces humans to rows in a database or commercial assets. This toolkit actively resists that paradigm. Built on **W3C Solid**, this architecture enforces data sovereignty through:
-1. **Decentralized Identity:** Users own their WebID; applications never own user accounts.
+Most modern software reduces humans to rows in a database or commercial assets. This toolkit actively resists that paradigm. Built on **W3C Solid**, this architecture enforces digital agency and sovereignty through:
+1. **Redefining Digital Identity:** Rather than reducing human existence to corporate profiles or platform tokens, we distinguish clearly between:
+   - **Identifiers (The Objective Pointer):** A WebID is an objective URI pointing to a profile document. It is a technical pointer and locator in a global web of data, not the human person.
+   - **Authentication (The Gatekeeper):** Solid-OIDC and cryptographic DPoP tokens prove *possession* and *control* of the identifier. They establish a protocol-level proof of key ownership, not proof of selfhood.
+   - **Human Identity (The Subjective Reality):** Real identity is a dynamic, subjective process of social, cultural, and individual development. It is formed through mutual relationships (the cooperative social graph), cultural contexts, creative works, and individual agency over time. It cannot be reduced to static database indexes, commercial profiling schemas, or digital attributes. This framework treats technical identifiers strictly as tools to support the human person's natural right to negotiate digital agency on their own terms.
 2. **Access Control (WAC/ACP):** Users cryptographically grant or revoke access to their data.
 3. **Usage Rights (ODRL):** Access isn't just binary; policies explicitly dictate *how* data can be used (e.g., "Academic Research Only").
 
