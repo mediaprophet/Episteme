@@ -30,15 +30,17 @@ const adpDnsOutput = document.getElementById('adp-dns-output') as HTMLElement;
 const adpDnsCode = document.getElementById('adp-dns-code') as HTMLElement;
 
 // Project Co-Stewardship Elements
-const openProjectModalBtn = document.getElementById('open-project-modal-btn') as HTMLButtonElement;
-const projectModal = document.getElementById('project-modal') as HTMLElement;
-const projectNameInput = document.getElementById('project-name') as HTMLInputElement;
-const coStewardSelect = document.getElementById('co-steward-select') as HTMLSelectElement;
-const projectPolicySelect = document.getElementById('project-policy-select') as HTMLSelectElement;
-const projectValuesSelect = document.getElementById('project-values-select') as HTMLSelectElement;
-const cancelProjectBtn = document.getElementById('cancel-project-btn') as HTMLButtonElement;
-const mintProjectBtn = document.getElementById('mint-project-btn') as HTMLButtonElement;
-const projectListEl = document.getElementById('project-list') as HTMLElement;
+const openProjectModalBtn  = document.getElementById('open-project-modal-btn') as HTMLButtonElement;
+const projectModal         = document.getElementById('project-modal') as HTMLElement;
+const projectNameInput     = document.getElementById('project-name') as HTMLInputElement;
+const projectDescInput     = document.getElementById('project-description') as HTMLTextAreaElement;
+const projectHomepageInput = document.getElementById('project-homepage') as HTMLInputElement;
+const coStewardSelect      = document.getElementById('co-steward-select') as HTMLSelectElement;
+const projectPolicySelect  = document.getElementById('project-policy-select') as HTMLSelectElement;
+const projectValuesSelect  = document.getElementById('project-values-select') as HTMLSelectElement;
+const cancelProjectBtn     = document.getElementById('cancel-project-btn') as HTMLButtonElement;
+const mintProjectBtn       = document.getElementById('mint-project-btn') as HTMLButtonElement;
+const projectListEl        = document.getElementById('project-list') as HTMLElement;
 
 let currentSession: any;
 let targetAgentForAgreement: Contact | null = null;
@@ -174,6 +176,8 @@ cancelProjectBtn.addEventListener('click', () => {
 
 mintProjectBtn.addEventListener('click', async () => {
   const projectName = projectNameInput.value.trim();
+  const description = projectDescInput.value.trim();
+  const homepageUrl = projectHomepageInput.value.trim();
   const selectedOptions = Array.from(coStewardSelect.selectedOptions);
   const stewards = selectedOptions.map(opt => opt.value);
 
@@ -182,7 +186,7 @@ mintProjectBtn.addEventListener('click', async () => {
     return;
   }
   if (stewards.length === 0) {
-    alert("Please select at least one co-steward.");
+    alert("Please select at least one co-steward from the address book.");
     return;
   }
 
@@ -191,36 +195,45 @@ mintProjectBtn.addEventListener('click', async () => {
 
   try {
     const webId = currentSession.info.webId;
-    await createCoStewardshipProject(
-      webId,
+    await createCoStewardshipProject({
+      creatorWebId:     webId,
       projectName,
-      stewards,
-      projectPolicySelect.value,
-      projectValuesSelect.value
-    );
-    
-    alert(`Project '${projectName}' created with ODRL policy and attached to your Pod!`);
-    
-    // Add to project list UI
+      description,
+      homepageUrl,
+      coStewardsWebIds: stewards,
+      policyType:       projectPolicySelect.value as 'co-authorship' | 'delegated',
+      valueConstraint:  projectValuesSelect.value,
+    });
+
+    alert(`Project '${projectName}' minted as doap:Project + schema:Project with ODRL & HEF equity graph on your Pod!`);
+
+    // Enrich project list card
     const li = document.createElement('li');
     li.className = 'contact-item';
     li.innerHTML = `
       <div>
         <h4>${projectName}</h4>
-        <small style="color: var(--text-secondary);">Policy: ${projectPolicySelect.value} | Constraint: ${projectValuesSelect.value}</small><br/>
-        <small style="color: var(--text-secondary);">Co-Stewards: ${stewards.length} Agent(s)</small>
+        ${description ? `<p style="font-size:0.85rem; color:var(--text-secondary); margin: 0.3rem 0;">${description}</p>` : ''}
+        <small style="color: var(--text-secondary);">
+          ODRL: <strong>${projectPolicySelect.value}</strong> &nbsp;|&nbsp;
+          Rights: <strong>${projectValuesSelect.value}</strong> &nbsp;|&nbsp;
+          Co-Stewards: <strong>${stewards.length}</strong>
+        </small>
+        ${homepageUrl ? `<br/><a href="${homepageUrl}" target="_blank" style="font-size:0.8rem; color:var(--accent-color);">${homepageUrl}</a>` : ''}
       </div>
     `;
     projectListEl.appendChild(li);
-    
+
   } catch (error) {
     console.error(error);
     alert("Failed to store project graph. Note: Demo assumes /projects/ exists with Write permissions on your Pod.");
   }
 
   projectModal.classList.add('hidden');
-  mintProjectBtn.textContent = "Create Project Graph";
+  mintProjectBtn.textContent = "Mint Project Graph";
   mintProjectBtn.disabled = false;
   projectNameInput.value = '';
+  projectDescInput.value = '';
+  projectHomepageInput.value = '';
 });
 

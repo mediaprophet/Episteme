@@ -66,7 +66,7 @@
             <h2 style="border-bottom: none; margin-bottom: 0;">Co-Stewardship Projects</h2>
             <button id="open-project-modal-btn" class="btn primary-btn" style="font-size: 0.8rem;">+ New Project</button>
           </div>
-          <p class="subtitle">Projects governed by Multi-Agent Rights & ODRL Policies</p>
+          <p class="subtitle">doap:Project · schema:Project · ODRL Policies · HEF Contributor Equity</p>
           <ul id="project-list" class="contact-list">
             <!-- Projects injected here -->
           </ul>
@@ -103,22 +103,29 @@
         <div id="project-modal" class="modal hidden">
           <div class="modal-content glass-panel">
             <h2>Initiate Co-Stewardship Project</h2>
-            
-            <label for="project-name">Project Name</label>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Mints a <code>doap:Project</code> + <code>schema:Project</code> RDF graph with HEF equity tracking.</p>
+
+            <label for="project-name">Project Name <span style="color:#c084fc;">*</span></label>
             <input type="text" id="project-name" placeholder="e.g. Community Data Trust" style="width: 100%; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: white; font-family: var(--font-sans);">
 
-            <label for="co-steward-select">Select Co-Stewards (Multi-Agent)</label>
+            <label for="project-description">Description <small style="color:var(--text-secondary);">(doap:description / schema:description)</small></label>
+            <textarea id="project-description" rows="3" placeholder="Describe the project's purpose and goals..." style="width: 100%; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: white; font-family: var(--font-sans); resize: vertical;"></textarea>
+
+            <label for="project-homepage">Homepage URL <small style="color:var(--text-secondary);">(doap:homepage / schema:url)</small></label>
+            <input type="url" id="project-homepage" placeholder="https://example.com/project" style="width: 100%; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: white; font-family: var(--font-sans);">
+
+            <label for="co-steward-select">Select Co-Stewards <small style="color:var(--text-secondary);">(doap:developer · schema:contributor)</small></label>
             <select id="co-steward-select" multiple style="height: 100px; width: 100%;">
               <!-- Options injected here -->
             </select>
 
-            <label for="project-policy-select">ODRL Policy Structure</label>
+            <label for="project-policy-select">ODRL Rights Policy <small style="color:var(--text-secondary);">(HEF ClaimProcess)</small></label>
             <select id="project-policy-select" style="width: 100%;">
               <option value="co-authorship">Equal Co-Authorship (odrl:modify)</option>
               <option value="delegated">Delegated Stewardship (odrl:distribute)</option>
             </select>
 
-            <label for="project-values-select">Human Rights Value Constraint</label>
+            <label for="project-values-select">Human Rights Value Constraint <small style="color:var(--text-secondary);">(UN Instrument URI)</small></label>
             <select id="project-values-select" style="width: 100%;">
               <option value="UDHR">Universal Declaration of Human Rights (UDHR)</option>
               <option value="CRC">Convention on the Rights of the Child (CRC)</option>
@@ -127,7 +134,7 @@
 
             <div class="modal-actions">
               <button id="cancel-project-btn" class="btn secondary-btn">Cancel</button>
-              <button id="mint-project-btn" class="btn primary-btn">Create Project Graph</button>
+              <button id="mint-project-btn" class="btn primary-btn">Mint Project Graph</button>
             </div>
           </div>
         </div>
