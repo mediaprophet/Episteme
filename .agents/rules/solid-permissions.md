@@ -12,6 +12,18 @@ Solid Pods enforce data sovereignty through either Web Access Control (WAC) or A
 3. **Access Modes:** Permissions are defined using five explicit boolean flags: `read`, `append`, `write`, `controlRead`, and `controlWrite`. Always provide explicit true/false values to avoid overriding state unintentionally.
 4. **Advanced Policies:** Only drop down to the specific ACP APIs (e.g., `acp_ess_2`) if the feature explicitly requires complex policy matchers (like restricting access to specific Client IDs or building `allOf`/`anyOf` rule chains).
 
+## Handling the 'Append' Right
+When a user grants `Append` but not `Write`, it means a third party can add data (like an inbox message) but cannot delete or modify existing data. This is critical for Linked Data Notifications (LDN) inboxes.
+
+## Anti-Patterns
+- **Anti-Pattern:** Checking for `Read` access by attempting a fetch and catching the 403. Instead, query the ACL/ACP directly via `universalAccess.getAgentAccess()`.
+- **Anti-Pattern:** Granting `Public` Write access to any resource. 
+
+## Security Checklist
+- [ ] Are permissions granted only at the narrowest possible scope (File rather than Container) when possible?
+- [ ] Did you verify the target WebID before granting access?
+- [ ] If changing from ACP to WAC or vice-versa, are you using `universalAccess` to avoid corrupting the resource's permissions?
+
 ## Example Pattern: Universal Access
 ```javascript
 import { universalAccess } from "@inrupt/solid-client";

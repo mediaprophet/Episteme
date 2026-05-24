@@ -69,6 +69,22 @@
         "training on user data without explicit ODRL policy"
       ],
       "technicalMapping": "Prioritize on-device models (e.g., Transformers.js) or local inference engines when processing Pod data. Never silently exfiltrate Pod data to cloud LLMs."
+    },
+    "user_lock_in": {
+      "definition": "Architectural patterns that prevent a user from easily migrating their data to another provider.",
+      "technicalMapping": "Use standard W3C ontologies and decouple the application UI from the data storage layer to actively prevent lock-in."
+    },
+    "interoperability": {
+      "definition": "The ability of different Solid applications to read and write to the same dataset without conflict.",
+      "technicalMapping": "Rely on Shape Trees and Type Indexes for discovery, and avoid writing proprietary JSON blobs into the Pod."
+    },
+    "data_vault": {
+      "definition": "A secure personal data store operating strictly under the user's sovereign control.",
+      "forbiddenContexts": [
+        "centralized cloud drive",
+        "company server"
+      ],
+      "technicalMapping": "Synonymous with a W3C Solid Pod. All authentication must occur via WebID, and authorization via WAC/ACP."
     }
   }
 }

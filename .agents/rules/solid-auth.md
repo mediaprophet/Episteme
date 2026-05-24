@@ -9,6 +9,16 @@ Check `AGENTS.md` for the declared Authentication library before writing code. A
 ## Core Directives (All Stacks)
 1. **No Standard JWT/OAuth2:** Never build custom JWT handlers or standard OAuth2 flows. Solid Identity Providers (IdPs) require specific Solid-OIDC flows.
 2. **WebID as the Root:** Authentication always yields a WebID (a URI). This WebID is the starting point for all user data discovery.
+- **Data Isolation**: Never cache WebID data permanently on the application server. The Pod is the single source of truth.
+
+## Anti-Patterns
+- **Anti-Pattern:** Storing a WebID in a relational database foreign key (e.g., `user_id` mapping to a `WebID`). Applications should be entirely stateless regarding identity.
+- **Anti-Pattern:** Hardcoding a list of "allowed" identity providers (unless explicitly defined in a `custom-addons/` override).
+
+## Security Checklist
+- [ ] Is the redirect URI properly registered and secured (HTTPS/localhost)?
+- [ ] Are we using DPoP (Demonstrating Proof-of-Possession) to prevent token replay attacks?
+- [ ] Is the session state cleared immediately upon `logout()`?
 
 ---
 
