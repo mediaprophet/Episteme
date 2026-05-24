@@ -24,17 +24,9 @@ const DOAP   = "http://usefulinc.com/ns/doap#";
 // Schema.org
 const SCHEMA = "https://schema.org/";
 
-// Humanitarian Equity Framework (HEF) – using current example.org base URIs
-// NOTE: These should be migrated to https://w3id.org/hef/ once a persistent
-// namespace is minted for the project.
-const HEF_LICENSE = "http://example.org/humanitarian-equity-framework/ontology/license#";
-const HEF_COST    = "http://example.org/humanitarian-equity-framework/ontology/cost-model#";
-const HEF_CONTRIB = "http://example.org/humanitarian-equity-framework/ontology/contributors#";
-const HEF_CLAIMS  = "http://example.org/humanitarian-equity-framework/ontology/claims-procedure#";
-const HEF_RULES   = "http://example.org/humanitarian-equity-framework/ontology/project-rules#";
-
-// HCAI Agreements
-const HCAI = "https://w3id.org/hcai/agreements#";
+// Webizen Extension Vocabularies
+const WZ_ST = "https://mediaprophet.org/ext/webizen/stewardship#";
+const WZ_AG = "https://mediaprophet.org/ext/webizen/agreements#";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -129,10 +121,10 @@ export async function createCoStewardshipProject(
     // Provenance
     .addUrl(`${PROV}wasAttributedTo`,  creatorWebId)
     .addDatetime(`${PROV}generatedAtTime`, now)
-    // ODRL policy link
+    // Webizen ODRL policy link
     .addUrl(`${ODRL}hasPolicy`,  `#${policyId}`)
-    // HEF claim procedure link
-    .addUrl(`${HEF_CLAIMS}hasClaimProcess`, `#${claimId}`);
+    // Webizen claim procedure link
+    .addUrl(`${WZ_ST}hasClaimProcess`, `#${claimId}`);
 
   if (nymEnabled) {
     projectBuilder = projectBuilder.addUrl(`${NYM_EXT}hasNymConfig`, `#nym-config`);
@@ -176,15 +168,15 @@ export async function createCoStewardshipProject(
   const guardianThings: any[] = [];
   guardians.forEach((g, idx) => {
     const gId = `guardian-agreement-${Date.now()}-${idx}`;
-    projectBuilder = projectBuilder.addUrl(`${HCAI}hasAgreement`, `#${gId}`);
+    projectBuilder = projectBuilder.addUrl(`${WZ_AG}hasAgreement`, `#${gId}`);
 
     const gThing = buildThing(createThing({ name: gId }))
-      .addUrl(`${RDF}type`, `${HCAI}Agreement`)
+      .addUrl(`${RDF}type`, `${WZ_AG}Agreement`)
       .addUrl(`${RDF}type`, `${ODRL}Policy`)
-      .addUrl(`${HCAI}principalAgent`, creatorWebId)
-      .addUrl(`${HCAI}guardianAgent`, g.guardianWebId)
-      .addStringNoLocale(`${HCAI}domainOfAgency`, g.purpose)
-      .addUrl(`${HCAI}valueCredential`, unUri)
+      .addUrl(`${WZ_AG}principalAgent`, creatorWebId)
+      .addUrl(`${WZ_AG}guardianAgent`, g.guardianWebId)
+      .addStringNoLocale(`${WZ_AG}domainOfAgency`, g.purpose)
+      .addUrl(`${WZ_AG}valueCredential`, unUri)
       .addDatetime(`${DC}created`, now)
       .build();
 
@@ -199,7 +191,7 @@ export async function createCoStewardshipProject(
     .addUrl(`${RDF}type`,         `${ODRL}Policy`)
     .addUrl(`${ODRL}target`,      `#${projectId}`)
     .addUrl(`${ODRL}assigner`,    creatorWebId)
-    .addUrl(`${HCAI}valueCredential`,   unUri)
+    .addUrl(`${WZ_AG}valueCredential`,   unUri)
     .addStringNoLocale(`${DC}description`, `${policyType} governance policy for ${projectName}`);
 
   const odrlAction = policyType === 'co-authorship'
@@ -213,36 +205,36 @@ export async function createCoStewardshipProject(
 
   const policyThing = policyBuilder.build();
 
-  // ── 3. HEF License Thing ────────────────────────────────────────────────────
-  // hef:License (subClassOf odrl:Policy) — references the ODRL policy and the
+  // ── 3. Webizen License Thing ────────────────────────────────────────────────
+  // wz-st:License (subClassOf odrl:Policy) — references the ODRL policy and the
   // UN human rights value constraint as the boundary condition.
   const licenseThing = buildThing(createThing({ name: licenseId }))
-    .addUrl(`${RDF}type`,             `${HEF_LICENSE}License`)
+    .addUrl(`${RDF}type`,             `${WZ_ST}License`)
     .addUrl(`${RDF}type`,             `${ODRL}Policy`)
-    .addUrl(`${HEF_LICENSE}governedBy`, `#${policyId}`)
-    .addUrl(`${HEF_LICENSE}valueInstrument`, unUri)
+    .addUrl(`${WZ_ST}governedBy`, `#${policyId}`)
+    .addUrl(`${WZ_ST}valueInstrument`, unUri)
     .addStringNoLocale(`${DC}title`,  `Episteme Co-Stewardship License – ${policyType}`)
     .build();
 
-  // ── 4. HEF Claim Process Thing ─────────────────────────────────────────────
-  // hef:ClaimProcess (subClassOf odrl:Policy) — the mechanism by which
+  // ── 4. Webizen Claim Process Thing ─────────────────────────────────────────
+  // wz-st:ClaimProcess (subClassOf odrl:Policy) — the mechanism by which
   // contributors can assert rights over their contributions.
   const claimThing = buildThing(createThing({ name: claimId }))
-    .addUrl(`${RDF}type`,             `${HEF_CLAIMS}ClaimProcess`)
+    .addUrl(`${RDF}type`,             `${WZ_ST}ClaimProcess`)
     .addUrl(`${RDF}type`,             `${ODRL}Policy`)
-    .addUrl(`${HEF_CLAIMS}relatedPolicy`, `#${policyId}`)
+    .addUrl(`${WZ_ST}relatedPolicy`, `#${policyId}`)
     .addUrl(`${ODRL}assigner`,        creatorWebId)
     .addStringNoLocale(`${DC}description`, `Contribution claim procedure for project: ${projectName}`)
     .build();
 
-  // ── 5. HEF Obligation Cost Thing ───────────────────────────────────────────
-  // hef:ObligationCost (subClassOf schema:MonetaryAmount) — tracks the
+  // ── 5. Webizen Obligation Cost Thing ───────────────────────────────────────
+  // wz-st:ObligationCost (subClassOf schema:MonetaryAmount) — tracks the
   // aggregated value of contributor effort. Initialised to 0 as a stub;
   // future tooling can update this as work is contributed.
   const costThing = buildThing(createThing({ name: costId }))
-    .addUrl(`${RDF}type`,                     `${HEF_COST}ObligationCost`)
+    .addUrl(`${RDF}type`,                     `${WZ_ST}ObligationCost`)
     .addUrl(`${RDF}type`,                     `${SCHEMA}MonetaryAmount`)
-    .addUrl(`${HEF_COST}relatedProject`,      `#${projectId}`)
+    .addUrl(`${WZ_ST}relatedProject`,      `#${projectId}`)
     .addStringNoLocale(`${SCHEMA}currency`,   "USD")
     .addDecimal(`${SCHEMA}value`,             0)
     .addStringNoLocale(`${DC}description`,

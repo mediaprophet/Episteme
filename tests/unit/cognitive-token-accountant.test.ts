@@ -91,19 +91,19 @@ describe('Cognitive Token Accountant', () => {
 
       // Verify predicates
       expect(getUrl(contribThing!, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type')).toBe(
-        'http://example.org/humanitarian-equity-framework/ontology/contributors#CognitiveContribution'
+        'https://mediaprophet.org/ext/webizen/stewardship#CognitiveContribution'
       );
       expect(getUrl(contribThing!, 'http://www.w3.org/ns/prov#wasAssociatedWith')).toBe(input.contributorWebId);
       expect(getUrl(contribThing!, 'http://www.w3.org/ns/prov#used')).toBe(input.projectUri);
       
       const tokensCount = calculateCognitiveTokens(input.contributionText); // 15 tokens
-      expect(getInteger(contribThing!, 'http://example.org/humanitarian-equity-framework/ontology/contributors#cognitiveTokens')).toBe(tokensCount);
+      expect(getInteger(contribThing!, 'https://mediaprophet.org/ext/webizen/stewardship#cognitiveTokens')).toBe(tokensCount);
 
       // Verify linked obligation cost
       const costThing = getThing(dataset, `${contribSubject!.split('#')[0]}#cost`);
       expect(costThing).toBeDefined();
       expect(getUrl(costThing!, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type')).toBe(
-        'http://example.org/humanitarian-equity-framework/ontology/cost-model#ObligationCost'
+        'https://mediaprophet.org/ext/webizen/stewardship#ObligationCost'
       );
       expect(getStringNoLocale(costThing!, 'https://schema.org/currency')).toBe('USD');
       

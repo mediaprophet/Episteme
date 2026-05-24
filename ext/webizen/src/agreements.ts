@@ -6,9 +6,7 @@ import {
   saveSolidDatasetAt,
   SolidDataset
 } from '@inrupt/solid-client';
-import { fetch } from '@inrupt/solid-client-authn-browser';
-
-const HCAI = "https://w3id.org/hcai/agreements#";
+const WZ_AG = "https://mediaprophet.org/ext/webizen/agreements#";
 const RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 
 export async function mintGuardianshipAgreement(
@@ -16,17 +14,18 @@ export async function mintGuardianshipAgreement(
   targetAgentWebId: string,
   domainType: string,
   valueConstraint: string,
-  podBaseUrl: string
+  podBaseUrl: string,
+  authFetch: typeof fetch = globalThis.fetch
 ): Promise<SolidDataset> {
   
   // Construct the Agreement Resource
   const agreementId = `agreement-${Date.now()}`;
   const agreementThing = buildThing(createThing({ name: agreementId }))
-    .addUrl(`${RDF}type`, `${HCAI}Agreement`)
-    .addUrl(`${HCAI}principalAgent`, userWebId)
-    .addUrl(`${HCAI}guardianAgent`, targetAgentWebId)
-    .addStringNoLocale(`${HCAI}domainOfAgency`, domainType)
-    .addStringNoLocale(`${HCAI}valueCredential`, valueConstraint)
+    .addUrl(`${RDF}type`, `${WZ_AG}Agreement`)
+    .addUrl(`${WZ_AG}principalAgent`, userWebId)
+    .addUrl(`${WZ_AG}guardianAgent`, targetAgentWebId)
+    .addStringNoLocale(`${WZ_AG}domainOfAgency`, domainType)
+    .addStringNoLocale(`${WZ_AG}valueCredential`, valueConstraint)
     .addDatetime('http://purl.org/dc/terms/created', new Date())
     .build();
 
@@ -38,7 +37,7 @@ export async function mintGuardianshipAgreement(
   // In production, we'd look up the storage root via the profile
   const storageUrl = new URL(userWebId).origin + `/agreements/${agreementId}.ttl`;
 
-  await saveSolidDatasetAt(storageUrl, dataset, { fetch });
+  await saveSolidDatasetAt(storageUrl, dataset, { fetch: authFetch });
 
   return dataset;
 }

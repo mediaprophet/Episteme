@@ -72,7 +72,7 @@ window.addEventListener('load', async () => {
     userNameEl.textContent = "Sovereign User"; // Could fetch from profile
 
     // Load Address Book
-    const contacts = await getAddressBook(webId);
+    const contacts = await getAddressBook(webId, currentSession.fetch);
     renderContacts(contacts);
   }
 });
@@ -138,7 +138,8 @@ mintBtn.addEventListener('click', async () => {
       targetAgentForAgreement.webId,
       domainSelect.value,
       valuesSelect.value,
-      webId // Passing root profile as base for now
+      webId, // Passing root profile as base for now
+      currentSession.fetch
     );
     alert(`Agreement successfully stored in Pod for ${domainSelect.value}!`);
   } catch (error) {

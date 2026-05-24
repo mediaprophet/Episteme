@@ -7,10 +7,8 @@
 @prefix odrl:   <http://www.w3.org/ns/odrl/2/> .
 @prefix prov:   <http://www.w3.org/ns/prov#> .
 @prefix dc:     <http://purl.org/dc/terms/> .
-@prefix hef-lc: <http://example.org/humanitarian-equity-framework/ontology/license#> .
-@prefix hef-co: <http://example.org/humanitarian-equity-framework/ontology/cost-model#> .
-@prefix hef-cl: <http://example.org/humanitarian-equity-framework/ontology/claims-procedure#> .
-@prefix hcai:   <https://w3id.org/hcai/agreements#> .
+@prefix wz-st:  <https://mediaprophet.org/ext/webizen/stewardship#> .
+@prefix wz-ag:  <https://mediaprophet.org/ext/webizen/agreements#> .
 @prefix nym-ext: <https://mediaprophet.org/ext/nym#> .
 @prefix ep:     <https://episteme.example/shapes/> .
 
@@ -80,12 +78,12 @@ ep:ProjectShape
         sh:message  "Project must reference an ODRL Policy via odrl:hasPolicy." ;
     ] ;
 
-    # ── HEF Claim Process link ────────────────────────────────────────────────
+    # ── Webizen Claim Process link ────────────────────────────────────────────
     sh:property [
-        sh:path     hef-cl:hasClaimProcess ;
+        sh:path     wz-st:hasClaimProcess ;
         sh:nodeKind sh:IRI ;
         sh:minCount 1 ;
-        sh:message  "Project must reference an HEF ClaimProcess resource." ;
+        sh:message  "Project must reference a Webizen ClaimProcess resource." ;
     ] ;
 
     # ── Provenance ────────────────────────────────────────────────────────────
@@ -106,9 +104,9 @@ ep:ProjectShape
 
     # ── Guardianship Relations ────────────────────────────────────────────────
     sh:property [
-        sh:path     hcai:hasAgreement ;
+        sh:path     wz-ag:hasAgreement ;
         sh:nodeKind sh:IRI ;
-        sh:message  "Project links to guardianship agreements via hcai:hasAgreement." ;
+        sh:message  "Project links to guardianship agreements via wz-ag:hasAgreement." ;
     ] ;
 
     # ── Nym Metadata Privacy Extension ────────────────────────────────────────
@@ -147,16 +145,16 @@ ep:PolicyShape
     ] ;
 
     sh:property [
-        sh:path     hcai:valueCredential ;
+        sh:path     wz-ag:valueCredential ;
         sh:minCount 1 ;
         sh:message  "ODRL Policy must reference a UN Human Rights value credential URI." ;
     ] .
 
-# ─── HEF Obligation Cost Shape ────────────────────────────────────────────────
+# ─── Webizen Obligation Cost Shape ────────────────────────────────────────────
 ep:ObligationCostShape
     a sh:NodeShape ;
-    rdfs:label "HEF Obligation Cost Shape" ;
-    sh:targetClass hef-co:ObligationCost ;
+    rdfs:label "Webizen Obligation Cost Shape" ;
+    sh:targetClass wz-st:ObligationCost ;
 
     sh:property [
         sh:path     schema:currency ;

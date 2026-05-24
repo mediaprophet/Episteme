@@ -20,10 +20,10 @@
     "templates/**/*.ts",
     "templates/**/*.tsx",
     "custom-addons/**/*.ts",
-    "demos/webizen/src/**/*.ts"
+    "ext/webizen/src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "demos/webizen/node_modules"
+    "ext/webizen/node_modules"
   ]
 }

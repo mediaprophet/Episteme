@@ -1,5 +1,4 @@
 import { getSolidDataset, getThingAll, getUrl, getStringNoLocale } from '@inrupt/solid-client';
-import { fetch } from '@inrupt/solid-client-authn-browser';
 
 const VCARD = "http://www.w3.org/2006/vcard/ns#";
 const FOAF = "http://xmlns.com/foaf/0.1/";
@@ -12,9 +11,9 @@ export interface Contact {
 /**
  * Scans a user's WebID profile for known connections (foaf:knows).
  */
-export async function getAddressBook(webId: string): Promise<Contact[]> {
+export async function getAddressBook(webId: string, authFetch: typeof fetch = globalThis.fetch): Promise<Contact[]> {
   try {
-    const profileDataset = await getSolidDataset(webId, { fetch });
+    const profileDataset = await getSolidDataset(webId, { fetch: authFetch });
     const profileThings = getThingAll(profileDataset);
     
     const contacts: Contact[] = [];
@@ -26,7 +25,7 @@ export async function getAddressBook(webId: string): Promise<Contact[]> {
         // Attempt to fetch their name if possible
         let name = "Unknown Contact";
         try {
-          const contactDataset = await getSolidDataset(knownWebId, { fetch });
+          const contactDataset = await getSolidDataset(knownWebId, { fetch: authFetch });
           const contactThings = getThingAll(contactDataset);
           for (const cThing of contactThings) {
             const cName = getStringNoLocale(cThing, `${VCARD}fn`);

@@ -15,7 +15,7 @@ import {
   discoverShape,
   validateResource
 } from '../../templates/shacl-discovery-demo';
-import { createCoStewardshipProject } from '../../demos/webizen/src/stewardship';
+import { createCoStewardshipProject } from '../../ext/webizen/src/stewardship';
 
 describe('SHACL Shape Discovery & Validation', () => {
 

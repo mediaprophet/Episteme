@@ -20,9 +20,7 @@ const PROV = "http://www.w3.org/ns/prov#";
 const DC   = "http://purl.org/dc/terms/";
 const SCHEMA = "https://schema.org/";
 
-const HEF_COST    = "http://example.org/humanitarian-equity-framework/ontology/cost-model#";
-const HEF_CONTRIB = "http://example.org/humanitarian-equity-framework/ontology/contributors#";
-const HEF_RULES   = "http://example.org/humanitarian-equity-framework/ontology/project-rules#";
+const WZ_ST = "https://mediaprophet.org/ext/webizen/stewardship#";
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
 
@@ -129,7 +127,7 @@ export function mintContributionDataset(
 
   // 1. Contribution Activity Node
   const contributionThing = buildThing(createThing({ name: contributionId }))
-    .addUrl(`${RDF}type`,                       `${HEF_CONTRIB}CognitiveContribution`)
+    .addUrl(`${RDF}type`,                       `${WZ_ST}CognitiveContribution`)
     .addUrl(`${RDF}type`,                       `${PROV}Activity`)
     // Provenance associations
     .addUrl(`${PROV}wasAssociatedWith`,         contributorWebId)
@@ -139,19 +137,19 @@ export function mintContributionDataset(
     // Metadata
     .addStringNoLocale(`${DC}description`,      description)
     // Cognitive token metrics
-    .addInteger(`${HEF_CONTRIB}cognitiveTokens`, tokens)
-    .addInteger(`${HEF_CONTRIB}computationalEquivalence`, computationalEquivalence)
-    .addDecimal(`${HEF_CONTRIB}qualiaMultiplier`, options.qualiaPremiumMultiplier)
-    .addStringNoLocale(`${HEF_CONTRIB}valuationMethod`, valuationMethod)
+    .addInteger(`${WZ_ST}cognitiveTokens`, tokens)
+    .addInteger(`${WZ_ST}computationalEquivalence`, computationalEquivalence)
+    .addDecimal(`${WZ_ST}qualiaMultiplier`, options.qualiaPremiumMultiplier)
+    .addStringNoLocale(`${WZ_ST}valuationMethod`, valuationMethod)
     // Link to the obligation cost node
-    .addUrl(`${HEF_COST}obligationCost`,        `#cost`)
+    .addUrl(`${WZ_ST}obligationCost`,        `#cost`)
     .build();
 
   // 2. Obligation Cost Node (subClassOf schema:MonetaryAmount)
   const costThing = buildThing(createThing({ name: 'cost' }))
-    .addUrl(`${RDF}type`,                       `${HEF_COST}ObligationCost`)
+    .addUrl(`${RDF}type`,                       `${WZ_ST}ObligationCost`)
     .addUrl(`${RDF}type`,                       `${SCHEMA}MonetaryAmount`)
-    .addUrl(`${HEF_COST}relatedProject`,         projectUri)
+    .addUrl(`${WZ_ST}relatedProject`,         projectUri)
     .addStringNoLocale(`${SCHEMA}currency`,      currency)
     .addDecimal(`${SCHEMA}value`,                obligationValue)
     .addStringNoLocale(`${DC}description`,       `Obligation equity contribution value of ${obligationValue} USD`)
