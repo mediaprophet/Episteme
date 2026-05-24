@@ -99,6 +99,8 @@ This project maintains specialized rule files in `/.agents/rules/` for deep-dive
 - `solid-odrl.md`: Rules for enforcing Open Digital Rights Language policies.
 - `solid-complementary-protocols.md`: Directives for integrating blockchains, Nym mixnets, and VCs safely.
 - `solid-external-bridges.md`: Directives for Web 2.0 data ingestion and Model Context Protocol (MCP) integrations.
+- `solid-web-annotations.md`: Directives for modeling user-generated content using W3C Web Annotations.
+- `solid-client-architecture.md`: Architectural rules for offline-first resilience and on-device Ethical ML.
 
 ### Target Platform Rules
 - `target-platforms/01-static-web.md`: Mandates standard CORS handling and standard WebCrypto DPoP flows.

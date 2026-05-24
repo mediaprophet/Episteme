@@ -52,6 +52,23 @@
     "bridging_protocol": {
       "definition": "An integration standard (like Model Context Protocol) that connects isolated environments.",
       "technicalMapping": "When bridging Solid Pods to external AI or Web 2.0 systems, WAC/ACP permissions must be strictly enforced at the bridge boundary."
+    },
+    "annotation": {
+      "definition": "A formal expression of thought, highlight, or reading progress attached to a target resource.",
+      "forbiddenContexts": [
+        "user comment",
+        "post",
+        "proprietary user-generated content"
+      ],
+      "technicalMapping": "Must strictly follow the W3C Web Annotation Data Model (oa:Annotation), stored inside the user's Pod, not an application database."
+    },
+    "ethical_ml": {
+      "definition": "Machine Learning and AI inference that occurs within the user's trusted perimeter without extracting data.",
+      "forbiddenContexts": [
+        "cloud inference on personal data",
+        "training on user data without explicit ODRL policy"
+      ],
+      "technicalMapping": "Prioritize on-device models (e.g., Transformers.js) or local inference engines when processing Pod data. Never silently exfiltrate Pod data to cloud LLMs."
     }
   }
 }
