@@ -101,6 +101,13 @@ ep:ProjectShape
         sh:nodeKind sh:IRI ;
         sh:minCount 1 ;
         sh:message  "Project must specify a schema:hostingProvider IRI." ;
+    ] ;
+
+    # ── Guardianship Relations ────────────────────────────────────────────────
+    sh:property [
+        sh:path     hcai:hasAgreement ;
+        sh:nodeKind sh:IRI ;
+        sh:message  "Project links to guardianship agreements via hcai:hasAgreement." ;
     ] .
 
 # ─── ODRL Policy Shape ────────────────────────────────────────────────────────

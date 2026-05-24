@@ -146,6 +146,12 @@
               <input type="url" id="provider-uri" placeholder="https://coop.example/profile/card#me" style="width: 100%; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: white; font-family: var(--font-sans);">
             </div>
 
+            <label style="font-weight: 600; margin-top: 0.8rem; display: block; border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.3rem;">Guardians & Professional Agents <small style="color:var(--text-secondary);">(hcai:Agreement)</small></label>
+            <div id="project-guardians-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.3rem;">
+              <!-- Dynamic rows will be injected here -->
+            </div>
+            <button type="button" id="add-project-guardian-btn" class="btn secondary-btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; align-self: flex-start; margin-top: 0.3rem;">+ Add Guardian/Agent</button>
+
             <div class="modal-actions">
               <button id="cancel-project-btn" class="btn secondary-btn">Cancel</button>
               <button id="mint-project-btn" class="btn primary-btn">Mint Project Graph</button>

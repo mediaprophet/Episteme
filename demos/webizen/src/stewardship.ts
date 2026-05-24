@@ -38,6 +38,11 @@ const HCAI = "https://w3id.org/hcai/agreements#";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+export interface ProjectGuardianshipInput {
+  guardianWebId: string;
+  purpose: 'financial' | 'legal' | 'governance' | 'supervision' | 'healthcare';
+}
+
 export interface StewardshipProjectInput {
   creatorWebId: string;
   projectName: string;
@@ -49,6 +54,7 @@ export interface StewardshipProjectInput {
   providerType: 'self' | 'other';
   providerName?: string;
   providerUri?: string;
+  guardians?: ProjectGuardianshipInput[];
 }
 
 // ─── Value Constraint → UN Instrument URI map ─────────────────────────────────
@@ -84,6 +90,7 @@ export async function createCoStewardshipProject(
     providerType,
     providerName,
     providerUri,
+    guardians = [],
   } = input;
 
   const projectId  = `project-${Date.now()}`;
@@ -154,6 +161,25 @@ export async function createCoStewardshipProject(
       .addUrl(`${SCHEMA}contributor`,   steward);
   }
 
+  // Guardianship relations (optional)
+  const guardianThings: any[] = [];
+  guardians.forEach((g, idx) => {
+    const gId = `guardian-agreement-${Date.now()}-${idx}`;
+    projectBuilder = projectBuilder.addUrl(`${HCAI}hasAgreement`, `#${gId}`);
+
+    const gThing = buildThing(createThing({ name: gId }))
+      .addUrl(`${RDF}type`, `${HCAI}Agreement`)
+      .addUrl(`${RDF}type`, `${ODRL}Policy`)
+      .addUrl(`${HCAI}principalAgent`, creatorWebId)
+      .addUrl(`${HCAI}guardianAgent`, g.guardianWebId)
+      .addStringNoLocale(`${HCAI}domainOfAgency`, g.purpose)
+      .addUrl(`${HCAI}valueCredential`, unUri)
+      .addDatetime(`${DC}created`, now)
+      .build();
+
+    guardianThings.push(gThing);
+  });
+
   const projectThing = projectBuilder.build();
 
   // ── 2. ODRL Policy Thing ────────────────────────────────────────────────────
@@ -222,6 +248,9 @@ export async function createCoStewardshipProject(
   if (providerThing) {
     dataset = setThing(dataset, providerThing);
   }
+  guardianThings.forEach(gThing => {
+    dataset = setThing(dataset, gThing);
+  });
 
   // Mint to Pod: /projects/<id>.ttl
   const storageUrl = new URL(creatorWebId).origin + `/projects/${projectId}.ttl`;

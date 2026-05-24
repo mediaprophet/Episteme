@@ -42,6 +42,8 @@ const projectProviderSelect  = document.getElementById('project-provider-select'
 const providerDetailsContainer = document.getElementById('provider-details-container') as HTMLElement;
 const providerNameInput      = document.getElementById('provider-name') as HTMLInputElement;
 const providerUriInput       = document.getElementById('provider-uri') as HTMLInputElement;
+const projectGuardiansContainer = document.getElementById('project-guardians-container') as HTMLElement;
+const addProjectGuardianBtn   = document.getElementById('add-project-guardian-btn') as HTMLButtonElement;
 const cancelProjectBtn       = document.getElementById('cancel-project-btn') as HTMLButtonElement;
 const mintProjectBtn         = document.getElementById('mint-project-btn') as HTMLButtonElement;
 const projectListEl          = document.getElementById('project-list') as HTMLElement;
@@ -181,6 +183,34 @@ projectProviderSelect.addEventListener('change', () => {
   }
 });
 
+addProjectGuardianBtn.addEventListener('click', () => {
+  const row = document.createElement('div');
+  row.className = 'guardian-row';
+  row.style.display = 'flex';
+  row.style.gap = '0.5rem';
+  row.style.alignItems = 'center';
+  row.style.marginTop = '0.3rem';
+  row.innerHTML = `
+    <input type="url" class="guardian-webid-input" placeholder="https://guardian.example/profile/card#me" style="flex: 2; padding: 0.4rem 0.8rem; font-size: 0.85rem; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; color: white; outline: none;">
+    <select class="guardian-purpose-select" style="flex: 1.5; padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+      <option value="financial">Financial (Accountant)</option>
+      <option value="legal">Legal (Lawyer/Counsel)</option>
+      <option value="governance">Governance (Advisor)</option>
+      <option value="supervision">Supervision (Supervisor)</option>
+      <option value="healthcare">Healthcare (Doctor/Caregiver)</option>
+    </select>
+    <button type="button" class="btn remove-guardian-btn" style="padding: 0.4rem 0.6rem; background: #ef4444; color: white; border-radius: 6px; font-size: 0.85rem; border: none; cursor: pointer;">×</button>
+  `;
+
+  // Bind removal listener
+  const removeBtn = row.querySelector('.remove-guardian-btn') as HTMLButtonElement;
+  removeBtn.addEventListener('click', () => {
+    row.remove();
+  });
+
+  projectGuardiansContainer.appendChild(row);
+});
+
 cancelProjectBtn.addEventListener('click', () => {
   projectModal.classList.add('hidden');
   projectNameInput.value = '';
@@ -190,6 +220,7 @@ cancelProjectBtn.addEventListener('click', () => {
   providerDetailsContainer.classList.add('hidden');
   providerNameInput.value = '';
   providerUriInput.value = '';
+  projectGuardiansContainer.innerHTML = '';
 });
 
 mintProjectBtn.addEventListener('click', async () => {
@@ -203,6 +234,33 @@ mintProjectBtn.addEventListener('click', async () => {
   const providerName = providerNameInput.value.trim();
   const providerUri = providerUriInput.value.trim();
 
+  // Harvest guardians
+  const guardianRows = projectGuardiansContainer.querySelectorAll('.guardian-row');
+  const guardians: any[] = [];
+  let guardiansValid = true;
+
+  guardianRows.forEach(row => {
+    const webIdInput = row.querySelector('.guardian-webid-input') as HTMLInputElement;
+    const purposeSelect = row.querySelector('.guardian-purpose-select') as HTMLSelectElement;
+    const webId = webIdInput.value.trim();
+    if (webId) {
+      try {
+        new URL(webId);
+        webIdInput.style.borderColor = 'var(--glass-border)';
+        guardians.push({
+          guardianWebId: webId,
+          purpose: purposeSelect.value as any
+        });
+      } catch (err) {
+        guardiansValid = false;
+        webIdInput.style.borderColor = '#ef4444';
+      }
+    } else {
+      guardiansValid = false;
+      webIdInput.style.borderColor = '#ef4444';
+    }
+  });
+
   if (!projectName) {
     alert("Please enter a project name.");
     return;
@@ -213,6 +271,10 @@ mintProjectBtn.addEventListener('click', async () => {
   }
   if (providerType === 'other' && !providerName) {
     alert("Please enter the name of the hosting platform/organisation.");
+    return;
+  }
+  if (!guardiansValid) {
+    alert("Please provide valid WebID URLs for all added guardians.");
     return;
   }
 
@@ -232,9 +294,13 @@ mintProjectBtn.addEventListener('click', async () => {
       providerType,
       providerName:     providerType === 'other' ? providerName : undefined,
       providerUri:      providerType === 'other' && providerUri ? providerUri : undefined,
+      guardians,
     });
 
     const providerLabel = providerType === 'self' ? 'Self (Personal Pod)' : providerName;
+    const guardiansLabel = guardians.length > 0 
+      ? guardians.map(g => g.purpose.charAt(0).toUpperCase() + g.purpose.slice(1)).join(', ')
+      : 'None';
 
     alert(`Project '${projectName}' minted as doap:Project + schema:Project with ODRL & HEF equity graph on your Pod!`);
 
@@ -248,6 +314,7 @@ mintProjectBtn.addEventListener('click', async () => {
         <small style="color: var(--text-secondary);">
           ODRL: <strong>${projectPolicySelect.value}</strong> &nbsp;|&nbsp;
           Host: <strong>${providerLabel}</strong> &nbsp;|&nbsp;
+          Guardians: <strong>${guardiansLabel}</strong> &nbsp;|&nbsp;
           Co-Stewards: <strong>${stewards.length}</strong>
         </small>
         ${homepageUrl ? `<br/><a href="${homepageUrl}" target="_blank" style="font-size:0.8rem; color:var(--accent-color);">${homepageUrl}</a>` : ''}
@@ -270,5 +337,6 @@ mintProjectBtn.addEventListener('click', async () => {
   providerDetailsContainer.classList.add('hidden');
   providerNameInput.value = '';
   providerUriInput.value = '';
+  projectGuardiansContainer.innerHTML = '';
 });
 
