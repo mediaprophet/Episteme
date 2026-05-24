@@ -10,7 +10,8 @@ import {
   SolidDataset,
   getThing,
   getUrl,
-  getUrlAll
+  getUrlAll,
+  getStringNoLocale
 } from '@inrupt/solid-client';
 
 // Core namespace constants
@@ -155,7 +156,7 @@ export async function validateResource(
 
   // Basic mock implementation of key constraints (matching our project-shape.ttl validation)
   if (shapeUri.includes("project")) {
-    const name = getUrl(thing, "http://usefulinc.com/ns/doap#name");
+    const name = getStringNoLocale(thing, "http://usefulinc.com/ns/doap#name") || getUrl(thing, "http://usefulinc.com/ns/doap#name");
     if (!name) {
       errors.push("SHACL Violation: doap:name is a mandatory property of doap:Project.");
     }

@@ -4,25 +4,21 @@
 @prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
 @prefix doap:   <http://usefulinc.com/ns/doap#> .
 @prefix schema: <https://schema.org/> .
-@prefix odrl:   <http://www.w3.org/ns/odrl/2/> .
 @prefix prov:   <http://www.w3.org/ns/prov#> .
 @prefix dc:     <http://purl.org/dc/terms/> .
-@prefix wz-st:  <https://mediaprophet.org/ext/webizen/stewardship#> .
-@prefix wz-ag:  <https://mediaprophet.org/ext/webizen/agreements#> .
-@prefix nym-ext: <https://mediaprophet.org/ext/nym#> .
 @prefix ep:     <https://episteme.example/shapes/> .
 
 # ─── Project Shape ────────────────────────────────────────────────────────────
 #
-# Validates the core Webizen Co-Stewardship Project resource.
-# The project must simultaneously be a:
-#   doap:Project, schema:Project, schema:CreativeWork, prov:Entity
-# with all mandatory fields from DOAP and ODRL governance.
+# Validates the core Description of a Project (DOAP) resource.
+# The project must be a:
+#   doap:Project, schema:Project, prov:Entity
+# with standard DOAP fields and provenance.
 #
 ep:ProjectShape
     a sh:NodeShape ;
-    rdfs:label "Webizen Co-Stewardship Project Shape" ;
-    rdfs:comment "Validates a Solid Pod project resource enriched with DOAP, Schema.org, HEF, and ODRL vocabularies." ;
+    rdfs:label "DOAP Project Shape" ;
+    rdfs:comment "Validates a Solid Pod project resource matching DOAP, Schema.org, and PROV ontologies." ;
     sh:targetClass doap:Project ;
 
     # ── Multi-typing ──────────────────────────────────────────────────────────
@@ -57,33 +53,10 @@ ep:ProjectShape
     ] ;
 
     sh:property [
-        sh:path     doap:license ;
-        sh:nodeKind sh:IRI ;
-        sh:minCount 1 ;
-        sh:message  "doap:license must link to the HEF license resource." ;
-    ] ;
-
-    sh:property [
         sh:path     doap:created ;
         sh:datatype xsd:dateTime ;
         sh:minCount 1 ;
         sh:message  "doap:created timestamp is required." ;
-    ] ;
-
-    # ── ODRL governance ───────────────────────────────────────────────────────
-    sh:property [
-        sh:path     odrl:hasPolicy ;
-        sh:nodeKind sh:IRI ;
-        sh:minCount 1 ;
-        sh:message  "Project must reference an ODRL Policy via odrl:hasPolicy." ;
-    ] ;
-
-    # ── Webizen Claim Process link ────────────────────────────────────────────
-    sh:property [
-        sh:path     wz-st:hasClaimProcess ;
-        sh:nodeKind sh:IRI ;
-        sh:minCount 1 ;
-        sh:message  "Project must reference a Webizen ClaimProcess resource." ;
     ] ;
 
     # ── Provenance ────────────────────────────────────────────────────────────
@@ -100,100 +73,4 @@ ep:ProjectShape
         sh:nodeKind sh:IRI ;
         sh:minCount 1 ;
         sh:message  "Project must specify a schema:hostingProvider IRI." ;
-    ] ;
-
-    # ── Guardianship Relations ────────────────────────────────────────────────
-    sh:property [
-        sh:path     wz-ag:hasAgreement ;
-        sh:nodeKind sh:IRI ;
-        sh:message  "Project links to guardianship agreements via wz-ag:hasAgreement." ;
-    ] ;
-
-    # ── Nym Metadata Privacy Extension ────────────────────────────────────────
-    sh:property [
-        sh:path     nym-ext:hasNymConfig ;
-        sh:node     ep:NymConfigurationShape ;
-        sh:maxCount 1 ;
-        sh:message  "Project may reference at most one Nym Configuration extension." ;
-    ] .
-
-# ─── ODRL Policy Shape ────────────────────────────────────────────────────────
-ep:PolicyShape
-    a sh:NodeShape ;
-    rdfs:label "Webizen Co-Stewardship ODRL Policy Shape" ;
-    sh:targetClass odrl:Policy ;
-
-    sh:property [
-        sh:path     odrl:assigner ;
-        sh:nodeKind sh:IRI ;
-        sh:minCount 1 ;
-        sh:message  "odrl:Policy must have at least one assigner WebID." ;
-    ] ;
-
-    sh:property [
-        sh:path     odrl:assignee ;
-        sh:nodeKind sh:IRI ;
-        sh:minCount 1 ;
-        sh:message  "odrl:Policy must have at least one assignee (co-steward) WebID." ;
-    ] ;
-
-    sh:property [
-        sh:path     odrl:action ;
-        sh:nodeKind sh:IRI ;
-        sh:minCount 1 ;
-        sh:message  "odrl:Policy must specify at least one permitted action." ;
-    ] ;
-
-    sh:property [
-        sh:path     wz-ag:valueCredential ;
-        sh:minCount 1 ;
-        sh:message  "ODRL Policy must reference a UN Human Rights value credential URI." ;
-    ] .
-
-# ─── Webizen Obligation Cost Shape ────────────────────────────────────────────
-ep:ObligationCostShape
-    a sh:NodeShape ;
-    rdfs:label "Webizen Obligation Cost Shape" ;
-    sh:targetClass wz-st:ObligationCost ;
-
-    sh:property [
-        sh:path     schema:currency ;
-        sh:datatype xsd:string ;
-        sh:minCount 1 ;
-        sh:message  "ObligationCost must specify a currency." ;
-    ] ;
-
-    sh:property [
-        sh:path     schema:value ;
-        sh:datatype xsd:decimal ;
-        sh:minCount 1 ;
-        sh:message  "ObligationCost must specify an initial numeric value." ;
-    ] .
-
-# ─── Nym Configuration Shape ──────────────────────────────────────────────────
-ep:NymConfigurationShape
-    a sh:NodeShape ;
-    rdfs:label "Nym Configuration Shape" ;
-    sh:targetClass nym-ext:NymConfiguration ;
-
-    sh:property [
-        sh:path     nym-ext:nymEnabled ;
-        sh:datatype xsd:boolean ;
-        sh:minCount 1 ;
-        sh:maxCount 1 ;
-        sh:message  "nymEnabled must be a single boolean value." ;
-    ] ;
-
-    sh:property [
-        sh:path     nym-ext:socksProxyUrl ;
-        sh:datatype xsd:string ;
-        sh:maxCount 1 ;
-        sh:message  "socksProxyUrl must be a string." ;
-    ] ;
-
-    sh:property [
-        sh:path     nym-ext:clientAddress ;
-        sh:datatype xsd:string ;
-        sh:maxCount 1 ;
-        sh:message  "clientAddress must be a string representing the Nym public address." ;
     ] .

@@ -19,11 +19,9 @@
     "tests/**/*.ts",
     "templates/**/*.ts",
     "templates/**/*.tsx",
-    "custom-addons/**/*.ts",
-    "ext/webizen/src/**/*.ts"
+    "custom-addons/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "ext/webizen/node_modules"
+    "node_modules"
   ]
 }
