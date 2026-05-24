@@ -1,11 +1,6 @@
 import { spawn } from 'child_process';
 import { setTimeout as sleep } from 'timers/promises';
 
-/**
- * Starts an in-memory Community Solid Server instance for E2E testing.
- * Uses proper health-check polling instead of a fragile fixed timeout.
- */
-
 let cssProcess = null;
 
 async function isServerReady(port) {
@@ -26,16 +21,15 @@ async function isServerReady(port) {
   }
 }
 
-export async function startLocalCSS(port = 3000) {
+export async function startLocalCSS(port = 3001) {
   return new Promise(async (resolve, reject) => {
     try {
       console.log(`🚀 Starting Community Solid Server on port ${port}...`);
 
       cssProcess = spawn('npx', [
-        'community-solid-server',
+        '@solid/community-server',
         '-p', port.toString(),
-        '-l', 'info',
-        '-m' // in-memory storage
+        '-l', 'info'
       ], {
         stdio: 'inherit',
         env: { ...process.env, FORCE_JAVA: 'true' }
@@ -46,8 +40,7 @@ export async function startLocalCSS(port = 3000) {
         reject(err);
       });
 
-      // Health check loop
-      const MAX_WAIT = 30000;   // 30 seconds max
+      const MAX_WAIT = 30000;
       const CHECK_INTERVAL = 800;
       let elapsed = 0;
 
