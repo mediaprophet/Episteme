@@ -3,6 +3,10 @@ import {
   createSolidDataset,
   buildThing,
   setThing,
+  getBoolean,
+  getStringNoLocale,
+  getThingAll,
+  getUrl
 } from '@inrupt/solid-client';
 import {
   discoverShapeFromHeaders,
@@ -11,6 +15,7 @@ import {
   discoverShape,
   validateResource
 } from '../../templates/shacl-discovery-demo';
+import { createCoStewardshipProject } from '../../demos/webizen/src/stewardship';
 
 describe('SHACL Shape Discovery & Validation', () => {
 
@@ -180,6 +185,60 @@ describe('SHACL Shape Discovery & Validation', () => {
       const result = await validateResource(resourceUri, dataset, null);
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('Data-driven check: Resource contains no predicates.');
+    });
+  });
+
+  describe('Co-Stewardship Project with Nym Configuration', () => {
+    it('should successfully build the project dataset with nym-ext triples when nymEnabled is true', async () => {
+      const creatorWebId = 'https://pod.example/alice#me';
+      const projectName = 'Nym Privacy Project';
+      
+      const mockFetch = vi.fn().mockResolvedValue({} as any);
+
+      const dataset = await createCoStewardshipProject({
+        creatorWebId,
+        projectName,
+        description: 'Test project with metadata privacy via Nym mixnet proxy routing.',
+        homepageUrl: 'https://example.org/nym-project',
+        coStewardsWebIds: ['https://pod.example/bob#me'],
+        policyType: 'co-authorship',
+        valueConstraint: 'UDHR',
+        providerType: 'self',
+        nymEnabled: true,
+        nymSocksUrl: 'socks5h://127.0.0.1:1080',
+        nymClientAddress: 'nym-client-key-address-value'
+      }, mockFetch);
+
+      expect(dataset).toBeDefined();
+
+      // Get all things in the dataset
+      const things = getThingAll(dataset);
+      
+      // Find the project thing
+      const projectThing = things.find(t => t.url.includes('project-'));
+      expect(projectThing).toBeDefined();
+
+      // Find the link to the Nym configuration
+      const nymConfigLink = getUrl(projectThing!, 'https://mediaprophet.org/ext/nym#hasNymConfig');
+      expect(nymConfigLink).toBeDefined();
+      expect(nymConfigLink).toContain('#nym-config');
+
+      // Find the Nym Configuration thing
+      const nymConfigThing = things.find(t => t.url.endsWith('#nym-config'));
+      expect(nymConfigThing).toBeDefined();
+
+      // Verify the Nym Configuration values
+      const type = getUrl(nymConfigThing!, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
+      expect(type).toBe('https://mediaprophet.org/ext/nym#NymConfiguration');
+
+      const isEnabled = getBoolean(nymConfigThing!, 'https://mediaprophet.org/ext/nym#nymEnabled');
+      expect(isEnabled).toBe(true);
+
+      const socksUrl = getStringNoLocale(nymConfigThing!, 'https://mediaprophet.org/ext/nym#socksProxyUrl');
+      expect(socksUrl).toBe('socks5h://127.0.0.1:1080');
+
+      const clientAddress = getStringNoLocale(nymConfigThing!, 'https://mediaprophet.org/ext/nym#clientAddress');
+      expect(clientAddress).toBe('nym-client-key-address-value');
     });
   });
 

@@ -11,6 +11,7 @@
 @prefix hef-co: <http://example.org/humanitarian-equity-framework/ontology/cost-model#> .
 @prefix hef-cl: <http://example.org/humanitarian-equity-framework/ontology/claims-procedure#> .
 @prefix hcai:   <https://w3id.org/hcai/agreements#> .
+@prefix nym-ext: <https://mediaprophet.org/ext/nym#> .
 @prefix ep:     <https://episteme.example/shapes/> .
 
 # ─── Project Shape ────────────────────────────────────────────────────────────
@@ -108,6 +109,14 @@ ep:ProjectShape
         sh:path     hcai:hasAgreement ;
         sh:nodeKind sh:IRI ;
         sh:message  "Project links to guardianship agreements via hcai:hasAgreement." ;
+    ] ;
+
+    # ── Nym Metadata Privacy Extension ────────────────────────────────────────
+    sh:property [
+        sh:path     nym-ext:hasNymConfig ;
+        sh:node     ep:NymConfigurationShape ;
+        sh:maxCount 1 ;
+        sh:message  "Project may reference at most one Nym Configuration extension." ;
     ] .
 
 # ─── ODRL Policy Shape ────────────────────────────────────────────────────────
@@ -161,4 +170,32 @@ ep:ObligationCostShape
         sh:datatype xsd:decimal ;
         sh:minCount 1 ;
         sh:message  "ObligationCost must specify an initial numeric value." ;
+    ] .
+
+# ─── Nym Configuration Shape ──────────────────────────────────────────────────
+ep:NymConfigurationShape
+    a sh:NodeShape ;
+    rdfs:label "Nym Configuration Shape" ;
+    sh:targetClass nym-ext:NymConfiguration ;
+
+    sh:property [
+        sh:path     nym-ext:nymEnabled ;
+        sh:datatype xsd:boolean ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message  "nymEnabled must be a single boolean value." ;
+    ] ;
+
+    sh:property [
+        sh:path     nym-ext:socksProxyUrl ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:message  "socksProxyUrl must be a string." ;
+    ] ;
+
+    sh:property [
+        sh:path     nym-ext:clientAddress ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:message  "clientAddress must be a string representing the Nym public address." ;
     ] .

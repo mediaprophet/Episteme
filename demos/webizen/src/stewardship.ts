@@ -6,7 +6,6 @@ import {
   saveSolidDatasetAt,
   SolidDataset
 } from '@inrupt/solid-client';
-import { fetch } from '@inrupt/solid-client-authn-browser';
 
 // ─── Namespace Declarations ───────────────────────────────────────────────────
 const RDF    = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -16,6 +15,7 @@ const ODRL   = "http://www.w3.org/ns/odrl/2/";
 const DC     = "http://purl.org/dc/terms/";
 const FOAF   = "http://xmlns.com/foaf/0.1/";
 const PROV   = "http://www.w3.org/ns/prov#";
+const NYM_EXT = "https://mediaprophet.org/ext/nym#";
 
 // W3C DOAP – Description of a Project
 // https://github.com/ewilderj/doap
@@ -55,6 +55,9 @@ export interface StewardshipProjectInput {
   providerName?: string;
   providerUri?: string;
   guardians?: ProjectGuardianshipInput[];
+  nymEnabled?: boolean;
+  nymSocksUrl?: string;
+  nymClientAddress?: string;
 }
 
 // ─── Value Constraint → UN Instrument URI map ─────────────────────────────────
@@ -77,7 +80,8 @@ const UN_INSTRUMENT_URIS: Record<string, string> = {
  *  - prov:Entity (provenance)
  */
 export async function createCoStewardshipProject(
-  input: StewardshipProjectInput
+  input: StewardshipProjectInput,
+  authFetch: typeof fetch = globalThis.fetch
 ): Promise<SolidDataset> {
   const {
     creatorWebId,
@@ -91,6 +95,9 @@ export async function createCoStewardshipProject(
     providerName,
     providerUri,
     guardians = [],
+    nymEnabled = false,
+    nymSocksUrl,
+    nymClientAddress,
   } = input;
 
   const projectId  = `project-${Date.now()}`;
@@ -126,6 +133,10 @@ export async function createCoStewardshipProject(
     .addUrl(`${ODRL}hasPolicy`,  `#${policyId}`)
     // HEF claim procedure link
     .addUrl(`${HEF_CLAIMS}hasClaimProcess`, `#${claimId}`);
+
+  if (nymEnabled) {
+    projectBuilder = projectBuilder.addUrl(`${NYM_EXT}hasNymConfig`, `#nym-config`);
+  }
 
   // Platform Hosting Provider
   let providerThing: any = null;
@@ -238,6 +249,22 @@ export async function createCoStewardshipProject(
       `Aggregated contribution obligation cost for project: ${projectName} (initial value 0)`)
     .build();
 
+  // ── 6. Nym Mixnet Config Thing ─────────────────────────────────────────────
+  let nymConfigThing: any = null;
+  if (nymEnabled) {
+    let nymBuilder = buildThing(createThing({ name: 'nym-config' }))
+      .addUrl(`${RDF}type`, `${NYM_EXT}NymConfiguration`)
+      .addBoolean(`${NYM_EXT}nymEnabled`, true);
+
+    if (nymSocksUrl) {
+      nymBuilder = nymBuilder.addStringNoLocale(`${NYM_EXT}socksProxyUrl`, nymSocksUrl);
+    }
+    if (nymClientAddress) {
+      nymBuilder = nymBuilder.addStringNoLocale(`${NYM_EXT}clientAddress`, nymClientAddress);
+    }
+    nymConfigThing = nymBuilder.build();
+  }
+
   // ── Assemble Dataset ────────────────────────────────────────────────────────
   let dataset = createSolidDataset();
   dataset = setThing(dataset, projectThing);
@@ -248,13 +275,16 @@ export async function createCoStewardshipProject(
   if (providerThing) {
     dataset = setThing(dataset, providerThing);
   }
+  if (nymConfigThing) {
+    dataset = setThing(dataset, nymConfigThing);
+  }
   guardianThings.forEach(gThing => {
     dataset = setThing(dataset, gThing);
   });
 
   // Mint to Pod: /projects/<id>.ttl
   const storageUrl = new URL(creatorWebId).origin + `/projects/${projectId}.ttl`;
-  await saveSolidDatasetAt(storageUrl, dataset, { fetch });
+  await saveSolidDatasetAt(storageUrl, dataset, { fetch: authFetch });
 
   return dataset;
 }

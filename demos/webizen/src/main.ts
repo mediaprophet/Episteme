@@ -46,6 +46,10 @@ const projectGuardiansContainer = document.getElementById('project-guardians-con
 const addProjectGuardianBtn   = document.getElementById('add-project-guardian-btn') as HTMLButtonElement;
 const cancelProjectBtn       = document.getElementById('cancel-project-btn') as HTMLButtonElement;
 const mintProjectBtn         = document.getElementById('mint-project-btn') as HTMLButtonElement;
+const projectNymEnabledInput = document.getElementById('project-nym-enabled') as HTMLInputElement;
+const projectNymDetailsContainer = document.getElementById('project-nym-details') as HTMLElement;
+const projectNymSocksInput   = document.getElementById('project-nym-socks') as HTMLInputElement;
+const projectNymAddressInput = document.getElementById('project-nym-address') as HTMLInputElement;
 const projectListEl          = document.getElementById('project-list') as HTMLElement;
 
 let currentSession: any;
@@ -183,6 +187,14 @@ projectProviderSelect.addEventListener('change', () => {
   }
 });
 
+projectNymEnabledInput.addEventListener('change', () => {
+  if (projectNymEnabledInput.checked) {
+    projectNymDetailsContainer.classList.remove('hidden');
+  } else {
+    projectNymDetailsContainer.classList.add('hidden');
+  }
+});
+
 addProjectGuardianBtn.addEventListener('click', () => {
   const row = document.createElement('div');
   row.className = 'guardian-row';
@@ -221,6 +233,10 @@ cancelProjectBtn.addEventListener('click', () => {
   providerNameInput.value = '';
   providerUriInput.value = '';
   projectGuardiansContainer.innerHTML = '';
+  projectNymEnabledInput.checked = false;
+  projectNymDetailsContainer.classList.add('hidden');
+  projectNymSocksInput.value = 'socks5h://127.0.0.1:1080';
+  projectNymAddressInput.value = '';
 });
 
 mintProjectBtn.addEventListener('click', async () => {
@@ -233,6 +249,10 @@ mintProjectBtn.addEventListener('click', async () => {
   const providerType = projectProviderSelect.value as 'self' | 'other';
   const providerName = providerNameInput.value.trim();
   const providerUri = providerUriInput.value.trim();
+  
+  const nymEnabled = projectNymEnabledInput.checked;
+  const nymSocksUrl = projectNymSocksInput.value.trim();
+  const nymClientAddress = projectNymAddressInput.value.trim();
 
   // Harvest guardians
   const guardianRows = projectGuardiansContainer.querySelectorAll('.guardian-row');
@@ -295,15 +315,19 @@ mintProjectBtn.addEventListener('click', async () => {
       providerName:     providerType === 'other' ? providerName : undefined,
       providerUri:      providerType === 'other' && providerUri ? providerUri : undefined,
       guardians,
-    });
+      nymEnabled,
+      nymSocksUrl:      nymEnabled ? nymSocksUrl : undefined,
+      nymClientAddress: (nymEnabled && nymClientAddress) ? nymClientAddress : undefined,
+    }, currentSession.fetch);
 
     const providerLabel = providerType === 'self' ? 'Self (Personal Pod)' : providerName;
     const guardiansLabel = guardians.length > 0 
       ? guardians.map(g => g.purpose.charAt(0).toUpperCase() + g.purpose.slice(1)).join(', ')
       : 'None';
-
+    const nymLabel = nymEnabled ? `Enabled (${nymSocksUrl})` : 'Disabled';
+ 
     alert(`Project '${projectName}' minted as doap:Project + schema:Project with ODRL & HEF equity graph on your Pod!`);
-
+ 
     // Enrich project list card
     const li = document.createElement('li');
     li.className = 'contact-item';
@@ -314,6 +338,7 @@ mintProjectBtn.addEventListener('click', async () => {
         <small style="color: var(--text-secondary);">
           ODRL: <strong>${projectPolicySelect.value}</strong> &nbsp;|&nbsp;
           Host: <strong>${providerLabel}</strong> &nbsp;|&nbsp;
+          Nym Privacy: <strong>${nymLabel}</strong> &nbsp;|&nbsp;
           Guardians: <strong>${guardiansLabel}</strong> &nbsp;|&nbsp;
           Co-Stewards: <strong>${stewards.length}</strong>
         </small>
@@ -338,5 +363,9 @@ mintProjectBtn.addEventListener('click', async () => {
   providerNameInput.value = '';
   providerUriInput.value = '';
   projectGuardiansContainer.innerHTML = '';
+  projectNymEnabledInput.checked = false;
+  projectNymDetailsContainer.classList.add('hidden');
+  projectNymSocksInput.value = 'socks5h://127.0.0.1:1080';
+  projectNymAddressInput.value = '';
 });
 
