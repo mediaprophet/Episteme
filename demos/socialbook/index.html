@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Book - Episteme</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+  </head>
+  <body>
+    <div class="app-container">
+      <header class="glass-header">
+        <h1 class="logo">Social Book</h1>
+        <div id="auth-controls">
+          <input type="url" id="idp-url" placeholder="https://solidcommunity.net" value="https://solidcommunity.net">
+          <button id="login-btn" class="btn primary-btn">Login</button>
+          <button id="logout-btn" class="btn hidden">Logout</button>
+        </div>
+      </header>
+
+      <main class="dashboard hidden" id="dashboard">
+        <!-- Self Panel -->
+        <section class="panel self-panel glass-panel">
+          <h2>Identity (Self)</h2>
+          <div class="profile-info">
+            <div class="avatar" id="user-avatar"></div>
+            <div class="details">
+              <h3 id="user-name">Loading...</h3>
+              <p class="webid-label" id="user-webid">WebID</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Social Address Book -->
+        <section class="panel address-book-panel glass-panel">
+          <h2>Social Address Book</h2>
+          <p class="subtitle">Trusted Agents & Guardians</p>
+          <ul id="contact-list" class="contact-list">
+            <!-- Contacts injected here -->
+          </ul>
+        </section>
+
+        <!-- Agreement Negotiator Modal (Hidden by default) -->
+        <div id="agreement-modal" class="modal hidden">
+          <div class="modal-content glass-panel">
+            <h2>Negotiate Guardianship Agreement</h2>
+            <p>Target Agent: <strong id="modal-agent-name"></strong></p>
+            
+            <label for="domain-select">Domain of Agency</label>
+            <select id="domain-select">
+              <option value="medical">Medical & Healthcare</option>
+              <option value="financial">Financial Agent</option>
+              <option value="itsupport">IT Support</option>
+              <option value="digital_legacy">Digital Legacy (Post-mortem)</option>
+            </select>
+
+            <label for="values-select">Foundational Value Constraint</label>
+            <select id="values-select">
+              <option value="UDHR">Universal Declaration of Human Rights (UDHR)</option>
+              <option value="CRC">Convention on the Rights of the Child (CRC)</option>
+            </select>
+
+            <div class="modal-actions">
+              <button id="cancel-agreement-btn" class="btn secondary-btn">Cancel</button>
+              <button id="mint-agreement-btn" class="btn primary-btn">Sign & Mint Agreement</button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <div class="hero-unauth" id="hero-unauth">
+        <h2>Sovereign Agency & Relationships</h2>
+        <p>A Human-Centric address book where social connections are bound by cryptographic, mutually agreed terms rather than corporate silos.</p>
+      </div>
+
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
