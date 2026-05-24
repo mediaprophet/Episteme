@@ -15,14 +15,13 @@ export async function startLocalCSS(port = 3000) {
     
     // Inrupt and standard Solid components expect standard HTTP for local testing
     // We run it purely in memory for fast tests.
-    app = await new AppRunner().start(
-      new AppRunner().getValidCommand({
-        port: port,
-        loggingLevel: 'info',
-        // Example: load a pre-configured memory setup
-        // config: '@css:config/file-no-setup.json',
-      })
-    );
+    const runner = new AppRunner();
+    app = await runner.start({
+      port: port,
+      loggingLevel: 'info',
+      // Example: load a pre-configured memory setup
+      // config: '@css:config/file-no-setup.json',
+    });
     
     console.log('Community Solid Server started successfully.');
     return app;

@@ -4,6 +4,10 @@ Welcome to **Episteme**, an advanced architectural framework designed to force L
 
 This repository provides modular rules, specific deployment constraints, and semantic dictionaries that act as a strict guardrail against technical debt, centralization, and ideological drift.
 
+### Branching Strategy
+- **`main` branch:** Dedicated exclusively to strict **"Vanilla Solid" compatibility** and backwards-compatible profiles. It acts as the stable baseline for W3C Solid compliance.
+- **`0.0.3-dev` branch:** The active development branch for experimental extensions and custom add-ons (such as advanced Webizen ecology models, Nym mixnet integration, and accounting tokens) designed to extend the capabilities of Solid-based systems.
+
 ---
 
 ## 🌟 The Philosophy: Human-Centric Digital Agency
