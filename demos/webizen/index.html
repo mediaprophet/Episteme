@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Social Book - Episteme</title>
+    <title>Webizen - Episteme</title>
     <!-- Modern Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +13,7 @@
   <body>
     <div class="app-container">
       <header class="glass-header">
-        <h1 class="logo">Social Book</h1>
+        <h1 class="logo">Webizen</h1>
         <div id="auth-controls">
           <input type="url" id="idp-url" placeholder="https://solidcommunity.net" value="https://solidcommunity.net">
           <button id="login-btn" class="btn primary-btn">Login</button>
@@ -30,6 +30,23 @@
             <div class="details">
               <h3 id="user-name">Loading...</h3>
               <p class="webid-label" id="user-webid">WebID</p>
+            </div>
+          </div>
+          
+          <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--glass-border);" />
+          
+          <div class="adp-section">
+            <h4 style="margin-bottom: 0.5rem; font-family: var(--font-display);">Domain Discovery (ADP)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+              Link a custom domain name to your WebID to enable decentralized discovery via the Agent Discovery Protocol.
+            </p>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+              <input type="text" id="adp-domain-input" placeholder="e.g. example.com" style="flex: 1;">
+              <button id="generate-adp-btn" class="btn secondary-btn">Generate DNS</button>
+            </div>
+            <div id="adp-dns-output" class="hidden" style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border: 1px dashed var(--accent-color);">
+              <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Add this TXT record to your domain's DNS settings:</p>
+              <code id="adp-dns-code" style="color: #c084fc; word-break: break-all; font-family: monospace;"></code>
             </div>
           </div>
         </section>
@@ -74,7 +91,7 @@
 
       <div class="hero-unauth" id="hero-unauth">
         <h2>Sovereign Agency & Relationships</h2>
-        <p>A Human-Centric address book where social connections are bound by cryptographic, mutually agreed terms rather than corporate silos.</p>
+        <p>A Human-Centric application where social connections are bound by cryptographic, mutually agreed terms rather than corporate silos. Define your Webizen identity.</p>
       </div>
 
     </div>

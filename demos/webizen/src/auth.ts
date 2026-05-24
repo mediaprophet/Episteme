@@ -14,7 +14,7 @@ export async function initiateLogin(idpUrl: string) {
     await login({
       oidcIssuer: idpUrl,
       redirectUrl: window.location.href,
-      clientName: "Episteme Social Book",
+      clientName: "Episteme Webizen",
     });
   }
 }

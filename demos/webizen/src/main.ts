@@ -22,6 +22,12 @@ const valuesSelect = document.getElementById('values-select') as HTMLSelectEleme
 const cancelBtn = document.getElementById('cancel-agreement-btn') as HTMLButtonElement;
 const mintBtn = document.getElementById('mint-agreement-btn') as HTMLButtonElement;
 
+// ADP Elements
+const adpDomainInput = document.getElementById('adp-domain-input') as HTMLInputElement;
+const generateAdpBtn = document.getElementById('generate-adp-btn') as HTMLButtonElement;
+const adpDnsOutput = document.getElementById('adp-dns-output') as HTMLElement;
+const adpDnsCode = document.getElementById('adp-dns-code') as HTMLElement;
+
 let currentSession: any;
 let targetAgentForAgreement: Contact | null = null;
 
@@ -113,3 +119,26 @@ mintBtn.addEventListener('click', async () => {
   mintBtn.disabled = false;
   targetAgentForAgreement = null;
 });
+
+// ADP Logic
+generateAdpBtn.addEventListener('click', () => {
+  const domain = adpDomainInput.value.trim();
+  if (!domain) {
+    alert("Please enter a domain name.");
+    return;
+  }
+  
+  const webId = currentSession?.info?.webId;
+  if (!webId) {
+    alert("You must be logged in to generate ADP records.");
+    return;
+  }
+
+  // Generate standard DNS TXT record for ADP linking domain to WebID
+  const txtRecordName = `_adp.${domain}`;
+  const txtRecordValue = `v=adp1 webid=${webId}`;
+  
+  adpDnsCode.textContent = `Name: ${txtRecordName}\nType: TXT\nValue: "${txtRecordValue}"`;
+  adpDnsOutput.classList.remove('hidden');
+});
+
