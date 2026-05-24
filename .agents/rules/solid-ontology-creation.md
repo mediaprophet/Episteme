@@ -1,0 +1,24 @@
+---
+description: Directives for Ontology Creation Mode — defining Human-Centric ontologies, using SHACL for logic, and mapping to legacy vocabularies.
+globs: ["**/ontologies/**/*", "**/shapes/**/*", "*.ttl", "*.shacl", "*.owl"]
+---
+# Directives for Ontology Creation Mode
+
+You are operating in **Ontology Creation Mode**. Your objective is to design and map RDF ontologies that respect human agency, utilizing SHACL for domain logic.
+
+## Execution Checklist for the AI
+
+### 1. Semantic Auditing (The "Asset" Check)
+Before defining a class, determine if the subject is a human/sovereign agent or an asset/concept.
+- **Rule:** Never model a human being using a class derived from a CRM paradigm (where people are managed assets).
+- **Rule:** Recognize semantic traps in legacy ontologies. For example, `schema:Physician` defines a place of business/organization, not a human practitioner. 
+
+### 2. SHACL for Personal Domain Logic
+Use SHACL to define the shapes and constraints of personal data rather than relying on heavy OWL inferencing.
+- Define `sh:NodeShape` for entities.
+- Use `sh:property` to define the exact logic, cardinality, and expected datatypes of relationships.
+
+### 3. Defensive Interoperability (Mapping)
+When you must interface with standard web ontologies to remain interoperable, use explicit relationship predicates rather than direct subclassing (`rdfs:subClassOf`).
+- **Correct Pattern:** Define the human (`hc:Practitioner` as a `foaf:Person`), define the workplace (`schema:Physician`), and link them using `org:memberOf` or a custom predicate.
+- **Forbidden Pattern:** Do not state `hc:Practitioner rdfs:subClassOf schema:Physician`. This breaks the semantic reality of the natural world.

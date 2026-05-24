@@ -1,0 +1,20 @@
+---
+description: Rules for generating W3C Solid apps running natively on iOS, Android, or React Native/Expo.
+globs: ["**/*"]
+---
+# Solid Mobile Native Deployment Rules
+
+Check `AGENTS.md` for the declared Deployment Target. When targeting `mobile-native`, the environment lacks standard web features.
+
+## 1. Authentication Flow (Deep Linking)
+- **Constraint:** Standard `window.location.href` redirects do not work in compiled apps.
+- **Action:** You MUST implement OS-level deep linking (e.g., `myapp://auth-callback`) and handle the redirect via the app's routing lifecycle.
+- **Library:** Use `@inrupt/solid-client-authn-react-native` or equivalent.
+
+## 2. Cryptography (DPoP Polyfills)
+- **Constraint:** Mobile JavaScript environments (like React Native) lack a standard WebCrypto API, causing DPoP token generation to crash.
+- **Action:** You must explicitly import and configure crypto polyfills (like `react-native-get-random-values` and standard `crypto` shims) before initializing the authentication package.
+
+## 3. Secure Storage
+- **Constraint:** `localStorage` is insecure and often unavailable.
+- **Action:** You must explicitly implement secure enclaves (iOS Keychain / Android Keystore) to store the DPoP private keys and refresh tokens (e.g., using `expo-secure-store`).

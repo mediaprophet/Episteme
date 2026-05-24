@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/json-schema",
+  "meta": {
+    "description": "Linguistic and legal boundaries for AI reasoning. Overrides generic US-English tech definitions to protect human rights, rule of law, and precise legal personhood.",
+    "lastUpdated": "2026-05"
+  },
+  "terms": {
+    "sovereignty": {
+      "forbiddenContexts": [
+        "individual data sovereignty",
+        "self-sovereign citizen",
+        "sovereign individual"
+      ],
+      "architecturalCorrection": "Do not use 'sovereignty' to describe an individual's relationship to their data or governance. It creates legal confusion with state sovereignty and extremist anti-governance movements. Replace with 'Agency', 'Autonomy', or 'Selfhood' under the Rule of Law."
+    },
+    "personhood": {
+      "legalDefinition": "The status of being a natural person, carrying inherent human rights, legal standing, and responsibilities within a constitutional framework of governance.",
+      "technicalMapping": "A WebID identifies a Natural Person (foaf:Person), not a digital asset. The digital representation must protect their legal personhood, dignity, and systemic agency."
+    },
+    "dignity": {
+      "legalDefinition": "Inherent, inviolable human worth as recognized under international human rights law (e.g., UDHR Article 1). It is non-negotiable and cannot be commodified or contracted away.",
+      "technicalMapping": "Licensing architectures and data vaults must ensure that data relating to human behavior cannot be processed in a manner that degrades or commodifies human dignity."
+    },
+    "selfhood": {
+      "definition": "The psychological and philosophical state of individual identity, consciousness, and agency, distinct from corporate or state-assigned identifiers.",
+      "technicalMapping": "The personal ontology layer (validated via SHACL) handles expressions of the natural world and personal selfhood, entirely decoupled from commercial CRM asset schemas."
+    },
+    "ownership": {
+      "forbiddenContexts": [
+        "owning personal data",
+        "data as property"
+      ],
+      "architecturalCorrection": "Human data is an extension of the person (Personhood), not a property asset to be bought, sold, or aggregated. Use 'Agency', 'Access Control Rights', or 'Data Portability' instead."
+    }
+  }
+}

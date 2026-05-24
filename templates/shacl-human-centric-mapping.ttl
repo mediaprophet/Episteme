@@ -1,0 +1,38 @@
+# Data Liberation & Ontology Template: Defensive Semantic Mapping
+# This SHACL shape demonstrates how to model a human practitioner 
+# without conflating them with a Schema.org commercial entity.
+
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <http://schema.org/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix hc: <https://webcivics.github.io/ontology/human-centric#> . # Example custom namespace
+
+# 1. Define the Sovereign Human Practitioner
+hc:PractitionerShape
+    a sh:NodeShape ;
+    sh:targetClass hc:Practitioner ;
+    
+    # Must be a person, not a thing or an asset
+    sh:property [
+        sh:path [ sh:inversePath a ] ;
+        sh:hasValue foaf:Person ;
+    ] ;
+
+    # 2. Defensive Mapping to Legacy Ontologies
+    # Instead of defining the human AS the business (schema:Physician),
+    # we define their relationship TO the business.
+    sh:property [
+        sh:path org:memberOf ;
+        sh:class schema:Physician ; # schema:Physician is treated correctly as the Medical Organization
+        sh:description "The medical clinic or organization where the human practitioner works." ;
+        sh:minCount 1 ;
+    ] ;
+
+    sh:property [
+        sh:path foaf:name ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .

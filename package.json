@@ -1,0 +1,20 @@
+{
+  "name": "solid-helper-project",
+  "version": "1.0.0",
+  "description": "W3C Solid Helper and Rules Boilerplate",
+  "type": "module",
+  "scripts": {
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run tests/unit",
+    "test:e2e": "vitest run tests/e2e",
+    "test:watch": "vitest",
+    "css:start": "community-solid-server -l info -m ."
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0",
+    "@solid/community-server": "^7.0.0",
+    "@inrupt/solid-client": "^2.0.0",
+    "@inrupt/solid-client-authn-node": "^2.0.0",
+    "@inrupt/vocab-common-rdf": "^1.0.5"
+  }
+}
