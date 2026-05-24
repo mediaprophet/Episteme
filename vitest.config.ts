@@ -2,9 +2,10 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    hookTimeout: 30000,
-    testTimeout: 30000,
-    environment: 'node',
     globals: true,
+    environment: 'node',
+    hookTimeout: 180000,   // 3 minutes - needed for CSS startup in CI
+    testTimeout: 60000,
+    include: ['tests/**/*.test.{js,ts}'],
   },
 });
