@@ -64,16 +64,23 @@ Because Solid relies heavily on WebCrypto for DPoP tokens and rigid URI redirect
 
 ## 🤖 How to Use This Toolkit
 
-### Step 1: Declare the Stack
+### Step 1: Clone the Repository
+It is highly recommended that you clone this repository to serve as the foundational architecture for your new project *before* making any customizations.
+```bash
+git clone https://github.com/mediaprophet/Episteme.git my-solid-app
+cd my-solid-app
+```
+
+### Step 2: Declare the Stack
 Open `AGENTS.md` and declare your technological stack so the AI knows exactly what libraries to generate code for. For example:
 - **Authentication:** `@inrupt/solid-client-authn-browser`
 - **Data Manipulation:** `@ldo/solid-react`
 - **Deployment Target:** `mobile-native`
 
-### Step 2: Inject the Context into your IDE/AI
+### Step 3: Inject the Context into your IDE/AI
 If using **Antigravity**, **Cursor**, or **Windsurf**, the system will natively detect the `.agents/rules/` folder. For IDEs like **VSCode (Copilot)**, keep `AGENTS.md` open in a tab and `@-mention` the file. If using web-based LLMs, upload the rules folder.
 
-### Step 3: Trigger a Mode
+### Step 4: Trigger a Mode
 Start your conversation.
 - *Starting fresh?* Say: **"Enter Architect Mode"**.
 - *Migrating old code?* Say: **"Webize this project"**.
