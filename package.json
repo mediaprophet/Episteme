@@ -8,9 +8,11 @@
     "test:unit": "vitest run tests/unit",
     "test:e2e": "vitest run tests/e2e",
     "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
     "css:start": "community-solid-server -l info -m ."
   },
   "devDependencies": {
+    "typescript": "^5.4.0",
     "vitest": "^1.6.0",
     "@solid/community-server": "^7.0.0",
     "@inrupt/solid-client": "^2.0.0",

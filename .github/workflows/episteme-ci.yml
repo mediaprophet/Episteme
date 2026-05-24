@@ -27,4 +27,4 @@ jobs:
       run: npm run test
 
     - name: Type Check Templates
-      run: npx tsc --noEmit
+      run: npm run typecheck
