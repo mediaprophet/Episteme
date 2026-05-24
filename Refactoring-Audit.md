@@ -1,6 +1,6 @@
 # Refactoring-Audit.md
 
-Based on the instructions of **Refactoring & Review Mode**, I have halted all new feature generation to conduct a structural review of the `w3c-solid-ai-helper` boilerplate templates. Here are my findings across the 4 core audit pillars:
+Based on the instructions of **Refactoring & Review Mode**, I have halted all new feature generation to conduct a structural review of the `w3c-solid-ai-helper` toolkit templates. Here are my findings across the 4 core audit pillars:
 
 ### Step 1: The Modularity & Separation of Concerns Audit
 - **Observation:** In `templates/inrupt-login-component.tsx`, the UI is tightly coupled to the raw `@inrupt/solid-client-authn-browser` logic (`login`, `handleIncomingRedirect`).

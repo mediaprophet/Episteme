@@ -1,6 +1,6 @@
 # Custom Add-ons & Overrides
 
-This directory is the "Escape Hatch" for the W3C Solid AI Helper boilerplate.
+This directory is the "Escape Hatch" for the W3C Solid AI Helper toolkit.
 
 While the `.agents/rules/` directory enforces strict, vanilla W3C Solid compliance, real-world applications often require domain-specific logic, such as integrating with a blockchain, utilizing a custom organizational identity provider, or enforcing unique payment schemas.
 

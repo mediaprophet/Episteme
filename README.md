@@ -8,7 +8,7 @@ This repository provides modular rules, specific deployment constraints, and sem
 
 ## 🌟 The Philosophy: Human-Centric Data Agency
 
-Most modern software reduces humans to rows in a database or commercial assets. This boilerplate actively resists that paradigm. Built on **W3C Solid**, this architecture enforces data sovereignty through:
+Most modern software reduces humans to rows in a database or commercial assets. This toolkit actively resists that paradigm. Built on **W3C Solid**, this architecture enforces data sovereignty through:
 1. **Decentralized Identity:** Users own their WebID; applications never own user accounts.
 2. **Access Control (WAC/ACP):** Users cryptographically grant or revoke access to their data.
 3. **Usage Rights (ODRL):** Access isn't just binary; policies explicitly dictate *how* data can be used (e.g., "Academic Research Only").
@@ -62,7 +62,7 @@ Because Solid relies heavily on WebCrypto for DPoP tokens and rigid URI redirect
 
 ---
 
-## 🤖 How to Use This Boilerplate
+## 🤖 How to Use This Toolkit
 
 ### Step 1: Declare the Stack
 Open `AGENTS.md` and declare your technological stack so the AI knows exactly what libraries to generate code for. For example:
@@ -95,7 +95,7 @@ npm run test
 ---
 
 ## 🛠 Custom Add-ons & Overrides (The Escape Hatch)
-While this boilerplate enforces strict vanilla W3C Solid compliance, real-world applications often require domain-specific integrations (e.g., blockchain payments, custom organizational auth resolvers).
+While this toolkit enforces strict vanilla W3C Solid compliance, real-world applications often require domain-specific integrations (e.g., blockchain payments, custom organizational auth resolvers).
 
 The **`custom-addons/`** directory acts as a native escape hatch. 
 - You can place your own Markdown AI instruction files (e.g., `override-auth.md`) and TypeScript hooks in this folder.
