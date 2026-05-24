@@ -1,7 +1,7 @@
 {
-  "name": "solid-helper-project",
-  "version": "1.0.0",
-  "description": "W3C Solid Helper and Rules Boilerplate",
+  "name": "episteme",
+  "version": "0.0.2-alpha",
+  "description": "Episteme: The Human-Centric AI Architecture for W3C Solid",
   "type": "module",
   "scripts": {
     "test": "npm run test:unit && npm run test:e2e",
