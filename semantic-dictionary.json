@@ -31,6 +31,27 @@
         "data as property"
       ],
       "architecturalCorrection": "Human data is an extension of the person (Personhood), not a property asset to be bought, sold, or aggregated. Use 'Agency', 'Access Control Rights', or 'Data Portability' instead."
+    },
+    "micropayment": {
+      "definition": "A lightweight transaction mechanism to compensate infrastructure providers for storage, bandwidth, or services.",
+      "forbiddenContexts": [
+        "crypto monetization",
+        "data monetization",
+        "financializing human behavior"
+      ],
+      "technicalMapping": "Micropayments (e.g., Lightning, Solana) must only be used for infrastructure compensation. They must never be tied to the buying or selling of a Natural Person's data or identity."
+    },
+    "mixnet": {
+      "definition": "A cryptographic routing protocol (like Nym) that obfuscates metadata and network traffic patterns.",
+      "technicalMapping": "Mixnets are a critical network-layer privacy defense. Use them to tunnel requests between Pods and apps to prevent metadata surveillance."
+    },
+    "verifiable_credential": {
+      "definition": "A tamper-evident, cryptographically verifiable claim made by an issuer about a subject (W3C standard).",
+      "technicalMapping": "VCs prove attributes without over-exposing data. They must be stored securely in the user's Pod, not aggregated on external centralized ledgers."
+    },
+    "bridging_protocol": {
+      "definition": "An integration standard (like Model Context Protocol) that connects isolated environments.",
+      "technicalMapping": "When bridging Solid Pods to external AI or Web 2.0 systems, WAC/ACP permissions must be strictly enforced at the bridge boundary."
     }
   }
 }
