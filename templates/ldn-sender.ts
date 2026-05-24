@@ -1,4 +1,4 @@
-import { getSolidDataset, getThing, getUrl, buildThing, createThing, saveSolidDatasetAt, createSolidDataset, setThing } from '@inrupt/solid-client';
+import { getSolidDataset, getThing, getUrl, buildThing, createThing, createSolidDataset, setThing } from '@inrupt/solid-client';
 import { Session } from '@inrupt/solid-client-authn-browser';
 
 /**

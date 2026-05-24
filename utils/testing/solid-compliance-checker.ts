@@ -18,8 +18,8 @@ export function assertWebAnnotationCompliance(dataset: SolidDataset): void {
   const things = getThingAll(dataset);
   
   for (const thing of things) {
-    const types = getUrl(thing, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type') || [];
-    const isAnnotation = Array.isArray(types) ? types.includes(`${OA}Annotation`) : types === `${OA}Annotation`;
+    const type = getUrl(thing, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
+    const isAnnotation = type === `${OA}Annotation`;
 
     if (isAnnotation) {
       const hasTarget = getUrl(thing, `${OA}hasTarget`);

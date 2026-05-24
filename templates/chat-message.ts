@@ -6,7 +6,14 @@ import {
   setThing 
 } from "@inrupt/solid-client";
 import { fetch } from "@inrupt/solid-client-authn-browser";
-import { SCHEMA_INRUPT } from "@inrupt/vocab-common-rdf";
+
+// schema.org terms not yet in @inrupt/vocab-common-rdf
+const SCHEMA = {
+  Message:  "https://schema.org/Message",
+  text:     "https://schema.org/text",
+  sender:   "https://schema.org/sender",
+  dateSent: "https://schema.org/dateSent",
+};
 
 /**
  * Appends a new chat message to a specific container dataset.
@@ -27,10 +34,10 @@ export async function appendChatMessage(
     // 2. Build a new Thing for the message
     // We use a generated local name for the new Thing
     const newMessageThing = buildThing(createThing({ name: `msg-${Date.now()}` }))
-      .addUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", SCHEMA_INRUPT.Message)
-      .addStringNoLocale(SCHEMA_INRUPT.text, messageText)
-      .addUrl(SCHEMA_INRUPT.sender, authorWebId)
-      .addDatetime(SCHEMA_INRUPT.dateSent, new Date())
+      .addUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", SCHEMA.Message)
+      .addStringNoLocale(SCHEMA.text, messageText)
+      .addUrl(SCHEMA.sender, authorWebId)
+      .addDatetime(SCHEMA.dateSent, new Date())
       .build();
 
     // 3. Add the new Thing to the dataset (immutability: creates a new dataset reference)

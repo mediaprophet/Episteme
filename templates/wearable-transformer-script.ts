@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import * as csv from 'csv-parser';
+import csv from 'csv-parser';
 import { Session } from '@inrupt/solid-client-authn-node';
 import { buildThing, createThing, setThing, saveSolidDatasetAt, createSolidDataset } from '@inrupt/solid-client';
 
@@ -14,14 +14,14 @@ import { SOSA } from './vocab/SOSA';
 
 const HEART_RATE = "http://purl.obolibrary.org/obo/NCIT_C16468"; // NCI Thesaurus for Heart Rate
 
-async function liberateHealthData(targetContainer: string, session: Session) {
+export async function liberateHealthData(targetContainer: string, session: Session) {
   let dataset = createSolidDataset();
   let count = 0;
 
   // 1. Extract: Stream the CSV
   fs.createReadStream('./samsung_health_heart_rate.csv')
     .pipe(csv())
-    .on('data', (row) => {
+    .on('data', (row: Record<string, string>) => {
       // 2. Transform: Map the flat row to SOSA Ontology
       const observation = buildThing(createThing({ name: `hr_${Date.now()}_${count}` }))
         .addUrl('http://www.w3.org/1999/02/22-rdf-syntax-ns#type', SOSA.Observation)

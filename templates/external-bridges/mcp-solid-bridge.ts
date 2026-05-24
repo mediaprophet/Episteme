@@ -7,7 +7,10 @@
  */
 
 import { getSolidDataset, getThingAll } from '@inrupt/solid-client';
-import { fetch as solidFetch } from '@inrupt/solid-client-authn-node';
+
+// NOTE: In production, inject the user's authenticated DPoP fetch from their active Session.
+// Here we fall back to global fetch for type-checking purposes.
+const solidFetch: typeof globalThis.fetch = globalThis.fetch;
 
 // A mock MCP Tool definition
 export const SolidMcpTools = {
@@ -18,7 +21,7 @@ export const SolidMcpTools = {
     },
     
     // The MCP execution handler
-    execute: async (params: { url: string }, context: any) => {
+    execute: async (params: { url: string }, _context: unknown) => {
       try {
         // CRITICAL: The MCP server MUST use the user's authenticated DPoP 
         // session. It relies entirely on the Solid Server to enforce WAC/ACP.

@@ -2,11 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import {
   createSolidDataset,
   buildThing,
-  setThing,
-  getBoolean,
-  getStringNoLocale,
-  getThingAll,
-  getUrl
+  setThing
 } from '@inrupt/solid-client';
 import {
   discoverShapeFromHeaders,

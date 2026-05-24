@@ -12,10 +12,7 @@ import {
   buildThing, 
   createThing, 
   setThing, 
-  saveSolidDatasetAt,
-  getSolidDataset,
-  getThingAll,
-  getUrl
+  saveSolidDatasetAt
 } from '@inrupt/solid-client';
 
 const OA = "http://www.w3.org/ns/oa#";
