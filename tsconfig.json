@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "DOM"],
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noEmit": true,
+    "allowJs": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "declarations.d.ts",
+    "utils/**/*.ts",
+    "tests/**/*.ts",
+    "templates/**/*.ts",
+    "templates/**/*.tsx",
+    "custom-addons/**/*.ts",
+    "demos/webizen/src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "demos/webizen/node_modules"
+  ]
+}

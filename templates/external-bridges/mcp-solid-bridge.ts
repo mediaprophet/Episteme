@@ -6,7 +6,7 @@
  * the underlying WAC/ACP permissions.
  */
 
-import { getSolidDataset, getStringNoLocale } from '@inrupt/solid-client';
+import { getSolidDataset, getThingAll } from '@inrupt/solid-client';
 import { fetch as solidFetch } from '@inrupt/solid-client-authn-node';
 
 // A mock MCP Tool definition
@@ -32,7 +32,7 @@ export const SolidMcpTools = {
         // Serialize or process the graph for the LLM
         return {
           status: "success",
-          data: dataset.graphs.default
+          data: getThingAll(dataset)
         };
 
       } catch (error: any) {

@@ -8,11 +8,9 @@
 
 import {
   SolidDataset,
-  getSolidDataset,
   getThing,
   getUrl,
-  getUrlAll,
-  getThingAll
+  getUrlAll
 } from '@inrupt/solid-client';
 
 // Core namespace constants
@@ -138,7 +136,7 @@ export async function validateResource(
       return { isValid: false, errors: ["Resource contains no readable data (no subject found)."] };
     }
     // Basic heuristics (e.g. must have some properties)
-    const predicates = Object.keys(thing.predicates);
+    const predicates = Object.keys((thing as any).predicates || {});
     if (predicates.length === 0) {
       errors.push("Data-driven check: Resource contains no predicates.");
     }

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   getThing,
+  getThingAll,
   getUrl,
   getInteger,
   getDecimal,
@@ -81,11 +82,11 @@ describe('Cognitive Token Accountant', () => {
 
       // Find the contribution Thing
       // Since name is contributionId (which contains 'contribution-'), we inspect all things
-      const things = Object.keys(dataset.graphs.default);
-      const contribSubject = things.find(uri => uri.includes('contribution-'));
-      expect(contribSubject).toBeDefined();
+      const things = getThingAll(dataset);
+      const contribThing = things.find(t => t.url.includes('contribution-'));
+      expect(contribThing).toBeDefined();
 
-      const contribThing = getThing(dataset, contribSubject!);
+      const contribSubject = contribThing!.url;
       expect(contribThing).toBeDefined();
 
       // Verify predicates

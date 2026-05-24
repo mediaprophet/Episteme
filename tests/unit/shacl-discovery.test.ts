@@ -3,7 +3,6 @@ import {
   createSolidDataset,
   buildThing,
   setThing,
-  mockSolidDatasetFrom,
 } from '@inrupt/solid-client';
 import {
   discoverShapeFromHeaders,

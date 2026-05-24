@@ -1,6 +1,5 @@
 import { getSolidDataset, getThing, getStringNoLocale, getUrl } from "@inrupt/solid-client";
 import { FOAF, VCARD } from "@inrupt/vocab-common-rdf";
-import { fetch } from "@inrupt/solid-client-authn-browser";
 
 /**
  * Interface representing standard User Profile Data
@@ -18,10 +17,10 @@ export interface UserProfile {
  * @param webId The user's Solid WebID URI
  * @returns A promise resolving to the UserProfile object
  */
-export async function getProfile(webId: string): Promise<UserProfile> {
+export async function getProfile(webId: string, authFetch: typeof fetch = globalThis.fetch): Promise<UserProfile> {
   try {
     // 1. Fetch the dataset using the authenticated session fetch
-    const dataset = await getSolidDataset(webId, { fetch });
+    const dataset = await getSolidDataset(webId, { fetch: authFetch });
     
     // 2. Get the specific Thing representing the user
     const profileThing = getThing(dataset, webId);

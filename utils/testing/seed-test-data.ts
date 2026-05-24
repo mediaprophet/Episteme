@@ -2,12 +2,13 @@ import {
   createSolidDataset, 
   buildThing, 
   createThing, 
+  setThing,
   saveSolidDatasetAt 
 } from "@inrupt/solid-client";
 import { FOAF, VCARD, RDF } from "@inrupt/vocab-common-rdf";
 // In a real test environment, this would be an authenticated fetch from a mock session
 // For example, using the Session object from @inrupt/solid-client-authn-node
-import { fetch } from "@inrupt/solid-client-authn-browser"; 
+
 
 /**
  * Seeds a local Community Solid Server with dummy WebID profile data.
@@ -22,7 +23,7 @@ export async function seedTestData(podUrl: string) {
   console.log(`Seeding data for WebID: ${webId}`);
 
   // Build a dummy profile Thing
-  const profileThing = buildThing(createThing({ name: "me" }))
+  const profileThing = buildThing(createThing({ url: webId })) // Use webId directly to ensure it matches the url
     .addUrl(RDF.type, FOAF.Person)
     .addStringNoLocale(FOAF.name, "Alice Tester")
     .addStringNoLocale(VCARD.fn, "Alice Tester")
@@ -34,11 +35,11 @@ export async function seedTestData(podUrl: string) {
 
   // Create a new dataset and insert the Thing
   let dataset = createSolidDataset();
-  dataset = Object.assign(dataset, { graphs: { default: { [webId]: profileThing } } }); // Simplified insertion
+  dataset = setThing(dataset, profileThing);
 
   try {
     // Save to the local CSS instance
-    await saveSolidDatasetAt(profileUrl, dataset, { fetch });
+    await saveSolidDatasetAt(profileUrl, dataset, { fetch: globalThis.fetch });
     console.log("Test data seeded successfully.");
   } catch (error) {
     console.error("Failed to seed test data:", error);
