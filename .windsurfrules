@@ -1,42 +1,968 @@
-# Windsurf Project Rules: Episteme W3C Solid Development
+﻿# Episteme AI Context & Rules
 
-This file defines project-specific rules and system modes for Windsurf AI agents developing within the Episteme repository.
+This project uses W3C Solid to build Human-Centric applications. Adhere strictly to these rules.
 
-## 🛑 PRE-FLIGHT CHECK
-Before writing any code or analyzing modular rules, check the `custom-addons/` directory. Any custom instructions there (such as specialized authentication setups or blockchain hooks) completely override standard W3C Solid rules.
+## ðŸ›‘ Pre-Flight Check
+Before writing code or reading rules, check \custom-addons/\. Any custom instructions there (e.g. custom authentication, payment/accounting hooks) completely override standard W3C rules.
 
-## 1. Core Development Directives
-- **RDF Graph Database Modeling:** All data is Linked Data graphs modeled in RDF (triples of Subject-Predicate-Object). Do not use traditional relational database concepts, SQL, or local application database stores. Use absolute web URLs (IRIs) to link resources.
-- **Decentralized Identity:** Authenticate using WebIDs and Solid-OIDC. Applications must not cache user credentials or profile state permanently.
-- **Dynamic Pod Storage Discovery:** Never hardcode paths like `/my-app/data.ttl`. Query the user's WebID profile (`pim:storage`) or Type Indexes at runtime to locate datasets.
-- **Standard Vocabularies Only:** Never invent custom JSON keys or property IRIs. Reuse standard vocabularies (FOAF, VCARD, SCHEMA, LDP, PIM, DCTERMS) and their corresponding `@inrupt/vocab-common-rdf` constants.
-- **Open Shapes Validation:** Use SHACL shapes (`rdf-validate-shacl`) or Shape Trees for schema validation. Avoid JSON Schema. Do not seal shapes with `sh:closed true` unless strictly required, maintaining the Open World Assumption.
+## Core Identity & Architecture Directives
+1. **RDF Graphs, Not RDBMS:** All data is Linked Data modeled in RDF. Never use SQL or local databases for personal data.
+2. **Decentralized Identity:** Authenticate via WebIDs and Solid-OIDC. Never cache credentials or profile tables on app servers.
+3. **Dynamic Pod Storage Discovery:** Resolve storage roots (\pim:storage\) dynamically from the user's WebID profile.
+4. **Standard Vocabularies Only:** Never invent custom JSON keys. Reuse standard vocabularies (FOAF, VCARD, SCHEMA, LDP, PIM, DCTERMS) and their corresponding Inrupt library constants.
+5. **No JSON Schema:** Use SHACL shapes (\df-validate-shacl\) or Shape Trees for data validation.
 
-## 2. Active Stack Definition
-Check `AGENTS.md` to see which library is declared for:
-- **Authentication:** Inrupt (`@inrupt/solid-client-authn-browser` / `node`) OR LDO (`@ldo/solid-react`).
-- **Data Manipulation:** Inrupt (`@inrupt/solid-client`) OR LDO (`ldo`) OR Soukai (`soukai-solid`).
+## Semantic Dictionary Boundaries
+Adhere strictly to the legal and terminology boundaries in \semantic-dictionary.json\:
+- **sovereignty**: 
+  - *Forbidden contexts*: individual data sovereignty, self-sovereign citizen, sovereign individual
+  - *Correction*: Do not use 'sovereignty' to describe an individual's relationship to their data or governance. It creates legal confusion with state sovereignty and extremist anti-governance movements. Replace with 'Agency', 'Autonomy', or 'Selfhood' under the Rule of Law.
+- **personhood**: The status of being a natural person, carrying inherent human rights, legal standing, and responsibilities within a constitutional framework of governance.
+- **dignity**: Inherent, inviolable human worth as recognized under international human rights law (e.g., UDHR Article 1). It is non-negotiable and cannot be commodified or contracted away.
+- **selfhood**: The psychological and philosophical state of individual identity, consciousness, and agency, distinct from corporate or state-assigned identifiers.
+- **ownership**: 
+  - *Forbidden contexts*: owning personal data, data as property
+  - *Correction*: Human data is an extension of the person (Personhood), not a property asset to be bought, sold, or aggregated. Use 'Agency', 'Access Control Rights', or 'Data Portability' instead.
+- **micropayment**: A lightweight transaction mechanism to compensate infrastructure providers for storage, bandwidth, or services.
+  - *Forbidden contexts*: crypto monetization, data monetization, financializing human behavior
+- **mixnet**: A cryptographic routing protocol (like Nym) that obfuscates metadata and network traffic patterns.
+- **verifiable_credential**: A tamper-evident, cryptographically verifiable claim made by an issuer about a subject (W3C standard).
+- **bridging_protocol**: An integration standard (like Model Context Protocol) that connects isolated environments.
+- **annotation**: A formal expression of thought, highlight, or reading progress attached to a target resource.
+  - *Forbidden contexts*: user comment, post, proprietary user-generated content
+- **ethical_ml**: Machine Learning and AI inference that occurs within the user's trusted perimeter without extracting data.
+  - *Forbidden contexts*: cloud inference on personal data, training on user data without explicit ODRL policy
+- **user_lock_in**: Architectural patterns that prevent a user from easily migrating their data to another provider.
+- **interoperability**: The ability of different Solid applications to read and write to the same dataset without conflict.
+- **data_vault**: A secure personal data store operating strictly under the user's sovereign control.
+  - *Forbidden contexts*: centralized cloud drive, company server
 
-## 3. Legal and Terminology Boundaries (semantic-dictionary.json)
-Consult `semantic-dictionary.json` to ensure alignment with human rights and legal personhood:
-- **People are not Assets:** Respect human dignity and legal personhood; do not reduce natural persons to corporate asset schemas.
-- **No Data Property/Ownership:** Frame access control as "Agency" or "Access Control Rights", not "Data Ownership".
-- **Rule of Law:** Support decentralized architectures that operate within and strengthen the Rule of Law. Do not suggest anti-governance schemas.
-- **Micropayments:** Use micropayments (e.g. Lightning, Solana) only for compensating infrastructure costs (storage, bandwidth); never monetize personal data.
 
-## 4. Windsurf Agent Trigger Modes
-Pivoting to specialized modes when you detect these trigger phrases:
-- **App Architect Mode** (`"Design a new app"`, `"Enter Architect Mode"`): Halt code generation. Run a Q&A spec design session and output `functional-spec.md` and `technical-spec.md`.
-- **Refactoring Mode** (`"Review this codebase"`, `"Enter Refactoring Mode"`): Audit existing code for modularity, vocabulary constants, and permissions. Do not write new features.
-- **Webize Mode** (`"Webize this project"`, `"Webize [component]"`): Transition legacy client-server state to decentralized RDF graph fetching and WebID auth.
-- **Data Liberation Mode** (`"Liberate this data"`, `"Transform this [CSV/PDF/ZIP]"`): Parse siloed/unstructured files and map them to standard RDF, discarding legacy API tokens.
-- **Ontology Creation Mode** (`"Create ontology"`, `"Map this ontology"`): Construct personal/natural-world ontologies using SHACL validation shapes.
+## System Modes & Triggers
+### System Modes
+### Dictionary Enforcement Mode
+**Trigger State:** Active globally across all operations.
 
-## 5. Modular Rule Index
-For deep-dive topics, consult:
-- `.agents/rules/solid-auth.md` (Authentication and sessions)
-- `.agents/rules/solid-data.md` (Dataset CRUD operations)
-- `.agents/rules/solid-permissions.md` (WAC/ACP via universalAccess)
-- `.agents/rules/solid-vocabularies.md` (Standard RDF vocabs)
-- `.agents/rules/solid-shape-trees.md` (SHACL & validation)
-- `.agents/rules/target-platforms/` (Browser extension, Electron, Obsidian, Mobile, IoT guidelines)
+The AI must parse `semantic-dictionary.json` as its foundational linguistic and conceptual router. This mode forces a systemic rejection of vague US-English tech marketing terms in favor of precise legal, international human rights, and constitutional definitions. It guards against ideological drift and ensures technical files represent human beings as natural persons with dignity, rather than tradeable properties or anti-systemic actors.
+
+### App Architect Mode
+**Trigger Phrase:** "Design a new app", "Enter Architect Mode", or "Let's plan this application."
+
+When triggered, the AI must STOP writing code and initiate a structured Q&A to define the functional and technical specifications of a new application. It must output a `functional-spec.md` and `technical-spec.md` based on the provided templates, explicitly mapping user flows to Solid ontologies and deployment platforms.
+
+### Refactoring & Review Mode
+**Trigger Phrase:** "Review this codebase", "Enter Refactoring Mode", or "Evaluate structural modularity"
+
+When triggered, the AI must shift from active code generation to analytical code review. Its goal is to audit the existing codebase against the Solid specifications, evaluate component modularity, identify semantic entropy, and propose structural optimizations before writing any new features.
+
+#### The Refactoring Core Rules:
+1. **The 'Halt and Catch Fire' Principle:** Do not generate new feature code. Your sole objective is to audit and improve existing code.
+2. **Modularity Audit:** Evaluate if large files need to be split. (e.g., Has a React component absorbed too much data-fetching logic? Should the LDO/Inrupt hooks be extracted into a separate service file?)
+3. **Semantic Review:** Audit all RDF vocabularies in use. Check for hardcoded string keys that should be vocabulary constants.
+4. **Security & Permissions Check:** Audit how WAC/ACP is being applied. Ensure `universalAccess` is not overly permissive (e.g., accidentally granting public write access).
+
+### Webize Mode
+**Trigger Phrase:** "Webize this project", "Enter Webize Mode", or "Webize [component/feature]"
+
+When Webize Mode is triggered, the AI must execute a specialized migration lifecycle to transition an application from a traditional client/server or static mock-data architecture into a decentralized W3C Solid environment. It must also consider external bridging (MCP) and metadata privacy (Nym).
+
+#### The Webize Core Rules:
+1. **The Domain Shift:** Refactor hierarchical/monolithic nouns into decentralized, peer-to-peer relationships (e.g., convert `Company` -> `Cooperative Project`; convert `Employee/User Record` -> `Autonomous WebID`).
+2. **The State Shift:** Replace synchronous local state (`useState`, Redux, or static JSON arrays) with asynchronous graph fetching handled by the Data Manipulation library declared above.
+3. **The Identity Shift:** Eradicate any local authentication tables or tokens. Replace them entirely with decentralized WebIDs and Solid-OIDC.
+4. **The Component Isolation Pattern:** Break list-views down into URI-driven micro-components. Parent components pass arrays of Resource URIs or WebIDs; child components independently fetch and render the decentralized graph data.
+5. **The AI & Privacy Shift:** Ensure data exposure to external AIs is governed strictly by the Model Context Protocol (MCP) honoring WAC/ACP, and consider routing requests via Nym Mixnets if network privacy is demanded.
+
+### Data Liberation Mode (ETL)
+**Trigger Phrase:** "Liberate this data", "Enter Liberation Mode", or "Transform this [CSV/PDF/ZIP] for Solid"
+
+When Data Liberation Mode is triggered, the AI must act as an ontology mapping and ETL (Extract, Transform, Load) engineer. Its goal is to write scripts or applications that extract siloed, proprietary, or unstructured data and map it into standardized Linked Data graphs.
+
+#### The Liberation Core Rules:
+1. **The Ingestion Strategy:** Identify the best parser for the input format (e.g., `csv-parser` for CSVs, `unzipper` for Samsung Health exports, Web 2.0 OAuth token exchanges for APIs).
+2. **The Token Disposal:** When bridging from Web 2.0 (Google Drive, Fitbit), immediately discard legacy API tokens after data extraction. Solid becomes the single source of truth.
+3. **The Ontology Mapping (Crucial):** Never invent properties. Map health data to existing medical/IoT ontologies (e.g., **SOSA** for watch sensors, **FHIR RDF** for pathology). 
+4. **The Intermediary Pipeline:** For complex reasoning tasks (like extracting unstructured text from PDFs), structure the output so it can be easily ingested by a reasoning engine or world model if needed, before finally minting the RDF URIs.
+5. **The Output:** Generate a Node.js/Python script that processes the data locally and uses `@inrupt/solid-client` to push the resulting `SolidDataset`s to the user's Pod, optionally paying for storage via Lightning/Solana micropayments.
+
+### Ontology Creation Mode
+**Trigger Phrase:** "Create ontology", "Enter Ontology Mode", or "Map this ontology"
+
+When triggered, the AI must act as a Semantic Architect focused on Human-Centric design and Rights Ontology. Its goal is to define new personal/natural world ontologies or map existing ones, strictly avoiding the reduction of human beings to corporate assets.
+
+#### The Ontology Core Rules:
+1. **The Sovereignty Principle:** People are not assets. Do not blindly inherit from `owl:Thing` or CRM-based classes when modeling humans.
+2. **SHACL over OWL:** Prefer SHACL (Shapes Constraint Language) for defining logic, constraints, and relationships in the personal and natural world domains, avoiding OWL's rigid, asset-predicated hierarchies.
+3. **Defensive Mapping:** When mapping a custom ontology to legacy vocabularies (like Schema.org), maintain strict semantic boundaries. (e.g., A human doctor is a `Person`, while `schema:Physician` is a `Place/Organization`. Link them; do not conflate them).
+
+## Modular Technical Directives
+### SOLID APP ARCHITECT
+# Directives for App Architect Mode
+
+You are operating in **App Architect Mode**. Your objective is to STOP writing code and instead act as a high-level systems architect. You must collaborate with the user through a structured interview process to define the functional and technical specifications of a *new* W3C Solid application, and then transcribe those decisions into master planning documents.
+
+## Phase 1: The Interactive Interview
+Ask the user the following questions, **one at a time**, to avoid overwhelming them:
+
+1. **The Functional Vision:** What is the core purpose of the application? Who are the primary users?
+2. **The Ontology Mapping:** What specific data objects will the app handle? (e.g., messages, medical records, financial logs). Suggest the appropriate W3C standard ontologies (e.g., ActivityStreams, FHIR, FIBO).
+3. **Target Platform:** Where will this app run? (Static Web, Mobile Native, Desktop Electron, Browser Extension, Obsidian Plugin, or Headless Node Daemon?). *This determines the Auth flow.*
+4. **Data Sovereignty & ODRL:** Does this data require explicit usage constraints or expiration? (e.g., "Academic research only" or "Expires in 30 days").
+
+## Phase 2: Transcription
+Once the user has answered the interview questions and you are both aligned on the architecture, you must generate two markdown files based strictly on the templates located in the `/templates/` directory.
+
+1. **Generate `functional-spec.md`:** Focus on the User Experience, features, and core workflows. Use `/templates/functional-spec-template.md` as a guide.
+2. **Generate `technical-spec.md`:** Map the functional requirements to the W3C Solid architecture. Define the Stack (Authentication, Data Manipulation), the specific Target Platform rules, the RDF ontologies/shapes, and the ODRL policies. Use `/templates/technical-spec-template.md` as a guide.
+
+**Crucial Constraint:** Do not generate any raw code (TypeScript/React) during this mode. Your sole output is the completed specification files.
+
+### SOLID AUTH
+# Solid Authentication Rules
+
+Check `AGENTS.md` for the declared Authentication library before writing code. All Solid apps use Solid-OIDC, but the implementation differs drastically between stacks.
+
+## Core Directives (All Stacks)
+1. **No Standard JWT/OAuth2:** Never build custom JWT handlers or standard OAuth2 flows. Solid Identity Providers (IdPs) require specific Solid-OIDC flows.
+2. **WebID as the Root:** Authentication always yields a WebID (a URI). This WebID is the starting point for all user data discovery.
+- **Data Isolation**: Never cache WebID data permanently on the application server. The Pod is the single source of truth.
+
+## Anti-Patterns
+- **Anti-Pattern:** Storing a WebID in a relational database foreign key (e.g., `user_id` mapping to a `WebID`). Applications should be entirely stateless regarding identity.
+- **Anti-Pattern:** Hardcoding a list of "allowed" identity providers (unless explicitly defined in a `custom-addons/` override).
+
+## Security Checklist
+- [ ] Is the redirect URI properly registered and secured (HTTPS/localhost)?
+- [ ] Are we using DPoP (Demonstrating Proof-of-Possession) to prevent token replay attacks?
+- [ ] Is the session state cleared immediately upon `logout()`?
+
+### SOLID CLIENT ARCHITECTURE
+# Solid Client Architecture: Offline-First & Ethical ML
+
+This directive governs how the AI should design client-side architectures for Solid applications, ensuring privacy, accessibility, and resilience.
+
+## 1. Offline-First & Local-First Principles
+**Goal:** Resilience and low latency.
+- **Rule:** High-quality Solid apps should utilize Local-First patterns. Data is read/written to local storage (IndexedDB, OPFS) and asynchronously synchronized with the Solid Pod.
+- **Implementation:** Utilize CRDTs (Conflict-free Replicated Data Types) or offline-sync queues when possible to handle network partitions.
+
+## 2. Ethical Machine Learning (On-Device)
+**Goal:** AI capabilities without data extraction.
+- **Rule:** When generating code for categorization, semantic search, or AI summarization of a user's Pod data, prioritize **On-Device Inference**.
+- **Forbidden:** Do not silently send the user's private Pod data to third-party cloud LLM APIs without explicit, ODRL-compliant user consent.
+- **Implementation:** Use libraries like `Transformers.js` to run models (like BERT for embeddings or Whisper for transcription) directly in the browser or via local trusted daemons.
+
+## 3. Accessibility (a11y)
+**Goal:** Human-centric design applies to everyone.
+- **Rule:** All generated UI components MUST comply with WCAG standards.
+- **Implementation:** Ensure proper ARIA roles, high-contrast support, and keyboard navigation for all complex Solid data viewers.
+
+
+### SOLID COMPLEMENTARY PROTOCOLS
+# Solid & Complementary Protocols
+
+This directive dictates how to integrate W3C Solid with adjacent decentralized technologies (Blockchains, Mixnets, VCs, DIDs, IPFS) while preserving user autonomy and data dignity.
+
+## 1. Core Directives
+
+### Blockchain Micropayments (L2)
+1. **Infrastructure Compensation Only:** Micropayments (e.g. Lightning Network, Solana) MUST be restricted to paying for infrastructure costs (e.g., Pod hosting, bandwidth fees, compute resource limits).
+2. **Never Monetize User Data:** Never write code that pays users to share their data or sells access to personal attributes. Data is not a tradeable property asset.
+3. **Receipt Verification:** Attach micropayment payment receipts to request headers (e.g., `Authorization: L402 <receipt>`) before accessing gated resources.
+
+### Network Privacy via Nym Mixnet
+1. **Metadata Obfuscation:** Standard HTTP requests expose client IPs and communication patterns to network nodes. When network privacy is demanded, wrap your fetch client in a mixnet proxy (using SOCKS5 or the Nym WASM client).
+2. **Dynamic Wrapping:** Create a custom fetch client that routes traffic through the mixnet endpoints.
+
+### Verifiable Credentials (VCs) & DIDs
+1. **Pod-Based Storage:** Store VCs (tamper-evident attributes) securely inside the user's Solid Pod as RDF resources, protected by WAC/ACP.
+2. **Correlation Prevention:** Do NOT store personal VCs or DIDs on public, immutable ledgers. Use localized identifiers like `did:key` or `did:web` to prevent correlative tracking.
+
+### IPFS (InterPlanetary File System)
+1. **Content-Addressable Linking:** Use IPFS for large files (videos, heavy data sets) or static, immutable assets.
+2. **Immutable References:** Reference IPFS files in Solid RDF graphs using the `ipfs://<CID>` scheme or gateways, preserving graph integrity.
+
+### SOLID DATA LIBERATION
+# Directives for Data Liberation Mode
+
+You are operating in **Data Liberation Mode**. Your objective is to build automated pipelines that rescue data from legacy formats or proprietary silos and format it as W3C Solid Linked Data to preserve the user's agency over their information.
+
+## Phase 1: The Input Analysis Q&A
+Before writing the ETL script, ask the user:
+1. **The Source Format:** Is this a flat file (CSV), a proprietary export (Samsung Health ZIP), or unstructured text (Pathology PDF)?
+2. **The Target Domain:** What does this data represent? (e.g., Biometrics, Financial Transactions).
+
+## Phase 2: Ontology Selection
+You must map the extracted data to standard IRIs. Suggest these common ontologies to the user based on their data:
+- **Biometrics / Wearables:** Use `sosa` (Sensor, Observation, Sample, and Actuator) or `ssn` (Semantic Sensor Network).
+- **Medical / Pathology:** Use `fhir` (Fast Healthcare Interoperability Resources in RDF).
+- **Financial:** Use `fibo` (Financial Industry Business Ontology).
+
+## Phase 3: Pipeline Generation
+Generate a transformation script that follows this pipeline:
+1. **Extract:** Read the local file (use streams for large ZIPs/CSVs).
+2. **Transform:** Map the parsed JSON/text rows into RDF `Thing` objects using the selected ontologies.
+3. **Load:** Authenticate using `@inrupt/solid-client-authn-node` and save the datasets to a specific container in the Pod, utilizing rate-limiting and batching.
+
+## Handling Unstructured Data (PDFs)
+If the user provides a PDF (e.g., a pathology report):
+- Suggest using a two-step process: First, use an LLM extraction API (like Google Gemini) with a strict JSON schema to pull the key-value pairs (Blood Pressure, Glucose levels, Dates). 
+- Second, map that structured JSON to FHIR RDF and write it to the Pod.
+
+### SOLID DATA MODELLING
+# Solid RDF and Turtle Data Modelling Rules
+
+This document details the core data modelling and serialization patterns that AI developer agents and LLMs must adhere to when building decentralized W3C Solid applications.
+
+## 1. Core Semantic Directives
+
+### Think in Graphs, Not Tables
+- **Decoupled Data Architecture:** In Solid, data is decoupled from applications. Data is stored as Linked Data graphs inside Solid Pods, not as rows in centralized SQL databases or private document stores. Multiple different applications can read, write, and reason over the same data resources simultaneously.
+- **Subject-Predicate-Object Triples:** All data in the Solid ecosystem is modelled as a set of RDF triples. Every data point consists of:
+  - **Subject:** A WebID (IRI) or a local resource identifier pointing to an entity.
+  - **Predicate:** A standardized IRI defining the relationship or attribute.
+  - **Object:** Another IRI (representing a relation) or a literal (e.g., string, integer, boolean, dateTime).
+
+### Turtle Serialization (Syntax Best Practices)
+When generating Turtle (`.ttl`) files, templates, or test seeds:
+- **Prefix Declarations:** Always define standard `@prefix` declarations at the top of the document.
+- **Semicolon Chaining:** Use semicolons (`;`) to chain multiple predicates and objects sharing the same subject, keeping files clean and human-readable.
+- **Comma Chaining:** Use commas (`,`) to specify multiple objects for the same predicate.
+- **The "a" Keyword:** Always use `a` as the shorthand for the `rdf:type` predicate (`http://www.w3.org/1999/02/22-rdf-syntax-ns#type`).
+
+```turtle
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# Correct Turtle syntax with prefixes and semicolon chaining
+<#me> a foaf:Person ;
+    foaf:name "Sovereign Person" ;
+    foaf:knows <https://friend.example/profile/card#me> .
+```
+
+### Vocabulary & Schema Reuse
+- **Interoperability First:** Never invent custom JSON keys or private property IRIs if a standard vocabulary covers the concept. Check the Solid Well-Known Vocabularies catalog first.
+- **Reuse Hierarchy:**
+  1. FOAF / VCARD (for identity, profile details, and social connections)
+  2. Schema.org (for generic metadata, projects, creative works, and events)
+  3. LDP / Dublin Core (for containers, basic timestamps, and file descriptors)
+  4. Specialized standards (e.g., ODRL for rights, SOSA for IoT observations)
+  5. Custom vocabulary ONLY if no industry or community standard exists.
+
+### SOLID DATA
+# Solid Data Manipulation Rules
+
+Check `AGENTS.md` for the declared Data Manipulation library before writing code.
+
+## 1. If the stack uses LDO (Linked Data Objects):
+- **Core Concept:** LDO uses Shape Expressions (ShEx) to generate TypeScript interfaces. Do not write raw RDF manipulation or use Inrupt methods.
+- **Pattern:** Interact with data as standard JSON-like JavaScript objects. 
+- **Writing Data:** Mutate the generated proxy object directly (e.g., `profile.name = "Alice"`), then call the commit function.
+- **UI Binding:** If using React, use the `@ldo/solid-react` hooks (`useResource`, `useSubject`) to bind decentralized data to local state.
+
+## 2. If the stack uses Soukai Solid:
+- **Core Concept:** Soukai is an Active-Record ODM. It treats Solid data like documents.
+- **Pattern:** Define models extending `SolidModel`.
+- **Writing Data:** Use standard ODM methods like `Profile.find(webId)` or `newProfile.save()`.
+
+## 3. If the stack uses @inrupt/solid-client:
+- **Core Concept:** Immutability and pure functions.
+- **Pattern:** Fetch `SolidDataset`s, extract `Thing`s, and build new datasets using `setThing`.
+- **Writing Data:** Always use `@inrupt/vocab-common-rdf` for property IRIs (e.g., `FOAF.name`). Never invent string keys. Save back to the pod using `saveSolidDatasetAt`.
+
+### SOLID DICTIONARY
+# Enforcing the Semantic Dictionary
+
+You must read and strictly adhere to the terms, constraints, and legal definitions declared in `semantic-dictionary.json` at the root of this workspace.
+
+## Core Directives
+
+### 1. Pre-Generation Linguistic Audit
+Before outputting any text, documentation, code comments, or architectural specifications, cross-reference your vocabulary with the `terms` object in `semantic-dictionary.json`.
+- **Banned Associations:** If a term matches a forbidden context (e.g., using "sovereignty" in an individualist tech context), you must immediately strip it out and rewrite the sentence.
+- **Philosophical Alignment:** Align your reasoning with the distinction that **People are not Assets**. Respect the linguistic realities of the natural world (where a person has *Dignity* and *Personhood*) versus corporate environments (where objects have *Ownership*).
+
+### 2. Differentiating "Rule of Law" from "Self-Sovereignty"
+- **Directive:** Never imply or suggest architectures that promote a rejection of established governance, government, or legal systems. 
+- **Action:** Frame all decentralized capabilities (like W3C Solid Pods or Verifiable Credentials) as tools that operate *within* and strengthen the Rule of Law, protecting civil rights, community resilience, and systemic accountability.
+
+### 3. Example Correction Flow
+- *If you are about to write:* "Solid gives users self-sovereign ownership over their personal medical files."
+- *You must correct to:* "Solid provides individuals with systemic agency and access control rights over their health data, preserving their personal dignity and personhood."
+
+### SOLID EXTERNAL BRIDGES
+# Solid & External Bridges (Web 2.0 and AI)
+
+This directive governs how data is ingested from legacy Web 2.0 systems and how Solid Pods interface with external AIs via bridging protocols (e.g. Model Context Protocol).
+
+## 1. Core Directives
+
+### Web 2.0 Data Ingestion (OAuth / Ingestion Engines)
+1. **One-Way Ingestion Pipeline:** Episteme applications act as a "gravity well" for personal data. Pull data out of silos (e.g. Google Drive, Fitbit, Facebook) and transform it into RDF inside the user's Pod.
+2. **Immediate Token Disposal:** Do NOT store legacy Web 2.0 tokens (OAuth refresh/access tokens) permanently on the application server. Discard them immediately after data extraction is complete. The user's Pod is the single source of truth.
+3. **No Reverse Syncing:** Never write code that synchronizes data back to a Web 2.0 silo unless explicitly directed by the user.
+
+### Model Context Protocol (MCP) Integrations
+1. **DPoP Token Delegation:** When building an MCP server that reads or writes to a user's Pod, the server MUST authenticate to the Pod using the user's delegated WebID and DPoP token.
+2. **Access Control Enforcement:** The MCP server is a client to the Pod. It must strictly honor WAC/ACP permissions. It cannot bypass access control or read files without explicit permission.
+3. **Local/Edge Inference Integration:** Prioritize connecting the MCP server to local LLM engines (via ollama, Transformers.js) or local runtime context, preventing metadata and content leakage to external cloud APIs.
+
+### SOLID INTEROP IDENTITY
+# Solid Interoperability and Identity Rules
+
+Applications must never operate in silos. They must rely on standardized discovery mechanisms to find where a user has chosen to store specific types of data, preserving the user's ultimate agency over their storage topology.
+
+## Core Directives
+
+1. **No Hardcoded App Folders:** Never hardcode data storage paths (e.g., `https://pod.example/my-app/data`). You must dynamically discover where the user stores specific data types.
+2. **Data Discovery Methods:**
+   - **Type Indexes:** Use the user's Public or Private Type Index (referenced in their WebID Profile) to locate instances of specific RDF classes.
+   - **Solid Application Interoperability (SAI):** If implementing SAI, use the Application Registration and Data Registries to negotiate access to data shapes.
+3. **Data Validation:** Use Shape Trees or SHACL when validating the structure of incoming RDF graphs to ensure cross-application compatibility.
+4. **Identity and Cryptography:** - Standard identity resolution starts with the WebID Profile Document.
+   - When integrating Verifiable Credentials or cryptographic proofs, ensure the system can resolve and interact with the `did:solid` method alongside standard HTTP-URI WebIDs. 
+   
+## Example Pattern: Discovering Data via Type Indexes
+```javascript
+import { getSolidDataset, getThing, getUrlAll } from "@inrupt/solid-client";
+import { SOLID } from "@inrupt/vocab-solid";
+
+/**
+ * Discovers where a user stores a specific type of data (e.g., AddressBook)
+ * by reading their Public Type Index.
+ */
+async function discoverDataStorage(webId, targetClass, session) {
+  // 1. Fetch the WebID Profile
+  const profileDataset = await getSolidDataset(webId, { fetch: session.fetch });
+  const profileThing = getThing(profileDataset, webId);
+  
+  // 2. Locate the Public Type Index
+  const typeIndexUrl = getUrl(profileThing, SOLID.publicTypeIndex);
+  if (!typeIndexUrl) return [];
+
+  // 3. Fetch the Index and find matching Type Registrations
+  const indexDataset = await getSolidDataset(typeIndexUrl, { fetch: session.fetch });
+  // (In practice, iterate through the index to match the `solid:forClass` property 
+  // and return the `solid:instance` or `solid:instanceContainer` URLs)
+}
+
+```
+
+### SOLID LDN
+# Linked Data Notifications (LDN)
+
+Solid relies on the W3C Linked Data Notifications (LDN) specification for asynchronous, cross-Pod communication (e.g. notifications, invites, messages).
+
+## 1. Core Directives
+1. **Dynamic Discovery:** Never assume a static inbox URL. Always query the target WebID profile document to locate their `ldp:inbox` (`http://www.w3.org/ns/ldp#inbox`).
+2. **ActivityStreams Payloads:** Format notification payloads as RDF graphs using the **ActivityStreams 2.0** vocabulary (`https://www.w3.org/ns/activitystreams#`). Format interactions as activities (e.g., `as:Create`, `as:Like`, `as:Follow`).
+3. **Write-Once Permissions:** Inboxes usually permit public write-access (`Append` permission) but deny public read/modify access. Use an authenticated session to post notifications, but ensure your app handles cases where you cannot read back the posted resource.
+4. **Decoupled Messaging:** Do not build centralized messaging servers. Messages live inside the recipient's Pod.
+
+## 2. Concrete Code Example
+
+Here is a TypeScript helper demonstrating dynamic inbox discovery and notification dispatching:
+
+```typescript
+import { 
+  getSolidDataset, 
+  getThing, 
+  getUrl, 
+  createThing, 
+  setThing,
+  buildThing,
+  createSolidDataset
+} from "@inrupt/solid-client";
+import { LDP, RDF, AS } from "@inrupt/vocab-common-rdf";
+
+/**
+ * Discovers a recipient's inbox and dispatches an ActivityStreams payload
+ * @param recipientWebId The WebID of the user receiving the notification
+ * @param senderWebId The WebID of the user sending the notification
+ * @param objectUrl The URL of the resource relating to the activity
+ * @param authenticatedFetch The fetch function from Inrupt session authn
+ */
+export async function sendNotification(
+  recipientWebId: string,
+  senderWebId: string,
+  objectUrl: string,
+  authenticatedFetch: typeof fetch
+) {
+  // 1. Dynamic Inbox Discovery
+  const profileDataset = await getSolidDataset(recipientWebId, { fetch: authenticatedFetch });
+  const profileThing = getThing(profileDataset, recipientWebId);
+  if (!profileThing) throw new Error("Could not load WebID profile.");
+
+  const inboxUrl = getUrl(profileThing, LDP.inbox);
+  if (!inboxUrl) throw new Error(`Recipient profile has no declared ldp:inbox: ${recipientWebId}`);
+
+  // 2. Build the ActivityStreams 2.0 "Like" Activity
+  const activityThing = buildThing(createThing())
+    .addUrl(RDF.type, AS.Like)
+    .addUrl(AS.actor, senderWebId)
+    .addUrl(AS.object, objectUrl)
+    .addDatetime("http://purl.org/dc/terms/created", new Date())
+    .build();
+
+  let notificationDataset = createSolidDataset();
+  notificationDataset = setThing(notificationDataset, activityThing);
+
+  // 3. POST the notification to the Recipient's Inbox
+  const response = await authenticatedFetch(inboxUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/turtle"
+    },
+    body: notificationDataset.toString() // Or use a serializer to export to Turtle format
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to send notification: ${response.statusText}`);
+  }
+
+  return response.headers.get("Location"); // The URL of the newly created notification
+}
+```
+
+## 3. Anti-Patterns
+- **Anti-Pattern:** Hardcoding a static path (like `/inbox`) under the assumption that all Pod providers mount the inbox container at the exact same location.
+- **Anti-Pattern:** Sending plain text JSON objects to a Solid Inbox. Inboxes expect RDF Turtle (or JSON-LD) payloads representing formal graph triples.
+- **Anti-Pattern:** Conflating `Append` access with `Write` access. When posting to an inbox, you do not check if you can overwrite the inbox; you simply execute a POST.
+
+### SOLID MIGRATION SCRIPTS
+# Solid Data Migration Script Rules
+
+When generating scripts to migrate legacy centralized data (JSON/CSV) into a Solid Pod, the script must run in a Node.js environment and strictly adhere to the mappings defined in `webize-spec.md`.
+
+## Core Directives
+
+### 1. Node.js Authentication
+- **Action:** Do not use `@inrupt/solid-client-authn-browser`. 
+- **Rule:** Migration scripts must use `@inrupt/solid-client-authn-node`. Use `interactiveLogin` for developer-run scripts, or Client Credentials for automated server-to-Pod migrations.
+
+### 2. URI Minting & Distribution
+- **Action:** Break apart monolithic JSON arrays.
+- **Rule:** Do not upload a single `users.json` file. Iterate through the legacy data and mint a unique URI for each entity (e.g., `https://pod.example/projects/123e4567-e89b-12d3...`). Save each entity as its own RDF graph or group them logically in a specific container.
+
+### 3. Rate Limiting & Async Batching
+- **Action:** Respect the target Pod's server limits.
+- **Rule:** Do not execute hundreds of concurrent `PUT` or `POST` requests. Solid servers (like CSS or ESS) will rate-limit or crash. Use batching (e.g., processing chunks of 10-20 items) and include artificial delays if necessary.
+
+### 4. Relational Linking
+- **Action:** Preserve legacy foreign keys as Linked Data URIs.
+- **Rule:** If Legacy User A belongs to Legacy Project B, the migrated RDF for User A must use a property like `org:memberOf` pointing to the newly minted URI of Project B. You must maintain a temporary mapping dictionary in memory during the script execution to link these new URIs together.
+
+### SOLID NOTIFICATIONS
+# Solid Notifications Rules
+
+The Solid Notifications Protocol allows applications to subscribe to changes on Pod resources rather than polling them constantly.
+
+## Core Directives
+1. **Discover the Notification Endpoint:** Do not assume a hardcoded websocket URL. You must discover the notification channel endpoint by inspecting the `Storage` or Resource HTTP headers (or the dataset's `.well-known` configuration).
+2. **Channel Negotiation:** A Pod may support `WebSocketChannel2023`, `EventSourceChannel2023`, or `WebhookChannel2023`. Applications must negotiate the supported channel.
+3. **Re-authentication:** Websocket connections may drop or tokens may expire. Always build robust reconnection logic that provisions fresh DPoP headers.
+
+## Forbidden Patterns
+- **No Aggressive Polling:** Never use `setInterval` to constantly `GET` a resource to check for changes. This drains mobile batteries and overwhelms Pod servers.
+- **Don't Assume Data Delivery in Payloads:** Notification payloads often only tell you *that* a resource changed (e.g., `Update` or `Delete` activity), not *what* the new data is. You must re-fetch the resource securely.
+
+## Example Pattern: Using Websockets
+```javascript
+import { getSolidDataset } from "@inrupt/solid-client";
+
+// Note: Inrupt provides an experimental universal notifications API 
+// (@inrupt/solid-client-notifications) which abstracts the channel types.
+import { subscribe } from "@inrupt/solid-client-notifications";
+
+async function watchResource(resourceIri, session, onUpdateCallback) {
+  const websocket = await subscribe(resourceIri, {
+    fetch: session.fetch,
+    onMessage: (message) => {
+      // The message indicates an event (e.g. Update). Re-fetch the data.
+      console.log("Resource changed:", message);
+      onUpdateCallback(resourceIri);
+    },
+    onError: (err) => console.error("Notification Error:", err)
+  });
+  
+  return websocket; // So it can be closed on component unmount
+}
+```
+
+### SOLID ODRL
+# Open Digital Rights Language (ODRL) Rules
+
+While Access Control (ACL) dictates *who* can access a resource, ODRL dictates *how* they are legally/ethically permitted to use it. This is the cornerstone of Human-Centric data agency.
+
+## Core Directives
+
+### 1. Augmenting ACL with Policies
+- **Action:** When creating a sensitive data vault or granting third-party app access, do not stop at WAC/ACP. You MUST generate an ODRL policy attached to the dataset.
+- **Vocabulary:** Use the ODRL namespace (`http://www.w3.org/ns/odrl/2/`).
+
+### 2. Human-Centric Rule Mapping
+- **Constraint:** Policies should express precise human rights contexts. 
+- **Action:** Define explicit `odrl:Rule` entities. For example:
+  - **Purpose Limitation:** Restrict usage to academic research, preventing commercial exploitation.
+  - **Temporal Expiry:** Set explicit deletion or revocation dates.
+  - **Attribution:** Require the data subject's agency to be acknowledged.
+
+### 3. Defensive Interoperability
+- **Action:** ODRL policies should be stored either within the same RDF document as the sensitive data (as metadata) or linked via an `odrl:hasPolicy` predicate from the target resource.
+- **Compliance:** Note that while WAC/ACP is enforced cryptographically by the Solid server, ODRL is often a contractual/ethical enforcement layer that the consuming application must respect. Document this distinction in your code comments.
+
+### SOLID ONTOLOGY CREATION
+# Directives for Ontology Creation Mode
+
+You are operating in **Ontology Creation Mode**. Your objective is to design and map RDF ontologies that respect human agency, utilizing SHACL for domain logic.
+
+## Execution Checklist for the AI
+
+### 1. Semantic Auditing (The "Asset" Check)
+Before defining a class, determine if the subject is a human/sovereign agent or an asset/concept.
+- **Rule:** Never model a human being using a class derived from a CRM paradigm (where people are managed assets).
+- **Rule:** Recognize semantic traps in legacy ontologies. For example, `schema:Physician` defines a place of business/organization, not a human practitioner. 
+
+### 2. SHACL for Personal Domain Logic
+Use SHACL to define the shapes and constraints of personal data rather than relying on heavy OWL inferencing.
+- Define `sh:NodeShape` for entities.
+- Use `sh:property` to define the exact logic, cardinality, and expected datatypes of relationships.
+
+### 3. Defensive Interoperability (Mapping)
+When you must interface with standard web ontologies to remain interoperable, use explicit relationship predicates rather than direct subclassing (`rdfs:subClassOf`).
+- **Correct Pattern:** Define the human (`hc:Practitioner` as a `foaf:Person`), define the workplace (`schema:Physician`), and link them using `org:memberOf` or a custom predicate.
+- **Forbidden Pattern:** Do not state `hc:Practitioner rdfs:subClassOf schema:Physician`. This breaks the semantic reality of the natural world.
+
+### SOLID PERMISSIONS
+# Solid Access Control Rules
+
+Solid Pods enforce data sovereignty through either Web Access Control (WAC) or Access Control Policies (ACP). Applications must be interoperable with both.
+
+## Core Directives
+1. **Never write raw ACL or ACP graph data manually.** The LLM must not attempt to manipulate `.acl` files or ACR (Access Control Resource) graphs directly using RDF.
+2. **Default to the Universal API:** For standard CRUD permission sharing, always use the `universalAccess` module from `@inrupt/solid-client`. It automatically detects whether the target Pod uses WAC or ACP and applies the correct underlying specification.
+3. **Access Modes:** Permissions are defined using five explicit boolean flags: `read`, `append`, `write`, `controlRead`, and `controlWrite`. Always provide explicit true/false values to avoid overriding state unintentionally.
+4. **Advanced Policies:** Only drop down to the specific ACP APIs (e.g., `acp_ess_2`) if the feature explicitly requires complex policy matchers (like restricting access to specific Client IDs or building `allOf`/`anyOf` rule chains).
+
+## Handling the 'Append' Right
+When a user grants `Append` but not `Write`, it means a third party can add data (like an inbox message) but cannot delete or modify existing data. This is critical for Linked Data Notifications (LDN) inboxes.
+
+## Anti-Patterns
+- **Anti-Pattern:** Checking for `Read` access by attempting a fetch and catching the 403. Instead, query the ACL/ACP directly via `universalAccess.getAgentAccess()`.
+- **Anti-Pattern:** Granting `Public` Write access to any resource. 
+
+## Security Checklist
+- [ ] Are permissions granted only at the narrowest possible scope (File rather than Container) when possible?
+- [ ] Did you verify the target WebID before granting access?
+- [ ] If changing from ACP to WAC or vice-versa, are you using `universalAccess` to avoid corrupting the resource's permissions?
+
+## Example Pattern: Universal Access
+```javascript
+import { universalAccess } from "@inrupt/solid-client";
+
+/**
+ * Grants specific access to a single user (Agent)
+ */
+async function shareWithUser(datasetUrl, agentWebId, session) {
+  await universalAccess.setAgentResourceAccess(
+    datasetUrl,
+    agentWebId,
+    { 
+      read: true, 
+      append: false, 
+      write: false, 
+      controlRead: false, 
+      controlWrite: false 
+    },
+    { fetch: session.fetch }
+  );
+}
+
+/**
+ * Makes a resource publicly readable
+ */
+async function makePubliclyReadable(datasetUrl, session) {
+  await universalAccess.setPublicResourceAccess(
+    datasetUrl,
+    { read: true, append: false, write: false, controlRead: false, controlWrite: false },
+    { fetch: session.fetch }
+  );
+}
+
+```
+
+### SOLID REFACTORING
+# Directives for Refactoring & Review Mode
+
+You are operating in **Refactoring & Review Mode**. Your objective is to audit the codebase for technical debt, structural entropy, and strict adherence to W3C Solid architecture.
+
+## Execution Checklist for the AI
+
+You must perform the following audit steps and present a summary report to the user *before* executing any code changes.
+
+### Step 1: The Modularity & Separation of Concerns Audit
+- **Analyze:** Are UI components tightly coupled with raw RDF manipulation (`getThing`, `setThing`)?
+- **Action:** Propose extracting Solid data-fetching logic into isolated custom hooks (e.g., `useSolidProfile.ts`) or dedicated service classes, leaving the UI components pure.
+
+### Step 2: The Semantic & Vocabulary Audit
+- **Analyze:** Scan the codebase for manual string definitions of URIs (e.g., `"http://xmlns.com/foaf/0.1/name"`).
+- **Action:** Propose replacing all raw strings with constants from `@inrupt/vocab-common-rdf` or the project's custom SHACL ontology.
+
+### Step 3: The Async & Open World Assumption Audit
+- **Analyze:** Scan UI components and data parsers for missing null checks.
+- **Action:** Identify areas where the application will crash if a Pod returns incomplete data. Propose fallback UI states (`loading`, `error`, `missing`).
+
+### Step 4: The Performance & Network Audit
+- **Analyze:** Look for synchronous blocking operations or N+1 fetch problems (e.g., fetching a list of 50 WebIDs, then making 50 sequential network requests to load profiles).
+- **Action:** Propose asynchronous batching using `Promise.all()` or utilizing Comunica SPARQL federated queries to optimize network latency.
+
+## Output Format
+Generate a markdown report titled `Refactoring-Audit.md` detailing your findings for each of the 4 steps above. Conclude the report by asking the user: *"Which of these refactoring priorities should we execute first?"*
+
+### SOLID SHAPE TREES
+# Solid Shape Trees and SHACL Discovery/Validation Rules
+
+In a decentralized ecosystem operating under the Open World Assumption, data can be sparse, extended, or structured differently by various applications. Shape Trees and SHACL (Shapes Constraint Language) provide mechanisms to discover, validate, and enforce expected RDF shapes without violating data interoperability.
+
+## 1. Core Concepts
+- **`sh:NodeShape`:** Defines a set of validation constraints on an RDF resource node.
+- **`sh:targetClass`:** Links a NodeShape to a specific class (e.g. `foaf:Person`, `doap:Project`), asserting that the shape applies to any resources of that type.
+- **`sh:property`:** Defines individual property constraints (predicate paths, expected datatypes, minimum/maximum counts).
+
+### SOLID TESTING
+# Solid Testing Rules
+
+W3C Solid applications operate on live decentralized Pods. Therefore, end-to-end and integration tests must run against a compliant Solid server, not mocked HTTP networks.
+
+## Core Directives
+1. **Never mock the `fetch` API for Solid endpoints:** Standard HTTP mocks (like MSW or Jest mocks) fail to accurately represent the LDP protocol, WAC/ACP headers, and WebSocket notifications of a real Solid Pod.
+2. **Use Community Solid Server (CSS):** Spin up an in-memory instance of `@solid/community-server` for all integration and E2E tests.
+3. **Mocking Authentication:** The only thing you should mock is the `@inrupt/solid-client-authn-browser` session state. Provide a fake authenticated `fetch` function that points to your local CSS instance.
+
+## Example: Local CSS Setup
+Use the programmatic API of Community Solid Server in your test setup files:
+```javascript
+import { AppRunner } from '@solid/community-server';
+
+let app;
+
+export async function startServer() {
+  app = await new AppRunner().start(
+    new AppRunner().getValidCommand({
+      port: 3000,
+      loggingLevel: 'info',
+      seededPodConfigJson: './test-pods.json' // Optional: Seed data
+    })
+  );
+}
+
+export async function stopServer() {
+  if (app) await app.stop();
+}
+```
+
+### SOLID UI BINDING
+# Solid UI and State Management Rules
+
+Solid applications interact with decentralized Pods, which means high network latency and incomplete data graphs are the default state.
+
+## Core Directives
+1. **The Open World Assumption:** Never assume a property exists in the RDF graph. Linked Data is sparse by nature. Always handle `null` or `undefined` gracefully when extracting strings or URLs from a `Thing`. UI components must never crash due to missing profile or dataset properties.
+2. **Async-First Components:** All Pod data fetching is asynchronous. Components must implement explicit `loading` and `error` states. 
+3. **Avoid Monolithic State:** Do not attempt to serialize entire `SolidDataset` or `Thing` objects into global state managers (like Redux). Store the minimal extracted primitives (strings, booleans) in state, or manage the `SolidDataset` at the component/hook level.
+4. **Optimistic UI Updates:** Because saving a dataset back to a Pod requires a network request, update the local component state immediately with the new value, then perform the `@inrupt/solid-client` save operation in the background. Roll back the state if the save fails.
+
+## Example Pattern: Safe Async Fetching (React)
+```javascript
+import { useState, useEffect } from 'react';
+import { getSolidDataset, getThing, getStringNoLocale } from '@inrupt/solid-client';
+import { FOAF } from '@inrupt/vocab-common-rdf';
+
+export function UserProfile({ webId, session }) {
+  const [name, setName] = useState('Loading...');
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchProfile() {
+      try {
+        // 1. Fetch the dataset asynchronously
+        const dataset = await getSolidDataset(webId, { fetch: session.fetch });
+        
+        // 2. Extract the specific Thing
+        const profileThing = getThing(dataset, webId);
+        
+        // 3. Graceful degradation: Handle missing data safely
+        const fetchedName = profileThing 
+          ? getStringNoLocale(profileThing, FOAF.name) 
+          : null;
+
+        if (isMounted) {
+          setName(fetchedName || 'Anonymous User');
+        }
+      } catch (err) {
+        if (isMounted) setError('Failed to load profile data.');
+      }
+    }
+
+    if (session.info.isLoggedIn) {
+      fetchProfile();
+    }
+
+    return () => { isMounted = false; };
+  }, [webId, session]);
+
+  if (error) return <div>Error: {error}</div>;
+
+  return <div>Welcome, {name}</div>;
+}
+
+```
+
+### SOLID VOCABULARIES
+# Solid Well-Known Vocabularies
+
+When writing data to a Solid Pod, you must use standard, well-known RDF vocabularies. Creating arbitrary JSON keys or hallucinating predicates destroys data interoperability.
+
+## Core Directives
+1. **Never Hallucinate Predicates:** Do not invent properties like `https://my-app.com/vocab#userName`. Use `http://xmlns.com/foaf/0.1/name` or `http://www.w3.org/2006/vcard/ns#fn`.
+2. **Use the @inrupt Libraries:** Always rely on `@inrupt/vocab-common-rdf` and `@inrupt/vocab-solid` which contain pre-mapped constants for these URIs.
+3. **Handle Namespaces Correctly:** If you must use a vocabulary not present in the Inrupt wrappers, clearly define the full URI string.
+
+## The Well-Known Vocabularies List
+When modeling Solid data, map your data to these core ontologies as referenced by the Solid project:
+
+- **FOAF** (`http://xmlns.com/foaf/0.1/`): For social graphs, people, and basic profile info (e.g., `foaf:name`, `foaf:knows`).
+- **VCARD** (`http://www.w3.org/2006/vcard/ns#`): For contact information (e.g., `vcard:hasPhoto`, `vcard:fn`, `vcard:hasEmail`).
+- **SCHEMA** (`http://schema.org/`): For diverse entity descriptions (e.g., `schema:Person`, `schema:Date`).
+- **LDP** (`http://www.w3.org/ns/ldp#`): For Linked Data Platform container definitions (e.g., `ldp:Container`, `ldp:contains`).
+- **SOLID** (`http://www.w3.org/ns/solid/terms#`): For Solid-specific terms (e.g., `solid:publicTypeIndex`, `solid:privateTypeIndex`, `solid:account`).
+- **PIM** (`http://www.w3.org/ns/pim/space#`): For personal workspace definitions (e.g., `pim:storage`, `pim:workspace`).
+- **DCTERMS** (`http://purl.org/dc/terms/`): For generic metadata (e.g., `dct:modified`, `dct:created`).
+- **ACL / ACP**: (`http://www.w3.org/ns/auth/acl#` / `http://www.w3.org/ns/solid/acp#`): For access control policies (though typically abstracted by `universalAccess`).
+
+## Example Pattern: Using Core Vocabs
+```javascript
+import { getStringNoLocale, getUrl } from "@inrupt/solid-client";
+import { FOAF, VCARD } from "@inrupt/vocab-common-rdf";
+import { SOLID } from "@inrupt/vocab-solid";
+
+// Safely retrieving standard properties from a profile Thing
+const name = getStringNoLocale(profileThing, FOAF.name) || getStringNoLocale(profileThing, VCARD.fn);
+const avatar = getUrl(profileThing, VCARD.hasPhoto);
+const storageRoot = getUrl(profileThing, "http://www.w3.org/ns/pim/space#storage");
+```
+
+### SOLID WEB ANNOTATIONS
+# W3C Web Annotations in Solid
+
+This directive standardizes how user-generated content (notes, highlights, bookmarks, reading progress) is modeled and stored using the official **W3C Web Annotation Data Model** (`http://www.w3.org/ns/oa#`).
+
+## 1. Core Directives
+1. **The Ban on Proprietary Schemas:** Never model a user's comment, note, or highlight using a custom JSON structure or a proprietary database record.
+2. **Attribution:** Every annotation MUST be attributed to the user's WebID via `dcterms:creator` or `as:author`.
+3. **Storage Location:** Annotations are stored in the user's Solid Pod (typically inside a dedicated container `/annotations/`), NEVER on application-specific servers.
+4. **Target and Body:** Every annotation MUST have an `oa:hasTarget` (identifying the resource, paragraph, or URL annotated) and `oa:hasBody` (the content of the note/highlight).
+
+## 2. Concrete Code Example
+
+Here is how to create and write a compliant Web Annotation using `@inrupt/solid-client`:
+
+```typescript
+import { 
+  createThing, 
+  setThing, 
+  buildThing, 
+  createSolidDataset, 
+  saveSolidDatasetAt 
+} from "@inrupt/solid-client";
+import { RDF, DCTERMS } from "@inrupt/vocab-common-rdf";
+
+const OA_NAMESPACE = "http://www.w3.org/ns/oa#";
+const OA = {
+  Annotation: `${OA_NAMESPACE}Annotation`,
+  hasTarget: `${OA_NAMESPACE}hasTarget`,
+  hasBody: `${OA_NAMESPACE}hasBody`,
+  TextualBody: `${OA_NAMESPACE}TextualBody`,
+  chars: `${OA_NAMESPACE}chars`,
+  format: `${OA_NAMESPACE}format`
+};
+
+/**
+ * Creates a standard W3C Web Annotation
+ * @param targetUrl The resource being annotated
+ * @param commentText The body content of the annotation
+ * @param authorWebId The annotator's WebID
+ */
+export function createWebAnnotation(
+  targetUrl: string, 
+  commentText: string, 
+  authorWebId: string
+) {
+  // 1. Create the Body Thing (Textual content)
+  const bodyThing = buildThing(createThing())
+    .addUrl(RDF.type, OA.TextualBody)
+    .addStringNoLocale(OA.chars, commentText)
+    .addStringNoLocale(OA.format, "text/plain")
+    .build();
+
+  // 2. Create the Annotation Thing
+  const annotationThing = buildThing(createThing())
+    .addUrl(RDF.type, OA.Annotation)
+    .addUrl(OA.hasTarget, targetUrl)
+    .addUrl(OA.hasBody, bodyThing.url)
+    .addUrl(DCTERMS.creator, authorWebId)
+    .addDatetime(DCTERMS.created, new Date())
+    .build();
+
+  // 3. Assemble and save to the user's annotations container
+  let dataset = createSolidDataset();
+  dataset = setThing(dataset, bodyThing);
+  dataset = setThing(dataset, annotationThing);
+
+  return { dataset, annotationUrl: annotationThing.url };
+}
+```
+
+## 3. Anti-Patterns
+- **Anti-Pattern:** Saving comments in a central Postgres database owned by the application. This causes user lock-in and violates GDPR/sovereignty guidelines.
+- **Anti-Pattern:** Using standard `schema:Comment` as a flat object without a target pointer. Annotations require the decoupling of `oa:hasTarget` and `oa:hasBody`.
+- **Anti-Pattern:** Storing the comment text directly on the annotation resource rather than referencing a distinct body resource (`oa:hasBody`). Doing so violates the W3C spec graph layout.
+
+### SOLID WEBIZE
+# Directives for Webize Mode
+
+You are operating in **Webize Mode**. Your goal is to decouple this application from central infrastructure or mock silos and wire it directly into the decentralized W3C Solid ecosystem.
+
+## PHASE 1: The Planning & Q&A Phase
+**CRITICAL: DO NOT WRITE CODE YET.** When the user triggers "Webize Mode", you must first initiate an Interactive Structural Q&A to map the "As-Is" centralized system to the "To-Be" decentralized functional specification.
+
+### The Interview Process
+Ask the user the following questions, one at a time, offering decentralized alternatives and suggestions based on W3C Solid principles:
+
+#### Step 1: The "As-Is" Audit
+Ask the user to describe the current centralized architecture:
+- What are the core data entities? (e.g., Users, Projects, Tasks, Comments).
+- Where is the centralization happening? (e.g., A central admin dashboard, a master database table).
+- Who currently "owns" the data in this model?
+
+#### Step 2: The "To-Be" Sovereignty Mapping (Human-Centric Design)
+Offer suggestions to remap these entities into a sovereign, Human-Centric model:
+- **Identity:** Confirm we are replacing local auth with WebIDs.
+- **Data Topology:** Suggest where the data should live. 
+  - *Example Suggestion:* "Instead of a centralized `projects` table, should each Project be an independent WebID/Pod that contributors are granted access to via ACP?"
+  - *Example Suggestion:* "Should comments live in the user's personal Pod and be linked to the Project via a Type Index, or stored directly in the Project's Pod?"
+- **Vocabularies:** Propose RDF vocabularies for their legacy data (e.g., suggest `sioc:Thread` instead of a `topics` table).
+
+#### Step 3: Generate the Functional Specification
+Once the user agrees on the mapping, you **must generate a `webize-spec.md` file** in the root of the project using `/templates/webize-spec-template.md` as a guide. This file serves as the architectural blueprint for the codebase refactor. Do not begin coding until this file is created and approved.
+
+### TARGET PLATFORM 01 STATIC WEB
+# Solid Static Web Deployment Rules
+
+Check `AGENTS.md` for the declared Deployment Target. When targeting `static-web`, you are operating in a standard browser environment.
+
+## 1. Authentication Flow
+- **Pattern:** Use standard browser redirects (`window.location.href`).
+- **Constraint:** Do not use Server-Side Rendering (SSR) for authenticated routes. Solid-OIDC requires the client browser to handle the redirect.
+- **Client ID:** The Client ID must be a URL pointing to a JSON-LD document hosted on the exact same static domain (e.g., `https://my-app.github.io/client-id.jsonld`).
+
+## 2. Networking and CORS
+- **Constraint:** CORS is strictly enforced by the browser. 
+- **Action:** If generating fetch requests to custom endpoints or external Pods, always ensure you mention CORS headers and Preflight requests.
+
+## 3. Cryptography (DPoP)
+- **Support:** DPoP (Demonstrating Proof-of-Possession) is handled natively and securely by the browser's WebCrypto API. No polyfills are required.
+
+### TARGET PLATFORM 02 MOBILE NATIVE
+# Solid Mobile Native Deployment Rules
+
+Check `AGENTS.md` for the declared Deployment Target. When targeting `mobile-native`, the environment lacks standard web features.
+
+## 1. Authentication Flow (Deep Linking)
+- **Constraint:** Standard `window.location.href` redirects do not work in compiled apps.
+- **Action:** You MUST implement OS-level deep linking (e.g., `myapp://auth-callback`) and handle the redirect via the app's routing lifecycle.
+- **Library:** Use `@inrupt/solid-client-authn-react-native` or equivalent.
+
+## 2. Cryptography (DPoP Polyfills)
+- **Constraint:** Mobile JavaScript environments (like React Native) lack a standard WebCrypto API, causing DPoP token generation to crash.
+- **Action:** You must explicitly import and configure crypto polyfills (like `react-native-get-random-values` and standard `crypto` shims) before initializing the authentication package.
+
+## 3. Secure Storage
+- **Constraint:** `localStorage` is insecure and often unavailable.
+- **Action:** You must explicitly implement secure enclaves (iOS Keychain / Android Keystore) to store the DPoP private keys and refresh tokens (e.g., using `expo-secure-store`).
+
+### TARGET PLATFORM 03 DESKTOP ELECTRON
+# Solid Desktop Electron Deployment Rules
+
+Check `AGENTS.md` for the declared Deployment Target. When targeting `desktop-electron`, you must bridge a Node.js backend with a web frontend.
+
+## 1. Security Isolation (IPC)
+- **Constraint:** Never put the Solid-OIDC authentication flow or DPoP private keys inside the renderer process (the frontend).
+- **Action:** Handle authentication in the Main process (Node.js) and pass the resulting session or data safely to the renderer via IPC (Inter-Process Communication).
+
+## 2. Authentication Flow (Loopback Servers)
+- **Constraint:** Standard redirects will break the Chromium webview.
+- **Action:** The OIDC flow must open the system's default browser for login (`shell.openExternal`). 
+- **Callback Catching:** Spin up a temporary local loopback web server in the Main process (e.g., `http://127.0.0.1:45321/callback`) to catch the auth redirect, or register a custom desktop protocol handler (`app://`).
+
+## 3. Data Topology
+- **Action:** Be explicitly clear about where data is being saved. Differentiate between saving to the local machine's physical disk versus pushing data to the decentralized WebID Pod.
+
+### TARGET PLATFORM 04 HEADLESS IOT
+# Solid Headless IoT Deployment Rules
+
+Check `AGENTS.md` for the declared Deployment Target. When targeting `node-daemon`, the environment has no user interface and no browser.
+
+## 1. Authentication Flow (Client Credentials)
+- **Constraint:** Interactive browser login is impossible. There is no `window` or `document` object.
+- **Action:** You MUST use the Client Credentials Grant via `@inrupt/solid-client-authn-node`. The device/script uses a pre-registered Client ID and Secret to authenticate autonomously.
+
+## 2. State Persistence
+- **Constraint:** IoT devices (like solar controllers) or containerized daemons may reboot or lose power frequently.
+- **Action:** Implement persistent local token caching. Do not hammer the Solid IdP for a new token every time the service restarts.
+
+## 3. Execution Patterns
+- **Action:** When writing scripts, respect Solid server rate limits (use batching) and never write DOM manipulation code.
+
+### TARGET PLATFORM 05 BROWSER EXTENSION
+# Solid Browser Extension Deployment Rules
+
+Check `AGENTS.md` for the declared Deployment Target. When building a browser extension (Manifest V3), the standard `@inrupt/solid-client-authn-browser` redirect flows will fail.
+
+## 1. Authentication Flow (The Identity API)
+- **Constraint:** Standard `window.location.href` redirects close the extension popup and destroy the state.
+- **Action:** You MUST use `chrome.identity.launchWebAuthFlow` (or `browser.identity.launchWebAuthFlow` for Firefox) to open a system-level auth window that returns the redirect URL directly to the extension's background worker or popup.
+- **Client ID:** The redirect URI must perfectly match the extension's origin (e.g., `chrome-extension://<your-extension-id>/redirect.html`) and be whitelisted by the Solid Identity Provider.
+
+## 2. Session Storage & Background Workers
+- **Constraint:** Manifest V3 Service Workers sleep after 30 seconds. Standard in-memory sessions will be lost. `localStorage` is not available in service workers.
+- **Action:** The Solid session tokens MUST be serialized and stored using `chrome.storage.local`. Upon waking, the background script must rehydrate the Inrupt session from this storage before making Pod requests.
+
+## 3. Manifest Permissions & CORS
+- **Action:** Ensure the `manifest.json` requests the necessary `host_permissions` (e.g., `*://*.solidcommunity.net/*`) to allow the extension to bypass standard CORS limitations when fetching decentralized RDF graphs.
+
+### TARGET PLATFORM 06 OBSIDIAN PLUGIN
+# Solid Obsidian Plugin Rules
+
+Check `AGENTS.md` for the declared Deployment Target. When building an Obsidian plugin, you are bridging a sandboxed desktop environment with decentralized RDF graphs.
+
+## 1. Authentication Flow (The Loopback / Custom URI)
+- **Constraint:** Standard `window.location.href` redirects will attempt to navigate the entire Obsidian Electron window away from the user's vault, breaking the app.
+- **Action:** You must use the system browser for the Solid-OIDC login page. To catch the redirect, you MUST either:
+  1. Spin up a temporary local Node.js HTTP server (e.g., `http://127.0.0.1:45321/callback`) during the auth flow to catch the token, then close it.
+  2. Use Obsidian's custom protocol handler (`obsidian://`) as the redirect URI (e.g., `obsidian://solid-auth-callback`).
+
+## 2. Networking and CORS
+- **Action:** If the target Pod server has aggressive CORS restrictions that block standard `fetch` from the `app://obsidian` origin, you can construct a custom fetch wrapper using Obsidian's built-in `requestUrl` API, which bypasses CORS entirely. 
+- *Warning:* If using DPoP (Proof of Possession), ensure the cryptographic headers generated by `@inrupt/solid-client-authn-browser` are correctly passed through `requestUrl`.
+
+## 3. Data Mapping: Vault to Graph
+- **Action:** Obsidian stores data in flat `.md` files; Solid stores data in RDF graphs. You must use the Obsidian `Vault` and `TFile` APIs to read local content.
+- **Rule:** Do not blindly upload `.md` files into the Pod as raw text. When instructed, parse the Markdown frontmatter (YAML) and transform it into a `SolidDataset` (RDF graph) before saving it to the Pod, ensuring true interoperability.
+
+## 4. Session Persistence
+- **Action:** Do not use `localStorage`. Store the serialized Solid session tokens securely in the plugin's `data.json` using the Obsidian `Plugin.saveData()` API, so the user doesn't have to log in every time they open their vault.
+
+

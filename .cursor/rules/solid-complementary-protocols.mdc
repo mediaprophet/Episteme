@@ -1,4 +1,4 @@
----
+﻿---
 description: Rules for integrating Solid with complementary protocols (Nym Mixnets, IPFS, Blockchains, VCs, and DIDs) without compromising user autonomy.
 globs: ["**/complementary/**/*", "**/protocols/**/*", "**/integration/**/*", "*.ts", "*.js"]
 alwaysApply: false
@@ -95,3 +95,4 @@ class PaymentRequiredError extends Error {
 - **Anti-Pattern:** Saving user credentials, private keys, or wallet seed phrases in plain text JSON files or local Storage. Always delegate key signing to the wallet/browser extensions.
 - **Anti-Pattern:** Placing plaintext personal identifiers (such as names or emails) or hash strings of such identifiers on a public blockchain ledger. This violates GDPR right-to-be-forgotten regulations.
 - **Anti-Pattern:** Conflating IPFS content CIDs with dynamic Solid resources. IPFS is for *immutable* binary objects, whereas Solid is for *mutable* resource graphs. Use Solid RDF nodes to link and categorize IPFS URIs.
+

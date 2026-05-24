@@ -1,0 +1,40 @@
+﻿---
+description: Rules for real-time updates via Solid Notifications Protocol (WebSockets/Webhooks).
+globs: ["**/subscriptions/**/*", "**/realtime/**/*", "**/websockets/**/*", "*.ts"]
+---
+# Solid Notifications Rules
+
+The Solid Notifications Protocol allows applications to subscribe to changes on Pod resources rather than polling them constantly.
+
+## Core Directives
+1. **Discover the Notification Endpoint:** Do not assume a hardcoded websocket URL. You must discover the notification channel endpoint by inspecting the `Storage` or Resource HTTP headers (or the dataset's `.well-known` configuration).
+2. **Channel Negotiation:** A Pod may support `WebSocketChannel2023`, `EventSourceChannel2023`, or `WebhookChannel2023`. Applications must negotiate the supported channel.
+3. **Re-authentication:** Websocket connections may drop or tokens may expire. Always build robust reconnection logic that provisions fresh DPoP headers.
+
+## Forbidden Patterns
+- **No Aggressive Polling:** Never use `setInterval` to constantly `GET` a resource to check for changes. This drains mobile batteries and overwhelms Pod servers.
+- **Don't Assume Data Delivery in Payloads:** Notification payloads often only tell you *that* a resource changed (e.g., `Update` or `Delete` activity), not *what* the new data is. You must re-fetch the resource securely.
+
+## Example Pattern: Using Websockets
+```javascript
+import { getSolidDataset } from "@inrupt/solid-client";
+
+// Note: Inrupt provides an experimental universal notifications API 
+// (@inrupt/solid-client-notifications) which abstracts the channel types.
+import { subscribe } from "@inrupt/solid-client-notifications";
+
+async function watchResource(resourceIri, session, onUpdateCallback) {
+  const websocket = await subscribe(resourceIri, {
+    fetch: session.fetch,
+    onMessage: (message) => {
+      // The message indicates an event (e.g. Update). Re-fetch the data.
+      console.log("Resource changed:", message);
+      onUpdateCallback(resourceIri);
+    },
+    onError: (err) => console.error("Notification Error:", err)
+  });
+  
+  return websocket; // So it can be closed on component unmount
+}
+```
+

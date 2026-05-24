@@ -1,0 +1,20 @@
+﻿---
+description: Rules for generating W3C Solid apps running as Manifest V3 Web/Browser Extensions (Chrome, Firefox).
+globs: ["**/*"]
+---
+# Solid Browser Extension Deployment Rules
+
+Check `AGENTS.md` for the declared Deployment Target. When building a browser extension (Manifest V3), the standard `@inrupt/solid-client-authn-browser` redirect flows will fail.
+
+## 1. Authentication Flow (The Identity API)
+- **Constraint:** Standard `window.location.href` redirects close the extension popup and destroy the state.
+- **Action:** You MUST use `chrome.identity.launchWebAuthFlow` (or `browser.identity.launchWebAuthFlow` for Firefox) to open a system-level auth window that returns the redirect URL directly to the extension's background worker or popup.
+- **Client ID:** The redirect URI must perfectly match the extension's origin (e.g., `chrome-extension://<your-extension-id>/redirect.html`) and be whitelisted by the Solid Identity Provider.
+
+## 2. Session Storage & Background Workers
+- **Constraint:** Manifest V3 Service Workers sleep after 30 seconds. Standard in-memory sessions will be lost. `localStorage` is not available in service workers.
+- **Action:** The Solid session tokens MUST be serialized and stored using `chrome.storage.local`. Upon waking, the background script must rehydrate the Inrupt session from this storage before making Pod requests.
+
+## 3. Manifest Permissions & CORS
+- **Action:** Ensure the `manifest.json` requests the necessary `host_permissions` (e.g., `*://*.solidcommunity.net/*`) to allow the extension to bypass standard CORS limitations when fetching decentralized RDF graphs.
+

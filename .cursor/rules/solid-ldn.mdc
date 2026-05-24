@@ -1,4 +1,4 @@
----
+﻿---
 description: Rules for handling cross-Pod messaging, Linked Data Notifications (LDN) discovery, and ActivityStreams activity dispatching.
 globs: ["**/inbox/**/*", "**/messaging/**/*", "**/notifications/**/*", "*.ts", "*.tsx"]
 alwaysApply: false
@@ -82,3 +82,4 @@ export async function sendNotification(
 - **Anti-Pattern:** Hardcoding a static path (like `/inbox`) under the assumption that all Pod providers mount the inbox container at the exact same location.
 - **Anti-Pattern:** Sending plain text JSON objects to a Solid Inbox. Inboxes expect RDF Turtle (or JSON-LD) payloads representing formal graph triples.
 - **Anti-Pattern:** Conflating `Append` access with `Write` access. When posting to an inbox, you do not check if you can overwrite the inbox; you simply execute a POST.
+

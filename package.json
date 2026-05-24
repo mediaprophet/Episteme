@@ -9,7 +9,8 @@
     "test:e2e": "vitest run tests/e2e",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "css:start": "community-solid-server -l info -m ."
+    "css:start": "community-solid-server -l info -m .",
+    "sync-rules": "node scripts/sync-rules.js"
   },
   "devDependencies": {
     "typescript": "^5.4.0",

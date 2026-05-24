@@ -1,0 +1,20 @@
+﻿---
+description: Rules for generating W3C Solid apps running as pure Static Web Apps or SPAs (React, Vue, GitHub Pages).
+globs: ["**/*"]
+---
+# Solid Static Web Deployment Rules
+
+Check `AGENTS.md` for the declared Deployment Target. When targeting `static-web`, you are operating in a standard browser environment.
+
+## 1. Authentication Flow
+- **Pattern:** Use standard browser redirects (`window.location.href`).
+- **Constraint:** Do not use Server-Side Rendering (SSR) for authenticated routes. Solid-OIDC requires the client browser to handle the redirect.
+- **Client ID:** The Client ID must be a URL pointing to a JSON-LD document hosted on the exact same static domain (e.g., `https://my-app.github.io/client-id.jsonld`).
+
+## 2. Networking and CORS
+- **Constraint:** CORS is strictly enforced by the browser. 
+- **Action:** If generating fetch requests to custom endpoints or external Pods, always ensure you mention CORS headers and Preflight requests.
+
+## 3. Cryptography (DPoP)
+- **Support:** DPoP (Demonstrating Proof-of-Possession) is handled natively and securely by the browser's WebCrypto API. No polyfills are required.
+

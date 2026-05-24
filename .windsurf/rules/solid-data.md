@@ -1,4 +1,4 @@
-﻿---
+---
 description: Rules for reading, writing, and modeling RDF Linked Data from Solid Pods based on the declared stack.
 globs: ["**/api/**/*", "**/services/**/*", "**/models/**/*", "*.ts", "*.tsx"]
 ---
@@ -21,4 +21,3 @@ Check `AGENTS.md` for the declared Data Manipulation library before writing code
 - **Core Concept:** Immutability and pure functions.
 - **Pattern:** Fetch `SolidDataset`s, extract `Thing`s, and build new datasets using `setThing`.
 - **Writing Data:** Always use `@inrupt/vocab-common-rdf` for property IRIs (e.g., `FOAF.name`). Never invent string keys. Save back to the pod using `saveSolidDatasetAt`.
-

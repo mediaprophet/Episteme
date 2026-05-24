@@ -1,0 +1,18 @@
+---
+description: Rules for generating W3C Solid apps running as headless Node.js daemons, IoT relays, or automated server scripts.
+globs: ["**/*"]
+---
+# Solid Headless IoT Deployment Rules
+
+Check `AGENTS.md` for the declared Deployment Target. When targeting `node-daemon`, the environment has no user interface and no browser.
+
+## 1. Authentication Flow (Client Credentials)
+- **Constraint:** Interactive browser login is impossible. There is no `window` or `document` object.
+- **Action:** You MUST use the Client Credentials Grant via `@inrupt/solid-client-authn-node`. The device/script uses a pre-registered Client ID and Secret to authenticate autonomously.
+
+## 2. State Persistence
+- **Constraint:** IoT devices (like solar controllers) or containerized daemons may reboot or lose power frequently.
+- **Action:** Implement persistent local token caching. Do not hammer the Solid IdP for a new token every time the service restarts.
+
+## 3. Execution Patterns
+- **Action:** When writing scripts, respect Solid server rate limits (use batching) and never write DOM manipulation code.

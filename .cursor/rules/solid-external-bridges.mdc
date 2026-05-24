@@ -1,4 +1,4 @@
----
+﻿---
 description: Rules for data ingestion from Web 2.0 silos and secure AI integration via Model Context Protocol (MCP) servers.
 globs: ["**/bridges/**/*", "**/mcp/**/*", "**/external/**/*", "*.ts", "*.js"]
 alwaysApply: false
@@ -93,3 +93,4 @@ export async function handleMcpReadTool(request: McpToolRequest) {
 - **Anti-Pattern:** Hardcoding a single system-wide "admin/owner" WebID token in the MCP server to bypass authentication. This compromises the entire security boundary of the Pod.
 - **Anti-Pattern:** Saving raw CSVs or JSON files extracted from Web 2.0 directly to the Pod without mapping them to RDF triples first.
 - **Anti-Pattern:** Feeding unencrypted, sensitive personal documents from a user's Pod directly to public external AI APIs without explicit user consent (ODRL policies).
+

@@ -1,4 +1,4 @@
----
+﻿---
 description: Rules for generating and storing user-generated content (notes, highlights, bookmarks) using the W3C Web Annotation Data Model (oa:Annotation).
 globs: ["**/annotations/**/*", "**/highlights/**/*", "**/comments/**/*", "*.ts", "*.tsx"]
 alwaysApply: false
@@ -77,3 +77,4 @@ export function createWebAnnotation(
 - **Anti-Pattern:** Saving comments in a central Postgres database owned by the application. This causes user lock-in and violates GDPR/sovereignty guidelines.
 - **Anti-Pattern:** Using standard `schema:Comment` as a flat object without a target pointer. Annotations require the decoupling of `oa:hasTarget` and `oa:hasBody`.
 - **Anti-Pattern:** Storing the comment text directly on the annotation resource rather than referencing a distinct body resource (`oa:hasBody`). Doing so violates the W3C spec graph layout.
+

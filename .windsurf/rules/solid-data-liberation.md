@@ -1,0 +1,29 @@
+---
+description: Directives for Data Liberation Mode — transforming CSVs, ZIPs, and PDFs into W3C Solid Linked Data.
+globs: ["**/etl/**/*", "**/extractors/**/*", "**/transformers/**/*", "*.csv", "*.pdf", "*.zip"]
+---
+# Directives for Data Liberation Mode
+
+You are operating in **Data Liberation Mode**. Your objective is to build automated pipelines that rescue data from legacy formats or proprietary silos and format it as W3C Solid Linked Data to preserve the user's agency over their information.
+
+## Phase 1: The Input Analysis Q&A
+Before writing the ETL script, ask the user:
+1. **The Source Format:** Is this a flat file (CSV), a proprietary export (Samsung Health ZIP), or unstructured text (Pathology PDF)?
+2. **The Target Domain:** What does this data represent? (e.g., Biometrics, Financial Transactions).
+
+## Phase 2: Ontology Selection
+You must map the extracted data to standard IRIs. Suggest these common ontologies to the user based on their data:
+- **Biometrics / Wearables:** Use `sosa` (Sensor, Observation, Sample, and Actuator) or `ssn` (Semantic Sensor Network).
+- **Medical / Pathology:** Use `fhir` (Fast Healthcare Interoperability Resources in RDF).
+- **Financial:** Use `fibo` (Financial Industry Business Ontology).
+
+## Phase 3: Pipeline Generation
+Generate a transformation script that follows this pipeline:
+1. **Extract:** Read the local file (use streams for large ZIPs/CSVs).
+2. **Transform:** Map the parsed JSON/text rows into RDF `Thing` objects using the selected ontologies.
+3. **Load:** Authenticate using `@inrupt/solid-client-authn-node` and save the datasets to a specific container in the Pod, utilizing rate-limiting and batching.
+
+## Handling Unstructured Data (PDFs)
+If the user provides a PDF (e.g., a pathology report):
+- Suggest using a two-step process: First, use an LLM extraction API (like Google Gemini) with a strict JSON schema to pull the key-value pairs (Blood Pressure, Glucose levels, Dates). 
+- Second, map that structured JSON to FHIR RDF and write it to the Pod.

@@ -1,0 +1,52 @@
+﻿---
+description: Rules for RDF graph data modelling, Turtle serialization, prefix declarations, and semantic decoupling in Solid application design.
+globs: ["**/data/**/*", "**/vocab/**/*", "**/rdf/**/*", "*.ts", "*.js", "*.ttl"]
+---
+# Solid RDF and Turtle Data Modelling Rules
+
+This document details the core data modelling and serialization patterns that AI developer agents and LLMs must adhere to when building decentralized W3C Solid applications.
+
+## 1. Core Semantic Directives
+
+### Think in Graphs, Not Tables
+- **Decoupled Data Architecture:** In Solid, data is decoupled from applications. Data is stored as Linked Data graphs inside Solid Pods, not as rows in centralized SQL databases or private document stores. Multiple different applications can read, write, and reason over the same data resources simultaneously.
+- **Subject-Predicate-Object Triples:** All data in the Solid ecosystem is modelled as a set of RDF triples. Every data point consists of:
+  - **Subject:** A WebID (IRI) or a local resource identifier pointing to an entity.
+  - **Predicate:** A standardized IRI defining the relationship or attribute.
+  - **Object:** Another IRI (representing a relation) or a literal (e.g., string, integer, boolean, dateTime).
+
+### Turtle Serialization (Syntax Best Practices)
+When generating Turtle (`.ttl`) files, templates, or test seeds:
+- **Prefix Declarations:** Always define standard `@prefix` declarations at the top of the document.
+- **Semicolon Chaining:** Use semicolons (`;`) to chain multiple predicates and objects sharing the same subject, keeping files clean and human-readable.
+- **Comma Chaining:** Use commas (`,`) to specify multiple objects for the same predicate.
+- **The "a" Keyword:** Always use `a` as the shorthand for the `rdf:type` predicate (`http://www.w3.org/1999/02/22-rdf-syntax-ns#type`).
+
+```turtle
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# Correct Turtle syntax with prefixes and semicolon chaining
+<#me> a foaf:Person ;
+    foaf:name "Sovereign Person" ;
+    foaf:knows <https://friend.example/profile/card#me> .
+```
+
+### Vocabulary & Schema Reuse
+- **Interoperability First:** Never invent custom JSON keys or private property IRIs if a standard vocabulary covers the concept. Check the Solid Well-Known Vocabularies catalog first.
+- **Reuse Hierarchy:**
+  1. FOAF / VCARD (for identity, profile details, and social connections)
+  2. Schema.org (for generic metadata, projects, creative works, and events)
+  3. LDP / Dublin Core (for containers, basic timestamps, and file descriptors)
+  4. Specialized standards (e.g., ODRL for rights, SOSA for IoT observations)
+  5. Custom vocabulary ONLY if no industry or community standard exists.
+
+---
+
+## 2. Forbidden Patterns & Anti-patterns
+
+- **No Relational/SQL Thinking:** Do not design schemas with foreign keys as integer IDs or attempt database joins. Instead, link entities directly using their absolute web URLs (IRIs).
+- **No Private App silos:** Do not wrap datasets in custom JSON strings. Solid Pod data must remain crawlable, discoverable, and readable by other Solid apps.
+- **No Hardcoded Pod Endpoints:** Never assume a specific container path exists (e.g., `/my-app/data.ttl`). Dynamic storage discovery using the user's WebID Profile (`pim:storage`) is mandatory.
+- **No String-based Namespaces in Logic:** Do not repeat raw namespace strings across implementation code; use pre-built vocabulary packages (like `@inrupt/vocab-common-rdf`) or centralized vocabulary constants.
+

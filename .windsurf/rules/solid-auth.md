@@ -1,4 +1,4 @@
-﻿---
+---
 description: Rules for handling Solid-OIDC authentication, WebIDs, and session management based on the declared stack.
 globs: ["**/auth/**/*", "**/login/**/*", "**/components/*Login*", "*.ts", "*.tsx", "**/App.tsx", "**/index.tsx"]
 ---
@@ -88,4 +88,3 @@ export function triggerLogin(issuerUrl = "https://solidcommunity.net") {
   });
 }
 ```
-

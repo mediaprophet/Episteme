@@ -1,0 +1,22 @@
+---
+description: Enforces the local semantic-dictionary.json boundaries on all AI text, code comments, and architectural generation.
+globs: ["**/*"]
+---
+# Enforcing the Semantic Dictionary
+
+You must read and strictly adhere to the terms, constraints, and legal definitions declared in `semantic-dictionary.json` at the root of this workspace.
+
+## Core Directives
+
+### 1. Pre-Generation Linguistic Audit
+Before outputting any text, documentation, code comments, or architectural specifications, cross-reference your vocabulary with the `terms` object in `semantic-dictionary.json`.
+- **Banned Associations:** If a term matches a forbidden context (e.g., using "sovereignty" in an individualist tech context), you must immediately strip it out and rewrite the sentence.
+- **Philosophical Alignment:** Align your reasoning with the distinction that **People are not Assets**. Respect the linguistic realities of the natural world (where a person has *Dignity* and *Personhood*) versus corporate environments (where objects have *Ownership*).
+
+### 2. Differentiating "Rule of Law" from "Self-Sovereignty"
+- **Directive:** Never imply or suggest architectures that promote a rejection of established governance, government, or legal systems. 
+- **Action:** Frame all decentralized capabilities (like W3C Solid Pods or Verifiable Credentials) as tools that operate *within* and strengthen the Rule of Law, protecting civil rights, community resilience, and systemic accountability.
+
+### 3. Example Correction Flow
+- *If you are about to write:* "Solid gives users self-sovereign ownership over their personal medical files."
+- *You must correct to:* "Solid provides individuals with systemic agency and access control rights over their health data, preserving their personal dignity and personhood."
