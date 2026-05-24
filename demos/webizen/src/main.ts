@@ -1,6 +1,7 @@
 import { handleAuth, initiateLogin, initiateLogout } from './auth';
 import { getAddressBook, Contact } from './addressBook';
 import { mintGuardianshipAgreement } from './agreements';
+import { createCoStewardshipProject } from './stewardship';
 
 // UI Elements
 const idpUrlInput = document.getElementById('idp-url') as HTMLInputElement;
@@ -27,6 +28,17 @@ const adpDomainInput = document.getElementById('adp-domain-input') as HTMLInputE
 const generateAdpBtn = document.getElementById('generate-adp-btn') as HTMLButtonElement;
 const adpDnsOutput = document.getElementById('adp-dns-output') as HTMLElement;
 const adpDnsCode = document.getElementById('adp-dns-code') as HTMLElement;
+
+// Project Co-Stewardship Elements
+const openProjectModalBtn = document.getElementById('open-project-modal-btn') as HTMLButtonElement;
+const projectModal = document.getElementById('project-modal') as HTMLElement;
+const projectNameInput = document.getElementById('project-name') as HTMLInputElement;
+const coStewardSelect = document.getElementById('co-steward-select') as HTMLSelectElement;
+const projectPolicySelect = document.getElementById('project-policy-select') as HTMLSelectElement;
+const projectValuesSelect = document.getElementById('project-values-select') as HTMLSelectElement;
+const cancelProjectBtn = document.getElementById('cancel-project-btn') as HTMLButtonElement;
+const mintProjectBtn = document.getElementById('mint-project-btn') as HTMLButtonElement;
+const projectListEl = document.getElementById('project-list') as HTMLElement;
 
 let currentSession: any;
 let targetAgentForAgreement: Contact | null = null;
@@ -64,6 +76,8 @@ logoutBtn.addEventListener('click', () => {
 // Render Address Book
 function renderContacts(contacts: Contact[]) {
   contactListEl.innerHTML = '';
+  coStewardSelect.innerHTML = ''; // Reset multi-select options
+  
   contacts.forEach(contact => {
     const li = document.createElement('li');
     li.className = 'contact-item';
@@ -84,6 +98,12 @@ function renderContacts(contacts: Contact[]) {
     });
 
     contactListEl.appendChild(li);
+
+    // Add to project co-steward dropdown
+    const option = document.createElement('option');
+    option.value = contact.webId;
+    option.textContent = `${contact.name} (${contact.webId})`;
+    coStewardSelect.appendChild(option);
   });
 }
 
@@ -140,5 +160,67 @@ generateAdpBtn.addEventListener('click', () => {
   
   adpDnsCode.textContent = `Name: ${txtRecordName}\nType: TXT\nValue: "${txtRecordValue}"`;
   adpDnsOutput.classList.remove('hidden');
+});
+
+// Project Co-Stewardship Logic
+openProjectModalBtn.addEventListener('click', () => {
+  projectModal.classList.remove('hidden');
+});
+
+cancelProjectBtn.addEventListener('click', () => {
+  projectModal.classList.add('hidden');
+  projectNameInput.value = '';
+});
+
+mintProjectBtn.addEventListener('click', async () => {
+  const projectName = projectNameInput.value.trim();
+  const selectedOptions = Array.from(coStewardSelect.selectedOptions);
+  const stewards = selectedOptions.map(opt => opt.value);
+
+  if (!projectName) {
+    alert("Please enter a project name.");
+    return;
+  }
+  if (stewards.length === 0) {
+    alert("Please select at least one co-steward.");
+    return;
+  }
+
+  mintProjectBtn.textContent = "Minting Graph...";
+  mintProjectBtn.disabled = true;
+
+  try {
+    const webId = currentSession.info.webId;
+    await createCoStewardshipProject(
+      webId,
+      projectName,
+      stewards,
+      projectPolicySelect.value,
+      projectValuesSelect.value
+    );
+    
+    alert(`Project '${projectName}' created with ODRL policy and attached to your Pod!`);
+    
+    // Add to project list UI
+    const li = document.createElement('li');
+    li.className = 'contact-item';
+    li.innerHTML = `
+      <div>
+        <h4>${projectName}</h4>
+        <small style="color: var(--text-secondary);">Policy: ${projectPolicySelect.value} | Constraint: ${projectValuesSelect.value}</small><br/>
+        <small style="color: var(--text-secondary);">Co-Stewards: ${stewards.length} Agent(s)</small>
+      </div>
+    `;
+    projectListEl.appendChild(li);
+    
+  } catch (error) {
+    console.error(error);
+    alert("Failed to store project graph. Note: Demo assumes /projects/ exists with Write permissions on your Pod.");
+  }
+
+  projectModal.classList.add('hidden');
+  mintProjectBtn.textContent = "Create Project Graph";
+  mintProjectBtn.disabled = false;
+  projectNameInput.value = '';
 });
 
