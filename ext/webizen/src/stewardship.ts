@@ -100,9 +100,19 @@ export async function createCoStewardshipProject(
   const now        = new Date();
   const unUri      = UN_INSTRUMENT_URIS[valueConstraint] ?? valueConstraint;
 
+  // Resolve storage location and construct absolute URLs to avoid relative/hash URI validation errors in Inrupt's SDK
+  const storageUrl = new URL(creatorWebId).origin + `/projects/${projectId}.ttl`;
+  const projectUrl = `${storageUrl}#${projectId}`;
+  const policyUrl  = `${storageUrl}#${policyId}`;
+  const licenseUrl = `${storageUrl}#${licenseId}`;
+  const claimUrl   = `${storageUrl}#${claimId}`;
+  const costUrl    = `${storageUrl}#${costId}`;
+  const nymConfigUrl = `${storageUrl}#nym-config`;
+  const providerUrl  = `${storageUrl}#provider`;
+
   // ── 1. Project Thing ────────────────────────────────────────────────────────
   // Multi-typed: doap:Project + schema:Project + schema:CreativeWork + prov:Entity
-  let projectBuilder = buildThing(createThing({ name: projectId }))
+  let projectBuilder = buildThing(createThing({ url: projectUrl }))
     // Core types
     .addUrl(`${RDF}type`,            `${DOAP}Project`)
     .addUrl(`${RDF}type`,            `${SCHEMA}Project`)
@@ -113,7 +123,7 @@ export async function createCoStewardshipProject(
     .addStringNoLocale(`${DOAP}description`, description)
     .addDatetime(`${DOAP}created`,           now)
     .addUrl(`${DOAP}maintainer`,             creatorWebId)
-    .addUrl(`${DOAP}license`,                `#${licenseId}`)
+    .addUrl(`${DOAP}license`,                licenseUrl)
     // Schema.org identification
     .addStringNoLocale(`${SCHEMA}name`,        projectName)
     .addStringNoLocale(`${SCHEMA}description`, description)
@@ -122,12 +132,12 @@ export async function createCoStewardshipProject(
     .addUrl(`${PROV}wasAttributedTo`,  creatorWebId)
     .addDatetime(`${PROV}generatedAtTime`, now)
     // Webizen ODRL policy link
-    .addUrl(`${ODRL}hasPolicy`,  `#${policyId}`)
+    .addUrl(`${ODRL}hasPolicy`,  policyUrl)
     // Webizen claim procedure link
-    .addUrl(`${WZ_ST}hasClaimProcess`, `#${claimId}`);
+    .addUrl(`${WZ_ST}hasClaimProcess`, claimUrl);
 
   if (nymEnabled) {
-    projectBuilder = projectBuilder.addUrl(`${NYM_EXT}hasNymConfig`, `#nym-config`);
+    projectBuilder = projectBuilder.addUrl(`${NYM_EXT}hasNymConfig`, nymConfigUrl);
   }
 
   // Platform Hosting Provider
@@ -135,13 +145,13 @@ export async function createCoStewardshipProject(
   if (providerType === 'self') {
     projectBuilder = projectBuilder.addUrl(`${SCHEMA}hostingProvider`, creatorWebId);
   } else {
-    const providerSubject = providerUri || `#provider`;
+    const providerSubject = providerUri || providerUrl;
     projectBuilder = projectBuilder.addUrl(`${SCHEMA}hostingProvider`, providerSubject);
 
     // Build the nested provider details as a schema:Organization resource
     let providerBuilder = providerUri
       ? buildThing(createThing({ url: providerUri }))
-      : buildThing(createThing({ name: 'provider' }));
+      : buildThing(createThing({ url: providerUrl }));
 
     providerBuilder = providerBuilder
       .addUrl(`${RDF}type`, `${SCHEMA}Organization`)
@@ -168,9 +178,10 @@ export async function createCoStewardshipProject(
   const guardianThings: any[] = [];
   guardians.forEach((g, idx) => {
     const gId = `guardian-agreement-${Date.now()}-${idx}`;
-    projectBuilder = projectBuilder.addUrl(`${WZ_AG}hasAgreement`, `#${gId}`);
+    const gUrl = `${storageUrl}#${gId}`;
+    projectBuilder = projectBuilder.addUrl(`${WZ_AG}hasAgreement`, gUrl);
 
-    const gThing = buildThing(createThing({ name: gId }))
+    const gThing = buildThing(createThing({ url: gUrl }))
       .addUrl(`${RDF}type`, `${WZ_AG}Agreement`)
       .addUrl(`${RDF}type`, `${ODRL}Policy`)
       .addUrl(`${WZ_AG}principalAgent`, creatorWebId)
@@ -187,9 +198,9 @@ export async function createCoStewardshipProject(
 
   // ── 2. ODRL Policy Thing ────────────────────────────────────────────────────
   // Governs multi-agent rights over the project content (odrl:modify / odrl:distribute)
-  let policyBuilder = buildThing(createThing({ name: policyId }))
+  let policyBuilder = buildThing(createThing({ url: policyUrl }))
     .addUrl(`${RDF}type`,         `${ODRL}Policy`)
-    .addUrl(`${ODRL}target`,      `#${projectId}`)
+    .addUrl(`${ODRL}target`,      projectUrl)
     .addUrl(`${ODRL}assigner`,    creatorWebId)
     .addUrl(`${WZ_AG}valueCredential`,   unUri)
     .addStringNoLocale(`${DC}description`, `${policyType} governance policy for ${projectName}`);
@@ -208,10 +219,10 @@ export async function createCoStewardshipProject(
   // ── 3. Webizen License Thing ────────────────────────────────────────────────
   // wz-st:License (subClassOf odrl:Policy) — references the ODRL policy and the
   // UN human rights value constraint as the boundary condition.
-  const licenseThing = buildThing(createThing({ name: licenseId }))
+  const licenseThing = buildThing(createThing({ url: licenseUrl }))
     .addUrl(`${RDF}type`,             `${WZ_ST}License`)
     .addUrl(`${RDF}type`,             `${ODRL}Policy`)
-    .addUrl(`${WZ_ST}governedBy`, `#${policyId}`)
+    .addUrl(`${WZ_ST}governedBy`, policyUrl)
     .addUrl(`${WZ_ST}valueInstrument`, unUri)
     .addStringNoLocale(`${DC}title`,  `Episteme Co-Stewardship License – ${policyType}`)
     .build();
@@ -219,10 +230,10 @@ export async function createCoStewardshipProject(
   // ── 4. Webizen Claim Process Thing ─────────────────────────────────────────
   // wz-st:ClaimProcess (subClassOf odrl:Policy) — the mechanism by which
   // contributors can assert rights over their contributions.
-  const claimThing = buildThing(createThing({ name: claimId }))
+  const claimThing = buildThing(createThing({ url: claimUrl }))
     .addUrl(`${RDF}type`,             `${WZ_ST}ClaimProcess`)
     .addUrl(`${RDF}type`,             `${ODRL}Policy`)
-    .addUrl(`${WZ_ST}relatedPolicy`, `#${policyId}`)
+    .addUrl(`${WZ_ST}relatedPolicy`, policyUrl)
     .addUrl(`${ODRL}assigner`,        creatorWebId)
     .addStringNoLocale(`${DC}description`, `Contribution claim procedure for project: ${projectName}`)
     .build();
@@ -231,10 +242,10 @@ export async function createCoStewardshipProject(
   // wz-st:ObligationCost (subClassOf schema:MonetaryAmount) — tracks the
   // aggregated value of contributor effort. Initialised to 0 as a stub;
   // future tooling can update this as work is contributed.
-  const costThing = buildThing(createThing({ name: costId }))
+  const costThing = buildThing(createThing({ url: costUrl }))
     .addUrl(`${RDF}type`,                     `${WZ_ST}ObligationCost`)
     .addUrl(`${RDF}type`,                     `${SCHEMA}MonetaryAmount`)
-    .addUrl(`${WZ_ST}relatedProject`,      `#${projectId}`)
+    .addUrl(`${WZ_ST}relatedProject`,      projectUrl)
     .addStringNoLocale(`${SCHEMA}currency`,   "USD")
     .addDecimal(`${SCHEMA}value`,             0)
     .addStringNoLocale(`${DC}description`,
@@ -244,7 +255,7 @@ export async function createCoStewardshipProject(
   // ── 6. Nym Mixnet Config Thing ─────────────────────────────────────────────
   let nymConfigThing: any = null;
   if (nymEnabled) {
-    let nymBuilder = buildThing(createThing({ name: 'nym-config' }))
+    let nymBuilder = buildThing(createThing({ url: nymConfigUrl }))
       .addUrl(`${RDF}type`, `${NYM_EXT}NymConfiguration`)
       .addBoolean(`${NYM_EXT}nymEnabled`, true);
 

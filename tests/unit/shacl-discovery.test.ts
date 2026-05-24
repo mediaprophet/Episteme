@@ -142,7 +142,7 @@ describe('SHACL Shape Discovery & Validation', () => {
       const shapeUri = 'https://raw.githubusercontent.com/mediaprophet/Episteme/main/utils/shapes/project-shape.ttl';
 
       const thing = buildThing({ url: resourceUri })
-        .addUrl('http://usefulinc.com/ns/doap#name', 'My Project')
+        .addStringNoLocale('http://usefulinc.com/ns/doap#name', 'My Project')
         .addUrl('http://usefulinc.com/ns/doap#maintainer', 'https://pod.example/alice#me')
         .addUrl('https://schema.org/hostingProvider', 'https://pod.example/alice#me')
         .build();
@@ -161,7 +161,7 @@ describe('SHACL Shape Discovery & Validation', () => {
 
       // Missing doap:maintainer and schema:hostingProvider
       const thing = buildThing({ url: resourceUri })
-        .addUrl('http://usefulinc.com/ns/doap#name', 'My Project')
+        .addStringNoLocale('http://usefulinc.com/ns/doap#name', 'My Project')
         .build();
       
       let dataset = createSolidDataset();

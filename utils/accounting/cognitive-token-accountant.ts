@@ -124,9 +124,22 @@ export function mintContributionDataset(
 
   const contributionId = `contribution-${Date.now()}`;
   const now = new Date();
+  const baseUri = "https://mediaprophet.org/ext/webizen/accounting";
+  const costUrl = `${baseUri}#cost`;
+  const contributionUrl = `${baseUri}#${contributionId}`;
 
-  // 1. Contribution Activity Node
-  const contributionThing = buildThing(createThing({ name: contributionId }))
+  // 1. Obligation Cost Node (subClassOf schema:MonetaryAmount)
+  const costThing = buildThing(createThing({ url: costUrl }))
+    .addUrl(`${RDF}type`,                       `${WZ_ST}ObligationCost`)
+    .addUrl(`${RDF}type`,                       `${SCHEMA}MonetaryAmount`)
+    .addUrl(`${WZ_ST}relatedProject`,         projectUri)
+    .addStringNoLocale(`${SCHEMA}currency`,      currency)
+    .addDecimal(`${SCHEMA}value`,                obligationValue)
+    .addStringNoLocale(`${DC}description`,       `Obligation equity contribution value of ${obligationValue} USD`)
+    .build();
+
+  // 2. Contribution Activity Node
+  const contributionThing = buildThing(createThing({ url: contributionUrl }))
     .addUrl(`${RDF}type`,                       `${WZ_ST}CognitiveContribution`)
     .addUrl(`${RDF}type`,                       `${PROV}Activity`)
     // Provenance associations
@@ -142,17 +155,7 @@ export function mintContributionDataset(
     .addDecimal(`${WZ_ST}qualiaMultiplier`, options.qualiaPremiumMultiplier)
     .addStringNoLocale(`${WZ_ST}valuationMethod`, valuationMethod)
     // Link to the obligation cost node
-    .addUrl(`${WZ_ST}obligationCost`,        `#cost`)
-    .build();
-
-  // 2. Obligation Cost Node (subClassOf schema:MonetaryAmount)
-  const costThing = buildThing(createThing({ name: 'cost' }))
-    .addUrl(`${RDF}type`,                       `${WZ_ST}ObligationCost`)
-    .addUrl(`${RDF}type`,                       `${SCHEMA}MonetaryAmount`)
-    .addUrl(`${WZ_ST}relatedProject`,         projectUri)
-    .addStringNoLocale(`${SCHEMA}currency`,      currency)
-    .addDecimal(`${SCHEMA}value`,                obligationValue)
-    .addStringNoLocale(`${DC}description`,       `Obligation equity contribution value of ${obligationValue} USD`)
+    .addUrl(`${WZ_ST}obligationCost`,        costThing.url)
     .build();
 
   let dataset = createSolidDataset();
