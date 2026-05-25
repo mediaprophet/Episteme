@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Episteme Semantic Dictionary Mode Schema",
+  "description": "JSON Schema to validate the structure of Episteme semantic dictionary mode files, ensuring JSON-LD compliance and term integrity.",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "type": "object",
+      "properties": {
+        "skos": { "type": "string", "const": "http://www.w3.org/2004/02/skos/core#" },
+        "dct": { "type": "string", "const": "http://purl.org/dc/terms/" },
+        "mode": { "type": "string", "const": "dct:subject" },
+        "definition": { "type": "string", "const": "skos:definition" },
+        "related_terms": {
+          "type": "object",
+          "properties": {
+            "@id": { "type": "string", "const": "skos:related" },
+            "@type": { "type": "string", "const": "@id" }
+          },
+          "required": ["@id", "@type"]
+        }
+      },
+      "required": ["skos", "dct", "mode", "definition", "related_terms"]
+    },
+    "mode": { "type": "string" },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "strict_w3c_compliance": { "type": "boolean" },
+        "primary_focus": { "type": "string" },
+        "integration_path": { "type": "string" }
+      },
+      "required": ["strict_w3c_compliance", "primary_focus"]
+    },
+    "terms": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "definition": { "type": "string" },
+          "related_terms": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "required": ["definition", "related_terms"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["@context", "mode", "settings", "terms"],
+  "additionalProperties": false
+}

@@ -149,14 +149,23 @@ npm run test
 ---
 
 ## 🛠 Custom Add-ons & Overrides (The Escape Hatch)
-While this toolkit enforces strict vanilla W3C Solid compliance, real-world applications often require domain-specific integrations (e.g., blockchain payments, custom organizational auth resolvers).
+While this toolkit enforces strict vanilla W3C Solid compliance, real-world applications often require domain-specific integrations (e.g., blockchain payments, offline mobile routing).
 
-The **`custom-addons/`** directory acts as a native escape hatch. 
-- You can place your own Markdown AI instruction files (e.g., `override-auth.md`) and TypeScript hooks in this folder.
+The **`custom-addons/`** directory acts as a native escape hatch and edge sandbox.
+- You can place your own Markdown AI instruction files (e.g., `override-auth.md`) and TypeScript/Javascript hooks in this folder.
 - The AI is hardcoded via a "Pre-Flight Hook" in `AGENTS.md` to always read `custom-addons/` first. If it finds a custom rule there, it will explicitly override the vanilla protocols.
-- See `custom-addons/README.md` and the provided `example-custom-idp.md` for a complete example on how to restrict the AI to a curated list of Pod hosts instead of the open WebID ecosystem.
 
-The **Episteme** framework is now not just a strict enforcer of protocol, but a fully extensible framework capable of supporting advanced, enterprise-grade edge cases seamlessly.
+### Webizen Offline-First Edge Autonomy
+Episteme includes a complete bridge routing middleware to reconcile offline mobile/edge operation with remote W3C Solid Pods:
+*   **`custom-addons/webizen-edge/sqlite-wrapper.ts`**: Provides a simulated SQLite local storage wrapper caching datasets and queueing pending offline writes.
+*   **`custom-addons/p2p-sync/reconciler.ts`**: Reconciles the offline synchronization queue back to the remote Solid Pod via HTTP LDP protocols on reconnection.
+*   **`custom-addons/network-broker.ts`**: Implements the *Network State & Interop Broker* that listens to connectivity changes and routes reads/writes dynamically between local SQLite cache and remote Pod storage.
+*   **`custom-addons/rights-ontology.ttl`**: Extends the Open Digital Rights Language (ODRL) with custom edge-device constraints (`webizen:maxCacheDuration`, `webizen:OnDeviceProcessingOnly`, and `webizen:secureEnclaveRequired`).
+
+### Solid Application Interoperability (SAI)
+To ensure core operations govern access securely in enterprise landscapes, `/vanilla-core/sai-interop.ts` exposes helper classes to manage **Application Registries**, **Access Grants**, and **Data Grants** in alignment with the SAI specification.
+
+The **Episteme** framework is now not just a strict enforcer of protocol, but a fully extensible framework capable of supporting advanced, offline-first edge cases and enterprise authorization controls.
 
 ---
 

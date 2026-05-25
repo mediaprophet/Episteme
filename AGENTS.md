@@ -20,6 +20,19 @@ You (or humans) can run verification tools to check that configuration and stack
 *   **Validate Configuration Structure:** Run `node .agents/utils/validate-config.js` to verify integrity and consistency across `config.json`, `knowledge-index.json`, `semantic-index.json`, and `custom-addons/`.
 *   **Load and Verify Active Stack:** Run `node .agents/utils/agent-config-loader.js` to parse stack declarations, check core modules/platforms against approved whitelists, and log the context flush/re-init policy.
 
+## 🌉 Phase 2 Architecture (Webizen Edge-Bridge & SAI)
+
+To support both strict W3C compliance and offline-first edge-autonomy, the architecture enforces a strict decoupling:
+
+1.  **JSON-LD Semantic Dictionary:** All files under `modes/` are valid JSON-LD using a `@context` mapping definitions to `skos:definition` and relations to `skos:related`.
+2.  **Strict Schema Validation:** Adding any terminology requires adherence to `dictionary-schema.json`. Run `node .agents/utils/validate-config.js` to verify.
+3.  **Bridge Routing Middleware:** Routing logic must sit behind the `NetworkBroker` (`custom-addons/network-broker.ts`).
+    *   **Offline State:** Accesses local edge database (`SQLiteWrapper` under `custom-addons/webizen-edge/sqlite-wrapper.ts`) and buffers modifications in the offline queue.
+    *   **Online State:** Directly interacts with remote W3C Solid Pods via standard HTTP/LDP.
+    *   **Reconnection:** Automates reconciliation (`Reconciler` under `custom-addons/p2p-sync/reconciler.ts`) to merge offline changes into the Pod database.
+4.  **Rights Ontologies:** Use the Webizen rights ontology (`custom-addons/rights-ontology.ttl`) which extends ODRL to represent edge hardware rules (`webizen:maxCacheDuration`, `webizen:OnDeviceProcessingOnly`, `webizen:secureEnclaveRequired`).
+5.  **Solid Application Interoperability (SAI):** All core app integrations in `vanilla-core/` must govern access using Application Registries, Access Grants, and Data Grants modeled in `vanilla-core/sai-interop.ts`.
+
 
 ## 🚀 System Modes
 

@@ -22,7 +22,89 @@ function logWarning(msg) {
   hasWarnings = true;
 }
 
-// 1. Validate semantic-dictionary.json
+// 1. Validate semantic-dictionary.json and modes schema
+const schemaPath = path.resolve('dictionary-schema.json');
+if (!fs.existsSync(schemaPath)) {
+  logError(`dictionary-schema.json not found in root: ${schemaPath}`);
+} else {
+  console.log('✅ dictionary-schema.json found.');
+}
+
+function validateModeFileSchema(modeJson, filePath) {
+  const fileName = path.basename(filePath);
+  if (!modeJson || typeof modeJson !== 'object' || Array.isArray(modeJson)) {
+    logError(`[Schema] Mode file ${fileName} is not a valid JSON object.`);
+    return;
+  }
+  
+  const requiredRootKeys = ['@context', 'mode', 'settings', 'terms'];
+  for (const key of requiredRootKeys) {
+    if (!(key in modeJson)) {
+      logError(`[Schema] Mode file ${fileName} is missing required root property: "${key}".`);
+    }
+  }
+  
+  if (modeJson['@context']) {
+    const ctx = modeJson['@context'];
+    if (typeof ctx !== 'object' || Array.isArray(ctx)) {
+      logError(`[Schema] Mode file ${fileName} "@context" must be an object.`);
+    } else {
+      const requiredContextKeys = ['skos', 'dct', 'mode', 'definition', 'related_terms'];
+      for (const key of requiredContextKeys) {
+        if (!(key in ctx)) {
+          logError(`[Schema] Mode file ${fileName} "@context" is missing key: "${key}".`);
+        }
+      }
+    }
+  }
+  
+  if (modeJson.settings) {
+    const settings = modeJson.settings;
+    if (typeof settings !== 'object' || Array.isArray(settings)) {
+      logError(`[Schema] Mode file ${fileName} "settings" must be an object.`);
+    } else {
+      if (typeof settings.strict_w3c_compliance !== 'boolean') {
+        logError(`[Schema] Mode file ${fileName} "settings.strict_w3c_compliance" must be a boolean.`);
+      }
+      if (typeof settings.primary_focus !== 'string') {
+        logError(`[Schema] Mode file ${fileName} "settings.primary_focus" must be a string.`);
+      }
+    }
+  }
+  
+  if (modeJson.terms) {
+    const terms = modeJson.terms;
+    if (typeof terms !== 'object' || Array.isArray(terms)) {
+      logError(`[Schema] Mode file ${fileName} "terms" must be an object.`);
+    } else {
+      for (const [termName, termData] of Object.entries(terms)) {
+        if (!termData || typeof termData !== 'object' || Array.isArray(termData)) {
+          logError(`[Schema] Mode file ${fileName} term "${termName}" must be an object.`);
+          continue;
+        }
+        if (!termData.definition || typeof termData.definition !== 'string') {
+          logError(`[Schema] Mode file ${fileName} term "${termName}" is missing "definition" string.`);
+        }
+        if (!termData.related_terms || !Array.isArray(termData.related_terms)) {
+          logError(`[Schema] Mode file ${fileName} term "${termName}" is missing "related_terms" array.`);
+        } else {
+          for (let i = 0; i < termData.related_terms.length; i++) {
+            if (typeof termData.related_terms[i] !== 'string') {
+              logError(`[Schema] Mode file ${fileName} term "${termName}" "related_terms[${i}]" must be a string.`);
+            }
+          }
+        }
+        const allowedTermKeys = ['definition', 'related_terms'];
+        for (const k of Object.keys(termData)) {
+          if (!allowedTermKeys.includes(k)) {
+            logError(`[Schema] Mode file ${fileName} term "${termName}" contains forbidden property: "${k}".`);
+          }
+        }
+      }
+    }
+  }
+}
+
 if (!fs.existsSync(semanticDictPath)) {
   logError(`semantic-dictionary.json not found in root: ${semanticDictPath}`);
 } else {
@@ -40,10 +122,11 @@ if (!fs.existsSync(semanticDictPath)) {
         } else {
           try {
             const modeJson = JSON.parse(fs.readFileSync(modeFilePath, 'utf8'));
+            validateModeFileSchema(modeJson, modeFilePath);
             if (!modeJson.terms || Object.keys(modeJson.terms).length === 0) {
               logWarning(`Mode file "${modeKey}" has empty "terms" block.`);
             } else {
-              console.log(`✅ Mode "${modeKey}" terms validated (${Object.keys(modeJson.terms).length} terms).`);
+              console.log(`✅ Mode "${modeKey}" terms validated against schema (${Object.keys(modeJson.terms).length} terms).`);
             }
           } catch (err) {
             logError(`Failed to parse Mode file "${modeKey}": ${err.message}`);

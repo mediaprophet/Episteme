@@ -1,0 +1,73 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+@prefix webizen: <https://github.com/mediaprophet/Episteme/ns/webizen#> .
+
+webizen:rights-ontology
+    a owl:Ontology ;
+    dct:title "Webizen Edge Digital Rights Ontology" ;
+    dct:description "An extension of the W3C Open Digital Rights Language (ODRL) for edge-centric, offline-first personal data stores and sandboxed processing." ;
+    owl:imports odrl: ;
+    owl:versionInfo "1.0.0" .
+
+# --- Classes ---
+
+webizen:EdgeConstraint
+    a rdfs:Class , owl:Class ;
+    rdfs:subClassOf odrl:Constraint ;
+    rdfs:label "Edge Constraint" ;
+    rdfs:comment "A constraint evaluated on the physical edge device (e.g., mobile phone) rather than a remote server." .
+
+webizen:OnDeviceProcessingOnly
+    a rdfs:Class , owl:Class , odrl:Action ;
+    rdfs:subClassOf odrl:Action ;
+    rdfs:label "On-Device Processing Only" ;
+    rdfs:comment "Specifies that data can only be decrypted and processed locally within sandboxed volatile memory. Transmission of raw data or processed variables is prohibited." .
+
+# --- Properties ---
+
+webizen:networkState
+    a rdf:Property , owl:ObjectProperty ;
+    rdfs:domain webizen:EdgeConstraint ;
+    rdfs:range webizen:NetworkStateValue ;
+    rdfs:label "Network State" ;
+    rdfs:comment "Restricts data access based on the connectivity status of the device." .
+
+webizen:maxCacheDuration
+    a rdf:Property , owl:DatatypeProperty ;
+    rdfs:domain webizen:EdgeConstraint ;
+    rdfs:range xsd:duration ;
+    rdfs:label "Maximum Cache Duration" ;
+    rdfs:comment "Specifies the absolute time duration that a decrypted local copy may live in edge storage (SQLite cache) before it must be programmatically scrubbed." .
+
+webizen:deviceRequirement
+    a rdf:Property , owl:ObjectProperty ;
+    rdfs:domain webizen:EdgeConstraint ;
+    rdfs:range webizen:DeviceRequirementValue ;
+    rdfs:label "Device Requirement" ;
+    rdfs:comment "Hardware or operating system requirements that must be met to hold the data keys locally." .
+
+# --- Individuals / Values ---
+
+webizen:offlineOnly
+    a webizen:NetworkStateValue ;
+    rdfs:label "Offline Only" ;
+    rdfs:comment "Operation is only permitted when the device has no active internet routing (protecting network leakage)." .
+
+webizen:onlineOnly
+    a webizen:NetworkStateValue ;
+    rdfs:label "Online Only" ;
+    rdfs:comment "Operation requires active internet routing to perform real-time verification." .
+
+webizen:secureEnclaveRequired
+    a webizen:DeviceRequirementValue ;
+    rdfs:label "Secure Enclave Required" ;
+    rdfs:comment "Indicates decryption keys must be locked inside OS secure hardware keystores." .
+
+webizen:lowBatteryRestricted
+    a webizen:DeviceRequirementValue ;
+    rdfs:label "Low Battery Restricted" ;
+    rdfs:comment "Data synchronization or intensive compute tasks are blocked if battery capacity is below 20% to prevent corruption." .
