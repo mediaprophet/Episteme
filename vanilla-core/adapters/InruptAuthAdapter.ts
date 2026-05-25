@@ -18,7 +18,7 @@ export class InruptAuthAdapter implements IAuthProvider {
 
   async logout(): Promise<void> {
     console.log('[InruptAuthAdapter] Logging out session...');
-    await getDefaultSession().logout();
+    await (getDefaultSession() as any).logout();
   }
 
   async handleIncomingRedirect(): Promise<{ isLoggedIn: boolean; webId?: string } | null> {
