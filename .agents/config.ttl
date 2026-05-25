@@ -1,0 +1,11 @@
+@prefix config: <https://github.com/mediaprophet/Episteme/config#> .
+
+config:project
+    config:mode "solid-agent-config" ;
+    config:core "solid-protocol, webid, ldp, odrl" ;
+    config:target-platforms "nextjs, node-solid-server" ;
+    config:custom-addons "my-policy-addon" ;
+    config:context-policy [
+        config:flush-after-config true ;
+        config:reinit-helpers ".agents/helpers/project-context.md, custom-addons/active-rules.md"
+    ] .

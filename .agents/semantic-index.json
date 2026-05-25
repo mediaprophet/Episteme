@@ -1,0 +1,59 @@
+{
+  "project": "Episteme Semantic Index",
+  "modules": [
+    {
+      "name": "solid-auth",
+      "path": ".agents/rules/solid-auth.md",
+      "description": "Rules for handling Solid-OIDC authentication, sessions, and WebIDs.",
+      "keywords": ["auth", "login", "oidc", "session", "webid", "dpop"]
+    },
+    {
+      "name": "solid-data",
+      "path": ".agents/rules/solid-data.md",
+      "description": "Rules for reading, writing, and mutating RDF Linked Data from Solid Pods.",
+      "keywords": ["data", "rdf", "ldo", "soukai", "inrupt", "pure-functions", "immutability"]
+    },
+    {
+      "name": "solid-permissions",
+      "path": ".agents/rules/solid-permissions.md",
+      "description": "Rules governing W3C Solid access control policies (WAC & ACP) via universalAccess.",
+      "keywords": ["permissions", "wac", "acp", "acl", "universalaccess", "read", "write", "append"]
+    },
+    {
+      "name": "solid-vocabularies",
+      "path": ".agents/rules/solid-vocabularies.md",
+      "description": "Enforces using standard, well-known RDF ontologies rather than custom JSON keys.",
+      "keywords": ["vocabularies", "foaf", "vcard", "schema", "ldp", "pim", "namespaces", "ontologies"]
+    },
+    {
+      "name": "solid-shape-trees",
+      "path": ".agents/rules/solid-shape-trees.md",
+      "description": "Instructions for dynamic discovery and structural validation using SHACL shapes and Shape Trees.",
+      "keywords": ["validation", "shacl", "shape-trees", "nodeshape", "shex"]
+    },
+    {
+      "name": "solid-ldn",
+      "path": ".agents/rules/solid-ldn.md",
+      "description": "Rules for asynchronous cross-Pod communication using W3C Linked Data Notifications.",
+      "keywords": ["ldn", "inbox", "notifications", "activitystreams", "messaging", "async"]
+    },
+    {
+      "name": "solid-complementary-protocols",
+      "path": ".agents/rules/solid-complementary-protocols.md",
+      "description": "Directives for integrating blockchains (micropayments), Nym Mixnets, and Verifiable Credentials.",
+      "keywords": ["blockchain", "mixnet", "nym", "vc", "did", "ipfs", "micropayments", "l402"]
+    },
+    {
+      "name": "solid-external-bridges",
+      "path": ".agents/rules/solid-external-bridges.md",
+      "description": "Rules for secure Web 2.0 data ingestion and Model Context Protocol (MCP) server endpoints.",
+      "keywords": ["mcp", "oauth", "bridge", "ingestion", "web2", "leakage"]
+    },
+    {
+      "name": "solid-web-annotations",
+      "path": ".agents/rules/solid-web-annotations.md",
+      "description": "Instructions for user-generated content modeled as W3C Web Annotations.",
+      "keywords": ["annotations", "comments", "highlights", "bookmarks", "oa"]
+    }
+  ]
+}

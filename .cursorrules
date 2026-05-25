@@ -851,6 +851,24 @@ Offer suggestions to remap these entities into a sovereign, Human-Centric model:
 #### Step 3: Generate the Functional Specification
 Once the user agrees on the mapping, you **must generate a `webize-spec.md` file** in the root of the project using `/templates/webize-spec-template.md` as a guide. This file serves as the architectural blueprint for the codebase refactor. Do not begin coding until this file is created and approved.
 
+### SUMMARY
+# Episteme Rules Directory Summary
+
+This folder contains modular W3C Solid application development rules.
+
+## Core Rules Index
+
+*   **solid-auth.md**: Session management and Solid-OIDC/DPoP authentication constraints.
+*   **solid-data.md**: RDF graph CRUD operations using `@inrupt/solid-client`, LDO, and Soukai.
+*   **solid-permissions.md**: Setting read/write/append permissions via `universalAccess` (WAC/ACP bridging).
+*   **solid-vocabularies.md**: Catalog of well-known RDF namespaces (FOAF, VCARD, SCHEMA, etc.).
+*   **solid-shape-trees.md**: Validation using SHACL constraints and link describedby discovery.
+*   **solid-ldn.md**: Cross-Pod asynchronous notification loops and ActivityStreams 2.0 payloads.
+*   **solid-complementary-protocols.md**: Privacy routing (Nym Mixnets), immutable mapping (IPFS), and infrastructure payments (L402).
+*   **solid-external-bridges.md**: Web 2.0 ingestion rules and delegated MCP server access controls.
+*   **solid-web-annotations.md**: Storing user highlights and comments using the `oa:Annotation` schema.
+
+
 ### TARGET PLATFORM 01 STATIC WEB
 # Solid Static Web Deployment Rules
 
@@ -957,5 +975,20 @@ Check `AGENTS.md` for the declared Deployment Target. When building an Obsidian 
 
 ## 4. Session Persistence
 - **Action:** Do not use `localStorage`. Store the serialized Solid session tokens securely in the plugin's `data.json` using the Obsidian `Plugin.saveData()` API, so the user doesn't have to log in every time they open their vault.
+
+### TARGET PLATFORM SUMMARY
+# Episteme Target Platforms Directory Summary
+
+This folder contains deployment-specific cryptographic and session redirect rules for various target platforms.
+
+## Platform Index
+
+*   **01-static-web.md**: Standard web browser constraints (CORS, standard WebCrypto APIs).
+*   **02-mobile-native.md**: Mobile-specific secure token storage and crypto polyfills for DPoP.
+*   **03-desktop-electron.md**: Electron IPC security protocols and loopback redirection.
+*   **04-headless-iot.md**: Server-to-server daemon setups utilizing Client Credentials grant.
+*   **05-browser-extension.md**: Manifest V3 security boundaries and launchWebAuthFlow setups.
+*   **06-obsidian-plugin.md**: Obsidian plugin Vault interface mapping and custom scheme uri redirections.
+
 
 

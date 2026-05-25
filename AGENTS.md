@@ -1,9 +1,14 @@
 # W3C Solid App Development Context
 
-This project builds Human-Centric applications using W3C Solid. The core philosophy is data sovereignty, user agency, and interoperability.
+This project builds Human-Centric applications using W3C Solid. To minimize context window bloat, agents MUST adhere to the progressive loading protocol.
 
-## 🛑 PRE-FLIGHT CHECK: Custom Overrides
-*AI INSTRUCTION:* Before reading any rules in the `.agents/rules/` directory or generating any code, you MUST check the `custom-addons/` directory. If a custom instruction exists there (e.g., overriding standard auth with a custom IDP list or blockchain integration), that custom instruction completely overrides the vanilla W3C rules below.
+## 🛑 ENTRY POINT & PRE-FLIGHT HOOK
+1. **Begin Session:** You MUST start by reading the loading manifest [.agents/manifest.md](file:///.agents/manifest.md).
+2. **Prior Knowledge Check:** Scan [.agents/knowledge-index.ttl](file:///.agents/knowledge-index.ttl) to verify what W3C specifications are already assumed to be known.
+3. **Parse Config & Stack:** Read [.agents/config.ttl](file:///.agents/config.ttl) to confirm the active core modules, platforms, and custom addons.
+4. **Context Flush Directive:** If `config:flush-after-config` is `true`, parse the active stack, **flush your entire current context window**, and re-initialize using ONLY the helper files listed under `config:reinit-helpers`.
+5. **Custom Addons Priority:** Check the `custom-addons/` directory. Custom addons always take precedence and are loaded first. Core Solid rules must never override custom-addons unless explicitly permitted by the project config.
+
 
 ## 🚀 System Modes
 
@@ -110,3 +115,15 @@ This project maintains specialized rule files in `/.agents/rules/` for deep-dive
 - `target-platforms/04-headless-iot.md`: Mandates Client Credentials Grant for autonomous server-to-Pod data flows, local token caching.
 - `target-platforms/05-browser-extension.md`: Instructs the AI on Manifest V3 constraints, using `chrome.identity.launchWebAuthFlow` and `chrome.storage.local`.
 - `target-platforms/06-obsidian-plugin.md`: Instructs the AI to use `obsidian://` custom protocol handler, bridging Vault APIs with RDF.
+
+## ⚡ Just-in-Time Rule Loading
+Agents should avoid loading all rules into context. Use the following loaders or command lines to query and fetch specific rules on demand:
+- **Node.js Loader:** Run `node .agents/utils/agent-loader.js --query <keyword>` or `--rule <name>` to extract specific context.
+- **Shell command:** Use `grep -i -C 2 "<term>" .agents/rules/*.md` to inspect specific rules on demand.
+
+## 🌐 Rules as Solid Resources (solid-native)
+Rules can be served dynamically from a W3C Solid Pod using the `solid-native` loader mode.
+- Fetch modular rule markdown and RDF shapes from the Pod container: `https://pod.example/rules/`
+- Each rule is exposed as an LDP resource (e.g. `https://pod.example/rules/solid-auth.md`).
+- Subscriptions to rule updates are supported via WebSocket notifications on the container.
+

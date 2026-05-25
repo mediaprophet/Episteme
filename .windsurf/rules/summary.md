@@ -1,0 +1,15 @@
+# Episteme Rules Directory Summary
+
+This folder contains modular W3C Solid application development rules.
+
+## Core Rules Index
+
+*   **solid-auth.md**: Session management and Solid-OIDC/DPoP authentication constraints.
+*   **solid-data.md**: RDF graph CRUD operations using `@inrupt/solid-client`, LDO, and Soukai.
+*   **solid-permissions.md**: Setting read/write/append permissions via `universalAccess` (WAC/ACP bridging).
+*   **solid-vocabularies.md**: Catalog of well-known RDF namespaces (FOAF, VCARD, SCHEMA, etc.).
+*   **solid-shape-trees.md**: Validation using SHACL constraints and link describedby discovery.
+*   **solid-ldn.md**: Cross-Pod asynchronous notification loops and ActivityStreams 2.0 payloads.
+*   **solid-complementary-protocols.md**: Privacy routing (Nym Mixnets), immutable mapping (IPFS), and infrastructure payments (L402).
+*   **solid-external-bridges.md**: Web 2.0 ingestion rules and delegated MCP server access controls.
+*   **solid-web-annotations.md**: Storing user highlights and comments using the `oa:Annotation` schema.

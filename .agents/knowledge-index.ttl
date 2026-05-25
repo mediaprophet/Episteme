@@ -1,0 +1,11 @@
+@prefix epi: <https://github.com/mediaprophet/Episteme/knowledge#> .
+
+epi:solid-protocol
+    epi:url "https://www.w3.org/TR/solid-protocol/" ;
+    epi:version "2023-12-12" ;
+    epi:status "KNOWN" .
+
+epi:odrl-model
+    epi:url "https://www.w3.org/TR/odrl-model/" ;
+    epi:version "2024-03-15" ;
+    epi:status "KNOWN" .
