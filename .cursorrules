@@ -37,6 +37,15 @@ Adhere strictly to the legal and terminology boundaries in \semantic-dictionary.
 - **data_vault**: A secure personal data store operating strictly under the user's sovereign control.
   - *Forbidden contexts*: centralized cloud drive, company server
 
+### Mode/Namespace: solid - Nomenclature focused on structural web architecture, data control, and technical decentralization.
+- **user-centric**: A structural architecture where data is centralized around the individual (the central node) rather than platform-centered models.
+- **data-sovereignty**: The foundational concept of decentralizing control away from central organizations, empowering individuals with absolute functional ownership to dictate exactly who uses their data.
+- **agency**: The legal and technical authority of an individual to manage their own digital footprint.
+- **re-decentralization**: An architectural effort aimed at reversing the trend of centralized platforms, returning the web to a decentralized state.
+- **de-verticalization**: The structural separation of the storage backend from the application layer to actively prevent vendor lock-in.
+- **pod**: Personal Online Datastore; the technical mechanism where users store information to retain complete control and ownership over their personal datasets.
+- **webid**: A dereferencable Linked Data URI that establishes a social agent's identity and discovery nexus within the ecosystem.
+
 
 ## System Modes & Triggers
 ### System Modes

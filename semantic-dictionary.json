@@ -86,5 +86,40 @@
       ],
       "technicalMapping": "Synonymous with a W3C Solid Pod. All authentication must occur via WebID, and authorization via WAC/ACP."
     }
+  },
+  "modes": {
+    "solid": {
+      "description": "Nomenclature focused on structural web architecture, data control, and technical decentralization.",
+      "terms": {
+        "user-centric": {
+          "definition": "A structural architecture where data is centralized around the individual (the central node) rather than platform-centered models.",
+          "related_terms": ["pod", "de-verticalization"]
+        },
+        "data-sovereignty": {
+          "definition": "The foundational concept of decentralizing control away from central organizations, empowering individuals with absolute functional ownership to dictate exactly who uses their data.",
+          "related_terms": ["control", "agency"]
+        },
+        "agency": {
+          "definition": "The legal and technical authority of an individual to manage their own digital footprint.",
+          "related_terms": ["control", "data-sovereignty"]
+        },
+        "re-decentralization": {
+          "definition": "An architectural effort aimed at reversing the trend of centralized platforms, returning the web to a decentralized state.",
+          "related_terms": ["de-verticalization"]
+        },
+        "de-verticalization": {
+          "definition": "The structural separation of the storage backend from the application layer to actively prevent vendor lock-in.",
+          "related_terms": ["re-decentralization", "user-centric"]
+        },
+        "pod": {
+          "definition": "Personal Online Datastore; the technical mechanism where users store information to retain complete control and ownership over their personal datasets.",
+          "related_terms": ["user-centric", "webid"]
+        },
+        "webid": {
+          "definition": "A dereferencable Linked Data URI that establishes a social agent's identity and discovery nexus within the ecosystem.",
+          "related_terms": ["pod"]
+        }
+      }
+    }
   }
 }

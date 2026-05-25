@@ -124,6 +124,24 @@ if (Test-Path "semantic-dictionary.json") {
                 $semanticDictText += "  - *Correction*: $($meta.architecturalCorrection)`n"
             }
         }
+        if ($dict.modes) {
+            foreach ($modeName in $dict.modes.PSObject.Properties) {
+                $mode = $modeName.Value
+                $semanticDictText += "`n### Mode/Namespace: $($modeName.Name) - $($mode.description)`n"
+                foreach ($term in $mode.terms.PSObject.Properties) {
+                    $meta = $term.Value
+                    $def = $meta.definition
+                    if (-not $def) { $def = $meta.legalDefinition }
+                    $semanticDictText += "- **$($term.Name)**: $def`n"
+                    if ($meta.forbiddenContexts) {
+                        $semanticDictText += "  - *Forbidden contexts*: $($meta.forbiddenContexts -join ', ')`n"
+                    }
+                    if ($meta.architecturalCorrection) {
+                        $semanticDictText += "  - *Correction*: $($meta.architecturalCorrection)`n"
+                    }
+                }
+            }
+        }
     } catch {
         Write-Error "Error parsing semantic-dictionary.json: $_"
     }

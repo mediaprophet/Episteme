@@ -106,6 +106,20 @@ if (fs.existsSync(semanticDictPath)) {
         semanticDictText += `  - *Correction*: ${meta.architecturalCorrection}\n`;
       }
     }
+    if (dict.modes) {
+      for (const [modeName, modeMeta] of Object.entries(dict.modes)) {
+        semanticDictText += `\n### Mode/Namespace: ${modeName} - ${modeMeta.description || ''}\n`;
+        for (const [term, meta] of Object.entries(modeMeta.terms || {})) {
+          semanticDictText += `- **${term}**: ${meta.definition || meta.legalDefinition || ''}\n`;
+          if (meta.forbiddenContexts) {
+            semanticDictText += `  - *Forbidden contexts*: ${meta.forbiddenContexts.join(', ')}\n`;
+          }
+          if (meta.architecturalCorrection) {
+            semanticDictText += `  - *Correction*: ${meta.architecturalCorrection}\n`;
+          }
+        }
+      }
+    }
   } catch (err) {
     console.error('Error parsing semantic-dictionary.json:', err);
   }
