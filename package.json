@@ -1,6 +1,6 @@
 {
   "name": "episteme",
-  "version": "0.0.3",
+  "version": "0.0.4-dev",
   "description": "Episteme: The Human-Centric AI Architecture for W3C Solid",
   "type": "module",
   "scripts": {

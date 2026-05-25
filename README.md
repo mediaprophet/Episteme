@@ -6,7 +6,7 @@ This repository provides modular rules, specific deployment constraints, and sem
 
 ### Branching Strategy
 - **`main` branch:** Dedicated exclusively to strict **"Vanilla Solid" compatibility** and backwards-compatible profiles. It acts as the stable baseline for W3C Solid compliance.
-- **`0.0.3-dev` branch:** The active development branch for experimental extensions and custom add-ons (such as advanced Webizen ecology models, Nym mixnet integration, and accounting tokens) designed to extend the capabilities of Solid-based systems.
+- **`0.0.4-dev` branch:** The active development branch for experimental extensions and custom add-ons (such as advanced Webizen ecology models, Nym mixnet integration, and accounting tokens) designed to extend the capabilities of Solid-based systems.
 
 ---
 
@@ -145,6 +145,30 @@ Start your conversation.
 npm install
 npm run test
 ```
+
+---
+
+## ⚙️ Universal Adapter Pattern & Cross-Vendor Portability
+
+To prevent lock-in to specific Solid server implementations (Enterprise ESS vs. Community CSS vs. Vanilla LDP), Episteme decouples the client application layer from vendor-specific SDKs using the **Universal Adapter Pattern**.
+
+### 1. Unified Engine Interfaces
+All core actions are written against the unified interfaces located under `vanilla-core/interfaces/`:
+*   **[IAuthProvider](file:///C:/antigravity/New%20folder/vanilla-core/interfaces/IAuthProvider.ts)**: Unifies authentication lifecycles (`login()`, `logout()`, `handleIncomingRedirect()`, and `getFetch()`).
+*   **[IDataProvider](file:///C:/antigravity/New%20folder/vanilla-core/interfaces/IDataProvider.ts)**: Unifies RDF graph CRUD operations (`read()`, `write()`, and `validatePortability()`).
+*   **[INotificationProvider](file:///C:/antigravity/New%20folder/vanilla-core/interfaces/INotificationProvider.ts)**: Unifies live updates via WebSocket and webhook protocols (`subscribeToResource()`, `unsubscribe()`, and `onConnectionLost()`).
+
+### 2. Stack Adapters & Runtime Factory
+Adapters are provided under `vanilla-core/adapters/`:
+*   `InruptAuthAdapter` and `CommunityAuthAdapter` for authentication.
+*   `InruptDataAdapter` and `LDODataAdapter` for data interactions.
+*   `InruptNotificationAdapter` and `CommunityNotificationAdapter` for real-time WebSocket messaging.
+*   **[useSolidAuth](file:///C:/antigravity/New%20folder/vanilla-core/templates/hooks/useSolidAuth.ts)**: Exposes a runtime factory hook that dynamically instantiates the correct adapter depending on the active stack choice configured in `.agents/config.ttl` (`config:data-stack`).
+
+### 3. Portability Checker
+Adapters implement validation checking to warn developers when targeting incompatible schemas:
+*   The `InruptDataAdapter` warns if WAC (ACL) rules are written to an Access Control Policies (ACP) environment.
+*   The `LDODataAdapter` warns if ACP rules are written to a Web Access Control (WAC) environment.
 
 ---
 
