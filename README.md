@@ -10,26 +10,15 @@ This repository provides modular rules, specific deployment constraints, and sem
 
 ---
 
-## 🌟 The Philosophy: Human-Centric Digital Agency
+## 🌟 Philosophical Design
 
-> [!NOTE]
-> **Foundational Interoperability vs. Feature Sets:** While alternative architectures for decentralized data and identity exist and may offer various specialized features, there remains a fundamental requirement for a shared, globally interoperable standard for the "social web." W3C Solid represents the maturation of decades of collective research and open standards development. It provides the essential, baseline interoperability layer to ensure that data is not siloed by applications, allowing different human-centric interfaces to securely interact with the same underlying personal data graphs.
+For a detailed review of the core philosophical principles underpinning the Episteme project—including the distinction between objective identifiers and human identity, considerations of epistemology, personal ontology, and the history of W3C Solid development—please refer to the **[Philosophical Design Guide](file:///C:/antigravity/New%20folder/Philosophica-design.md)**.
 
-Most modern software reduces humans to rows in a database or commercial assets. This toolkit actively resists that paradigm. Built on **W3C Solid**, this architecture provides digital (online) capabillities to transformationally improve support for human agency, dignity, and human rights through:
-1. **A Multi-Modal Digital Toolkit for Defining or Redefining "Identity":** 
-   When considering the complex notions of cultural identity, social identity, identity development, human identity, nationality, and various other qualia, the toolset built to support interoperability via W3C Solid tooling provides the means for developers to better define their notions and semantic definitions of societal, spatio-temporal, and socioeconomic relations in association with the concept of "identity" for all sorts of different "agents," including but not limited to natural agents.
-   
-   Rather than necessarily reducing human existence and human experience to support Customer Relationship Management (CRM) functionality and commercial consumability, this architecture empowers developers—if they choose to do so—to distinguish clearly between:
-   - **Identifiers (The Objective Pointer):** A WebID is an objective URI pointing to a profile document. It serves strictly as a technical pointer and locator in a global web of data, not as a representation of the human person.
-   - **Authentication (The Gatekeeper):** Solid-OIDC and cryptographic DPoP tokens prove *possession* and *control* of the identifier. They establish a protocol-level proof of key ownership, not proof of selfhood.
-2. **Philosophical Engineering, Epistemology, and Semantics:** 
-   Real identity is a dynamic, subjective process of social, cultural, and individual development. It is formed through mutual relationships (the cooperative social graph), cultural contexts, creative works, and individual agency over time. It cannot be reduced to static database indexes, commercial profiling schemas, or digital attributes.
-   
-   This framework is, in effect, a toolkit to support **"philosophical engineering"**—making architectural decisions via agentic software development that recognize that what is created originates from the "mind's eye" of the creator(s). By establishing a clear boundary between personal ontology (the existence and dignity of the natural person) and technical semantics, we treat technical identifiers strictly as tools rather than representations of the self.
-   
-   Long-term developmental works progressed via the W3C and related standardization groups have led to significant advancements in this decentralized identity and data representation toolset, which is presently brought together in a standardized, "vanilla" architecture known as **W3C Solid**. This framework enables natural persons and other agents to negotiate digital agency on their own terms while maintaining absolute epistemological and semantic coherence.
-3. **Access Control (WAC/ACP):** Users cryptographically grant or revoke access to their data.
-4. **Usage Rights (ODRL):** Access isn't just binary; policies explicitly dictate *how* data can be used (e.g., "Academic Research Only").
+## 🌐 Vanilla Solid Mode
+
+The vanilla Solid configuration operates strictly within W3C Solid standards using standard HTTP/LDP fetches and standard decentralized protocol layers. This baseline compatibility mode provides support for:
+- **Access Control (WAC/ACP):** Users cryptographically grant, append, or revoke access permissions to their datasets.
+- **Usage Rights (ODRL):** Access is not merely binary; policies explicitly dictate *how* data can be used (e.g., "Academic Research Only").
 
 **Semantic Enforcement:** This project includes `semantic-dictionary.json` to prevent AI agents from using vague US-tech buzzwords (like "data ownership" or "users as assets"). Instead, agents are forced to use precise human rights and legal terminology (like "Agency", "Dignity", and "Personhood").
 
