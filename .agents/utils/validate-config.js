@@ -159,6 +159,16 @@ if (!fs.existsSync(configPath)) {
       if (!project['target-platforms']) {
         logError('config.json is missing "project.target-platforms" declaration.');
       }
+      if (!project['data-stack']) {
+        logError('config.json is missing "project.data-stack" declaration.');
+      } else {
+        const approvedStacks = ['inrupt-enterprise', 'ldo-community', 'vanilla-core'];
+        if (!approvedStacks.includes(project['data-stack'])) {
+          logError(`Unapproved data-stack configured: "${project['data-stack']}". Must be one of: ${approvedStacks.join(', ')}`);
+        } else {
+          console.log(`✅ Data stack choice validated: "${project['data-stack']}"`);
+        }
+      }
     }
   } catch (err) {
     logError(`Failed to parse config.json: ${err.message}`);

@@ -4,6 +4,7 @@
     "core": "solid-protocol,webid,ldp,odrl",
     "target-platforms": "nextjs,node-solid-server",
     "custom-addons": "my-policy-addon",
+    "data-stack": "ldo-community",
     "context-policy": {
       "flush-after-config": true,
       "reinit-helpers": ".agents/helpers/project-context.md,custom-addons/active-rules.md"

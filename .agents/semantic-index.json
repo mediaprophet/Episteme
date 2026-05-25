@@ -54,6 +54,12 @@
       "path": ".agents/rules/solid-web-annotations.md",
       "description": "Instructions for user-generated content modeled as W3C Web Annotations.",
       "keywords": ["annotations", "comments", "highlights", "bookmarks", "oa"]
+    },
+    {
+      "name": "solid-portability",
+      "path": ".agents/rules/solid-portability.md",
+      "description": "Directives enforcing the Universal Adapter Pattern for authentication, data, and websocket notifications.",
+      "keywords": ["portability", "adapters", "inrupt", "ldo", "css", "ess", "ws", "acp", "wac"]
     }
   ]
 }

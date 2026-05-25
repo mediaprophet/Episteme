@@ -1,5 +1,9 @@
 import { SQLiteWrapper } from './webizen-edge/sqlite-wrapper';
 import { Reconciler } from './p2p-sync/reconciler';
+import { INotificationProvider } from '../vanilla-core/interfaces/INotificationProvider';
+import { InruptNotificationAdapter } from '../vanilla-core/adapters/InruptNotificationAdapter';
+import { CommunityNotificationAdapter } from '../vanilla-core/adapters/CommunityNotificationAdapter';
+import configData from '../.agents/config.json';
 
 /**
  * Network State & Interop Broker
@@ -8,9 +12,19 @@ import { Reconciler } from './p2p-sync/reconciler';
 export class NetworkBroker {
   private isOnline: boolean = true;
   private podUrl: string;
+  private notificationProvider: INotificationProvider;
 
   constructor(podUrl: string) {
     this.podUrl = podUrl;
+    
+    // Instantiate notification provider based on active configuration data stack
+    const dataStack = (configData as any).project["data-stack"] || "ldo-community";
+    if (dataStack === "inrupt-enterprise") {
+      this.notificationProvider = new InruptNotificationAdapter();
+    } else {
+      this.notificationProvider = new CommunityNotificationAdapter();
+    }
+
     this.setupListeners();
   }
 
@@ -55,6 +69,25 @@ export class NetworkBroker {
   private async triggerReconciliation(): Promise<void> {
     console.log('[NetworkBroker] Triggering state reconciliation...');
     await Reconciler.reconcile(this.podUrl);
+
+    // Dynamic notification listener hook on reconnection for critical data graphs
+    const criticalResource = `${this.podUrl.endsWith('/') ? this.podUrl : this.podUrl + '/'}profile/card`;
+    console.log(`[NetworkBroker] Subscribing to critical resource live updates: ${criticalResource}`);
+    
+    await this.notificationProvider.subscribeToResource(criticalResource, async (data) => {
+      console.log(`[NetworkBroker] Live notification received for ${criticalResource}. Merging incoming triples locally.`);
+      
+      // Merge state locally into SQLite cache
+      const q = SQLiteWrapper.getQueue();
+      SQLiteWrapper.clearQueue();
+      await SQLiteWrapper.write(criticalResource, 'SolidDataset', data);
+      SQLiteWrapper.clearQueue();
+      for (const entry of q) {
+        if (entry.uri !== criticalResource) {
+          await SQLiteWrapper.write(entry.uri, 'SolidDataset', entry.data);
+        }
+      }
+    });
   }
 
   /**

@@ -30,6 +30,7 @@ try {
   console.log(`Core Modules:     ${project.core}`);
   console.log(`Target Platforms: ${project['target-platforms']}`);
   console.log(`Custom Addons:    ${project['custom-addons']}`);
+  console.log(`Data Stack:       ${project['data-stack'] || 'not set'}`);
   console.log('-------------------------------------------');
 
   // --- STACK VALIDATION ---
