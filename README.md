@@ -187,12 +187,17 @@ The **`custom-addons/`** directory acts as a native escape hatch and edge sandbo
 - You can place your own Markdown AI instruction files (e.g., `override-auth.md`) and TypeScript/Javascript hooks in this folder.
 - The AI is hardcoded via a "Pre-Flight Hook" in `AGENTS.md` to always read `custom-addons/` first. If it finds a custom rule there, it will explicitly override the vanilla protocols.
 
-### Webizen Offline-First Edge Autonomy
+### Webizen: Offline-First Edge Autonomy (Active Development)
+The **Webizen** custom-addons profile is designed as a more advanced "offline" and "local-first" solution. It enables the means for a natural person to act as their own "platform provider," operating local-first data storage on personal devices that syncs securely with the broader web.
 Episteme includes a complete bridge routing middleware to reconcile offline mobile/edge operation with remote W3C Solid Pods:
 *   **`custom-addons/webizen-edge/sqlite-wrapper.ts`**: Provides a simulated SQLite local storage wrapper caching datasets and queueing pending offline writes.
 *   **`custom-addons/p2p-sync/reconciler.ts`**: Reconciles the offline synchronization queue back to the remote Solid Pod via HTTP LDP protocols on reconnection.
 *   **`custom-addons/network-broker.ts`**: Implements the *Network State & Interop Broker* that listens to connectivity changes and routes reads/writes dynamically between local SQLite cache and remote Pod storage.
 *   **`custom-addons/rights-ontology.ttl`**: Extends the Open Digital Rights Language (ODRL) with custom edge-device constraints (`webizen:maxCacheDuration`, `webizen:OnDeviceProcessingOnly`, and `webizen:secureEnclaveRequired`).
+
+### RWW-NeXT: Historical Simplicity & Edge Autonomy (Active Development)
+The **RWW-NeXT** custom-addons profile represents a reimagined, highly simplified version of read-write web capabilities. It draws direct inspiration from precursor works in Read-Write Web (RWW) history—such as [Joe Presbrey's MIT doctoral thesis on decentralized data](https://dig.csail.mit.edu/2014/Papers/presbrey/thesis.pdf), early linked data architectures (like [github.com/linkeddata/](https://github.com/linkeddata/)), and Tim Berners-Lee's original SWAP (Semantic Web Area Processor) project ([github.com/linkeddata/swap](https://github.com/linkeddata/swap)).
+RWW-NeXT focuses on lightweight, edge-autonomous data structures and raw semantic manipulation, bypassing complex enterprise requirements to deliver simple, high-performance read-write mechanisms directly to independent local nodes.
 
 ### Solid Application Interoperability (SAI)
 To ensure core operations govern access securely in enterprise landscapes, `/vanilla-core/sai-interop.ts` exposes helper classes to manage **Application Registries**, **Access Grants**, and **Data Grants** in alignment with the SAI specification.
