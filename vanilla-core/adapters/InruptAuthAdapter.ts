@@ -1,5 +1,5 @@
 import { IAuthProvider } from '../interfaces/IAuthProvider';
-import { login, logout, handleIncomingRedirect, getDefaultSession } from '@inrupt/solid-client-authn-browser';
+import { login, handleIncomingRedirect, getDefaultSession } from '@inrupt/solid-client-authn-browser';
 
 /**
  * Inrupt Auth Adapter
@@ -18,7 +18,7 @@ export class InruptAuthAdapter implements IAuthProvider {
 
   async logout(): Promise<void> {
     console.log('[InruptAuthAdapter] Logging out session...');
-    await logout();
+    await getDefaultSession().logout();
   }
 
   async handleIncomingRedirect(): Promise<{ isLoggedIn: boolean; webId?: string } | null> {
