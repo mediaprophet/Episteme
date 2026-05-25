@@ -1,125 +1,19 @@
 {
-  "$schema": "https://json.schemastore.org/json-schema",
-  "meta": {
-    "description": "Linguistic and legal boundaries for AI reasoning. Overrides generic US-English tech definitions to protect human rights, rule of law, and precise legal personhood.",
-    "lastUpdated": "2026-05"
-  },
-  "terms": {
-    "sovereignty": {
-      "forbiddenContexts": [
-        "individual data sovereignty",
-        "self-sovereign citizen",
-        "sovereign individual"
-      ],
-      "architecturalCorrection": "Do not use 'sovereignty' to describe an individual's relationship to their data or governance. It creates legal confusion with state sovereignty and extremist anti-governance movements. Replace with 'Agency', 'Autonomy', or 'Selfhood' under the Rule of Law."
-    },
-    "personhood": {
-      "legalDefinition": "The status of being a natural person, carrying inherent human rights, legal standing, and responsibilities within a constitutional framework of governance.",
-      "technicalMapping": "A WebID identifies a Natural Person (foaf:Person), not a digital asset. The digital representation must protect their legal personhood, dignity, and systemic agency."
-    },
-    "dignity": {
-      "legalDefinition": "Inherent, inviolable human worth as recognized under international human rights law (e.g., UDHR Article 1). It is non-negotiable and cannot be commodified or contracted away.",
-      "technicalMapping": "Licensing architectures and data vaults must ensure that data relating to human behavior cannot be processed in a manner that degrades or commodifies human dignity."
-    },
-    "selfhood": {
-      "definition": "The psychological and philosophical state of individual identity, consciousness, and agency, distinct from corporate or state-assigned identifiers.",
-      "technicalMapping": "The personal ontology layer (validated via SHACL) handles expressions of the natural world and personal selfhood, entirely decoupled from commercial CRM asset schemas."
-    },
-    "ownership": {
-      "forbiddenContexts": [
-        "owning personal data",
-        "data as property"
-      ],
-      "architecturalCorrection": "Human data is an extension of the person (Personhood), not a property asset to be bought, sold, or aggregated. Use 'Agency', 'Access Control Rights', or 'Data Portability' instead."
-    },
-    "micropayment": {
-      "definition": "A lightweight transaction mechanism to compensate infrastructure providers for storage, bandwidth, or services.",
-      "forbiddenContexts": [
-        "crypto monetization",
-        "data monetization",
-        "financializing human behavior"
-      ],
-      "technicalMapping": "Micropayments (e.g., Lightning, Solana) must only be used for infrastructure compensation. They must never be tied to the buying or selling of a Natural Person's data or identity."
-    },
-    "mixnet": {
-      "definition": "A cryptographic routing protocol (like Nym) that obfuscates metadata and network traffic patterns.",
-      "technicalMapping": "Mixnets are a critical network-layer privacy defense. Use them to tunnel requests between Pods and apps to prevent metadata surveillance."
-    },
-    "verifiable_credential": {
-      "definition": "A tamper-evident, cryptographically verifiable claim made by an issuer about a subject (W3C standard).",
-      "technicalMapping": "VCs prove attributes without over-exposing data. They must be stored securely in the user's Pod, not aggregated on external centralized ledgers."
-    },
-    "bridging_protocol": {
-      "definition": "An integration standard (like Model Context Protocol) that connects isolated environments.",
-      "technicalMapping": "When bridging Solid Pods to external AI or Web 2.0 systems, WAC/ACP permissions must be strictly enforced at the bridge boundary."
-    },
-    "annotation": {
-      "definition": "A formal expression of thought, highlight, or reading progress attached to a target resource.",
-      "forbiddenContexts": [
-        "user comment",
-        "post",
-        "proprietary user-generated content"
-      ],
-      "technicalMapping": "Must strictly follow the W3C Web Annotation Data Model (oa:Annotation), stored inside the user's Pod, not an application database."
-    },
-    "ethical_ml": {
-      "definition": "Machine Learning and AI inference that occurs within the user's trusted perimeter without extracting data.",
-      "forbiddenContexts": [
-        "cloud inference on personal data",
-        "training on user data without explicit ODRL policy"
-      ],
-      "technicalMapping": "Prioritize on-device models (e.g., Transformers.js) or local inference engines when processing Pod data. Never silently exfiltrate Pod data to cloud LLMs."
-    },
-    "user_lock_in": {
-      "definition": "Architectural patterns that prevent a user from easily migrating their data to another provider.",
-      "technicalMapping": "Use standard W3C ontologies and decouple the application UI from the data storage layer to actively prevent lock-in."
-    },
-    "interoperability": {
-      "definition": "The ability of different Solid applications to read and write to the same dataset without conflict.",
-      "technicalMapping": "Rely on Shape Trees and Type Indexes for discovery, and avoid writing proprietary JSON blobs into the Pod."
-    },
-    "data_vault": {
-      "definition": "A secure personal data store operating strictly under the user's sovereign control.",
-      "forbiddenContexts": [
-        "centralized cloud drive",
-        "company server"
-      ],
-      "technicalMapping": "Synonymous with a W3C Solid Pod. All authentication must occur via WebID, and authorization via WAC/ACP."
-    }
-  },
-  "modes": {
+  "project": "Episteme Semantic Dictionary",
+  "version": "1.1.0",
+  "description": "Root index of nomenclature modes mapping Solid's structural engineering, Webizen's human-centric philosophy, and historical web contexts.",
+  "modes_index": {
     "solid": {
       "description": "Nomenclature focused on structural web architecture, data control, and technical decentralization.",
-      "terms": {
-        "user-centric": {
-          "definition": "A structural architecture where data is centralized around the individual (the central node) rather than platform-centered models.",
-          "related_terms": ["pod", "de-verticalization"]
-        },
-        "data-sovereignty": {
-          "definition": "The foundational concept of decentralizing control away from central organizations, empowering individuals with absolute functional ownership to dictate exactly who uses their data.",
-          "related_terms": ["control", "agency"]
-        },
-        "agency": {
-          "definition": "The legal and technical authority of an individual to manage their own digital footprint.",
-          "related_terms": ["control", "data-sovereignty"]
-        },
-        "re-decentralization": {
-          "definition": "An architectural effort aimed at reversing the trend of centralized platforms, returning the web to a decentralized state.",
-          "related_terms": ["de-verticalization"]
-        },
-        "de-verticalization": {
-          "definition": "The structural separation of the storage backend from the application layer to actively prevent vendor lock-in.",
-          "related_terms": ["re-decentralization", "user-centric"]
-        },
-        "pod": {
-          "definition": "Personal Online Datastore; the technical mechanism where users store information to retain complete control and ownership over their personal datasets.",
-          "related_terms": ["user-centric", "webid"]
-        },
-        "webid": {
-          "definition": "A dereferencable Linked Data URI that establishes a social agent's identity and discovery nexus within the ecosystem.",
-          "related_terms": ["pod"]
-        }
-      }
+      "path": "./modes/solid-mode.json"
+    },
+    "webizen": {
+      "description": "Nomenclature focused on human-centric philosophy, edge-autonomy, and mobile-first knowledge banking.",
+      "path": "./modes/webizen-mode.json"
+    },
+    "rww-next": {
+      "description": "Historical nomenclature honoring the original Read-Write Web and the foundational hardware of the decentralized internet.",
+      "path": "./modes/rww-next-mode.json"
     }
   }
 }

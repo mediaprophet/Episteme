@@ -92,12 +92,13 @@ Before writing code or reading rules, check \`custom-addons/\`. Any custom instr
 
 // Read semantic dictionary terms to output a concise summary
 let semanticDictText = `## Semantic Dictionary Boundaries
-Adhere strictly to the legal and terminology boundaries in \`semantic-dictionary.json\`:
+Adhere strictly to the legal and terminology boundaries in the semantic dictionary configurations:
 `;
 if (fs.existsSync(semanticDictPath)) {
   try {
-    const dict = JSON.parse(fs.readFileSync(semanticDictPath, 'utf8'));
-    for (const [term, meta] of Object.entries(dict.terms || {})) {
+    const rootDict = JSON.parse(fs.readFileSync(semanticDictPath, 'utf8'));
+    // Support legacy/root terms if any
+    for (const [term, meta] of Object.entries(rootDict.terms || {})) {
       semanticDictText += `- **${term}**: ${meta.definition || meta.legalDefinition || ''}\n`;
       if (meta.forbiddenContexts) {
         semanticDictText += `  - *Forbidden contexts*: ${meta.forbiddenContexts.join(', ')}\n`;
@@ -106,16 +107,21 @@ if (fs.existsSync(semanticDictPath)) {
         semanticDictText += `  - *Correction*: ${meta.architecturalCorrection}\n`;
       }
     }
-    if (dict.modes) {
-      for (const [modeName, modeMeta] of Object.entries(dict.modes)) {
-        semanticDictText += `\n### Mode/Namespace: ${modeName} - ${modeMeta.description || ''}\n`;
-        for (const [term, meta] of Object.entries(modeMeta.terms || {})) {
-          semanticDictText += `- **${term}**: ${meta.definition || meta.legalDefinition || ''}\n`;
-          if (meta.forbiddenContexts) {
-            semanticDictText += `  - *Forbidden contexts*: ${meta.forbiddenContexts.join(', ')}\n`;
-          }
-          if (meta.architecturalCorrection) {
-            semanticDictText += `  - *Correction*: ${meta.architecturalCorrection}\n`;
+    // Parse modes_index
+    if (rootDict.modes_index) {
+      for (const [modeKey, modeInfo] of Object.entries(rootDict.modes_index)) {
+        const modePath = path.resolve(path.dirname(semanticDictPath), modeInfo.path);
+        if (fs.existsSync(modePath)) {
+          const modeDict = JSON.parse(fs.readFileSync(modePath, 'utf8'));
+          semanticDictText += `\n### Mode/Namespace: ${modeKey} - ${modeInfo.description || ''}\n`;
+          for (const [term, meta] of Object.entries(modeDict.terms || {})) {
+            semanticDictText += `- **${term}**: ${meta.definition || meta.legalDefinition || ''}\n`;
+            if (meta.forbiddenContexts) {
+              semanticDictText += `  - *Forbidden contexts*: ${meta.forbiddenContexts.join(', ')}\n`;
+            }
+            if (meta.architecturalCorrection) {
+              semanticDictText += `  - *Correction*: ${meta.architecturalCorrection}\n`;
+            }
           }
         }
       }

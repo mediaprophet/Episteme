@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "npm run test:unit && npm run test:e2e",
-    "test:unit": "vitest run tests/unit",
-    "test:e2e": "vitest run tests/e2e",
+    "test:unit": "vitest run vanilla-core/tests/unit",
+    "test:e2e": "vitest run vanilla-core/tests/e2e",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "css:start": "community-solid-server -l info -m .",

@@ -1,0 +1,25 @@
+{
+  "mode": "solid",
+  "settings": {
+    "strict_w3c_compliance": true,
+    "primary_focus": "structural_engineering"
+  },
+  "terms": {
+    "user-centric": {
+      "definition": "A structural architecture where data is centralized around the individual (the central node) rather than platform-centered models.",
+      "related_terms": ["pod", "de-verticalization"]
+    },
+    "data-sovereignty": {
+      "definition": "The foundational concept of decentralizing control away from central organizations, empowering individuals with absolute functional ownership to dictate exactly who uses their data.",
+      "related_terms": ["control", "agency"]
+    },
+    "re-decentralization": {
+      "definition": "An architectural effort aimed at reversing the trend of centralized platforms, returning the web to its intended decentralized state.",
+      "related_terms": ["de-verticalization"]
+    },
+    "pod": {
+      "definition": "Personal Online Datastore; the technical mechanism where users store information to retain complete control and ownership over their personal datasets.",
+      "related_terms": ["user-centric", "webid"]
+    }
+  }
+}

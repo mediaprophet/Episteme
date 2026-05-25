@@ -1,0 +1,22 @@
+{
+  "mode": "webizen",
+  "settings": {
+    "strict_w3c_compliance": false,
+    "primary_focus": "human_centric_autonomy",
+    "integration_path": "custom-addons/"
+  },
+  "terms": {
+    "human-centric": {
+      "definition": "A philosophical approach emphasizing the alignment of artificial intelligence and web technology with human needs, usability, and ethical values over strict structural engineering.",
+      "related_terms": ["edge-autonomy", "knowledge-bank"]
+    },
+    "edge-autonomy": {
+      "definition": "The capability of a user to act as their own platform provider natively on an edge device (such as a mobile phone), utilizing local-first data storage.",
+      "related_terms": ["local-first", "human-centric"]
+    },
+    "knowledge-bank": {
+      "definition": "A localized, user-operated repository of personal data and computational context, designed to operate independently of always-on server requirements.",
+      "related_terms": ["edge-autonomy"]
+    }
+  }
+}

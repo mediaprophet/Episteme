@@ -108,36 +108,44 @@ Before writing code or reading rules, check \`custom-addons/\`. Any custom instr
 "@
 
 # Read semantic dictionary terms
-$semanticDictText = "`n## Semantic Dictionary Boundaries`nAdhere strictly to the legal and terminology boundaries in \`semantic-dictionary.json\`:`n"
+$semanticDictText = "`n## Semantic Dictionary Boundaries`nAdhere strictly to the legal and terminology boundaries in the semantic dictionary configurations:`n"
 if (Test-Path "semantic-dictionary.json") {
     try {
-        $dict = Get-Content -Raw -Path "semantic-dictionary.json" | ConvertFrom-Json
-        foreach ($term in $dict.terms.PSObject.Properties) {
-            $meta = $term.Value
-            $def = $meta.definition
-            if (-not $def) { $def = $meta.legalDefinition }
-            $semanticDictText += "- **$($term.Name)**: $def`n"
-            if ($meta.forbiddenContexts) {
-                $semanticDictText += "  - *Forbidden contexts*: $($meta.forbiddenContexts -join ', ')`n"
-            }
-            if ($meta.architecturalCorrection) {
-                $semanticDictText += "  - *Correction*: $($meta.architecturalCorrection)`n"
+        $rootDict = Get-Content -Raw -Path "semantic-dictionary.json" | ConvertFrom-Json
+        if ($rootDict.terms) {
+            foreach ($term in $rootDict.terms.PSObject.Properties) {
+                $meta = $term.Value
+                $def = $meta.definition
+                if (-not $def) { $def = $meta.legalDefinition }
+                $semanticDictText += "- **$($term.Name)**: $def`n"
+                if ($meta.forbiddenContexts) {
+                    $semanticDictText += "  - *Forbidden contexts*: $($meta.forbiddenContexts -join ', ')`n"
+                }
+                if ($meta.architecturalCorrection) {
+                    $semanticDictText += "  - *Correction*: $($meta.architecturalCorrection)`n"
+                }
             }
         }
-        if ($dict.modes) {
-            foreach ($modeName in $dict.modes.PSObject.Properties) {
-                $mode = $modeName.Value
-                $semanticDictText += "`n### Mode/Namespace: $($modeName.Name) - $($mode.description)`n"
-                foreach ($term in $mode.terms.PSObject.Properties) {
-                    $meta = $term.Value
-                    $def = $meta.definition
-                    if (-not $def) { $def = $meta.legalDefinition }
-                    $semanticDictText += "- **$($term.Name)**: $def`n"
-                    if ($meta.forbiddenContexts) {
-                        $semanticDictText += "  - *Forbidden contexts*: $($meta.forbiddenContexts -join ', ')`n"
-                    }
-                    if ($meta.architecturalCorrection) {
-                        $semanticDictText += "  - *Correction*: $($meta.architecturalCorrection)`n"
+        if ($rootDict.modes_index) {
+            foreach ($modeKey in $rootDict.modes_index.PSObject.Properties) {
+                $modeInfo = $modeKey.Value
+                $modePath = $modeInfo.path
+                if (Test-Path $modePath) {
+                    $modeDict = Get-Content -Raw -Path $modePath | ConvertFrom-Json
+                    $semanticDictText += "`n### Mode/Namespace: $($modeKey.Name) - $($modeInfo.description)`n"
+                    if ($modeDict.terms) {
+                        foreach ($term in $modeDict.terms.PSObject.Properties) {
+                            $meta = $term.Value
+                            $def = $meta.definition
+                            if (-not $def) { $def = $meta.legalDefinition }
+                            $semanticDictText += "- **$($term.Name)**: $def`n"
+                            if ($meta.forbiddenContexts) {
+                                $semanticDictText += "  - *Forbidden contexts*: $($meta.forbiddenContexts -join ', ')`n"
+                            }
+                            if ($meta.architecturalCorrection) {
+                                $semanticDictText += "  - *Correction*: $($meta.architecturalCorrection)`n"
+                            }
+                        }
                     }
                 }
             }

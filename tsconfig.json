@@ -15,10 +15,10 @@
   },
   "include": [
     "declarations.d.ts",
-    "utils/**/*.ts",
-    "tests/**/*.ts",
-    "templates/**/*.ts",
-    "templates/**/*.tsx",
+    "vanilla-core/utils/**/*.ts",
+    "vanilla-core/tests/**/*.ts",
+    "vanilla-core/templates/**/*.ts",
+    "vanilla-core/templates/**/*.tsx",
     "custom-addons/**/*.ts"
   ],
   "exclude": [

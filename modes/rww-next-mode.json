@@ -1,0 +1,17 @@
+{
+  "mode": "rww-next",
+  "settings": {
+    "strict_w3c_compliance": false,
+    "primary_focus": "historical_context"
+  },
+  "terms": {
+    "read-write-web": {
+      "definition": "The original vision of the World Wide Web where individuals act as both consumers and active publishers/creators of interlinked content.",
+      "related_terms": ["next-node", "decentralization"]
+    },
+    "next-node": {
+      "definition": "A conceptual homage to the NeXTcube workstation used to host the first web server; represents a foundational, independent node in a truly decentralized network.",
+      "related_terms": ["read-write-web", "self-hosted"]
+    }
+  }
+}

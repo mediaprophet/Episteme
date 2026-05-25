@@ -6,6 +6,6 @@ export default defineConfig({
     environment: 'node',
     hookTimeout: 180000,   // 3 minutes - needed for CSS startup in CI
     testTimeout: 60000,
-    include: ['tests/**/*.test.{js,ts}'],
+    include: ['vanilla-core/tests/**/*.test.{js,ts}'],
   },
 });
