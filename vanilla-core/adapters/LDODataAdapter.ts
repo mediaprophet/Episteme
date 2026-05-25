@@ -24,7 +24,7 @@ export class LDODataAdapter implements IDataProvider {
     const warnings: string[] = [];
     
     // Community servers (e.g. CSS) primarily support WAC (ACL) rules rather than Inrupt-specific ACP rules
-    if (data.includes('acp:') || data.includes('AccessControlPolicy')) {
+    if (data.includes('acp:') || data.includes('solid/acp') || data.includes('AccessControlPolicy')) {
       warnings.push("ACP (AccessControlPolicy) terminology/rules detected. Community Solid Server (CSS) and other community targets primarily enforce Web Access Control (WAC/ACL) policies rather than ACP.");
     }
     

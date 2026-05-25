@@ -24,7 +24,7 @@ export class InruptDataAdapter implements IDataProvider {
     const warnings: string[] = [];
     
     // Inrupt ESS environments heavily favor Access Control Policies (ACP) over Web Access Control (WAC)
-    if (data.includes('acl:') || data.includes('accessControl') || data.includes('.acl')) {
+    if (data.includes('acl:') || data.includes('auth/acl') || data.includes('accessControl') || data.includes('.acl')) {
       warnings.push("WAC (WebAccessControl) terminology/rules detected. Inrupt Enterprise Server (ESS) environments prefer Access Control Policies (ACP) instead of traditional .acl rule definitions.");
     }
     
