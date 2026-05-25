@@ -12,11 +12,13 @@ This repository provides modular rules, specific deployment constraints, and sem
 
 ## 🌟 Philosophical Design
 
-For a detailed review of the core philosophical principles underpinning the Episteme project—including the distinction between objective identifiers and human identity, considerations of epistemology, personal ontology, and the history of W3C Solid development—please refer to the **[Philosophical Design Guide](file:///C:/antigravity/New%20folder/Philosophica-design.md)**.
+For a detailed review of the core philosophical principles underpinning the Episteme project—including the distinction between objective identifiers and human identity, considerations of epistemology, personal ontology, and the history of W3C Solid development—please refer to the **[Philosophical Design Guide](Philosophica-design.md)**.
 
 ## 🌐 Vanilla Solid Mode
 
 The vanilla Solid configuration operates strictly within W3C Solid standards using standard HTTP/LDP fetches and standard decentralized protocol layers. This baseline compatibility mode provides support for:
+- **Identifiers (The Objective Pointer):** A WebID is an objective URI pointing to a profile document. It serves strictly as a technical pointer and locator in a global web of data, not as a representation of the human person.
+- **Authentication (The Gatekeeper):** Solid-OIDC and cryptographic DPoP tokens prove *possession* and *control* of the identifier. They establish a protocol-level proof of key ownership, not proof of selfhood.
 - **Access Control (WAC/ACP):** Users cryptographically grant, append, or revoke access permissions to their datasets.
 - **Usage Rights (ODRL):** Access is not merely binary; policies explicitly dictate *how* data can be used (e.g., "Academic Research Only").
 

@@ -8,9 +8,7 @@ Most modern software reduces humans to rows in a database or commercial assets. 
 ### 1. A Multi-Modal Digital Toolkit for Defining or Redefining "Identity"
 When considering the complex notions of cultural identity, social identity, identity development, human identity, nationality, and various other qualia, the toolset built to support interoperability via W3C Solid tooling provides the means for developers to better define their notions and semantic definitions of societal, spatio-temporal, and socioeconomic relations in association with the concept of "identity" for all sorts of different "agents," including but not limited to natural agents.
 
-Rather than necessarily reducing human existence and human experience to support Customer Relationship Management (CRM) functionality and commercial consumability, this architecture empowers developers—if they choose to do so—to distinguish clearly between:
-- **Identifiers (The Objective Pointer):** A WebID is an objective URI pointing to a profile document. It serves strictly as a technical pointer and locator in a global web of data, not as a representation of the human person.
-- **Authentication (The Gatekeeper):** Solid-OIDC and cryptographic DPoP tokens prove *possession* and *control* of the identifier. They establish a protocol-level proof of key ownership, not proof of selfhood.
+Rather than necessarily reducing human existence and human experience to support Customer Relationship Management (CRM) functionality and commercial consumability, the W3C Solid baseline empowers developers—if they choose to do so—to distinguish clearly between technical pointers and human selfhood.
 
 ### 2. Philosophical Engineering, Epistemology, and Semantics
 Real identity is a dynamic, subjective process of social, cultural, and individual development. It is formed through mutual relationships (the cooperative social graph), cultural contexts, creative works, and individual agency over time. It cannot be reduced to static database indexes, commercial profiling schemas, or digital attributes.
