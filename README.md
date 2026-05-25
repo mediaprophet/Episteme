@@ -119,10 +119,10 @@ To minimize context window bloat, the agent follows the hierarchical loading seq
 
 ### Step 5: Inject the Context into your IDE/AI
 This repository features out-of-the-box support for modern AI-assisted IDEs:
-- **Antigravity:** Native compatibility via modular rules under `.agents/rules/`.
+- **Antigravity:** Native support via [.agents/rules/solid-antigravity.md](file:///.agents/rules/solid-antigravity.md), which automatically maps developer workflows using the compiled root-level `.antigravityrules` file.
 - **Cursor:** Automatically loads the custom `.mdc` rules files in `.cursor/rules/` (`solid-core.mdc`, `solid-data.mdc`, `solid-auth.mdc`, `solid-modes.mdc`) based on active file extensions, as well as the root-level legacy `.cursorrules` file.
 - **Windsurf:** Automatically reads the root `.windsurfrules` file to apply the core Solid directives and coordinate system modes during code editing.
-- **Sync Rules Utility:** To compile all changes in `.agents/rules/` and `semantic-dictionary.json` into `.cursorrules` and `.windsurfrules`, run the synchronizer:
+- **Sync Rules Utility:** To compile all changes in `.agents/rules/` and `semantic-dictionary.json` into `.cursorrules`, `.windsurfrules`, and `.antigravityrules`, run the synchronizer:
   ```powershell
   powershell -ExecutionPolicy Bypass -File scripts/sync-rules.ps1
   ```

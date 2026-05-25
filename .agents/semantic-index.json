@@ -60,6 +60,12 @@
       "path": ".agents/rules/solid-portability.md",
       "description": "Directives enforcing the Universal Adapter Pattern for authentication, data, and websocket notifications.",
       "keywords": ["portability", "adapters", "inrupt", "ldo", "css", "ess", "ws", "acp", "wac"]
+    },
+    {
+      "name": "solid-antigravity",
+      "path": ".agents/rules/solid-antigravity.md",
+      "description": "Directives governing the Antigravity agent's workflows, artifact management, planning mode, and subagent delegation.",
+      "keywords": ["antigravity", "agent", "planning", "tasks", "subagents", "artifacts", "sync"]
     }
   ]
 }

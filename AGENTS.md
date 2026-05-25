@@ -6,6 +6,7 @@ This project builds Human-Centric applications using W3C Solid. To minimize cont
 Before executing any tasks or generating code, you **MUST** execute the following sequence:
 
 1.  **Read the Manifest:** Load [.agents/manifest.md](file:///.agents/manifest.md) to understand the hierarchical loading sequence and loader modes (`local-fs` vs `solid-native`).
+    *   *Antigravity Note:* If executing under the **Antigravity** agent, load [.agents/rules/solid-antigravity.md](file:///.agents/rules/solid-antigravity.md) first to align with structured planning, subagent delegation, and task-tracking protocols.
 2.  **Verify Baseline Knowledge:** Scan [.agents/knowledge-index.ttl](file:///.agents/knowledge-index.ttl). If a specification is listed as `KNOWN` (e.g. `epi:solid-protocol`, `epi:odrl-model`), assume you already possess this knowledge and do not load additional specification documents.
 3.  **Load Active Configuration:** Read [.agents/config.ttl](file:///.agents/config.ttl) (or JSON mirror). Confirm the active core standards, platforms, and context policies.
 4.  **Enforce Precedence:** Inspect the `custom-addons/` directory first. **Custom-addons always take priority** over standard modules. Load `custom-addons/active-rules.md` and any active addon rules before processing core W3C Solid directives.
@@ -131,6 +132,7 @@ This project maintains specialized rule files in `/.agents/rules/` for deep-dive
 - `solid-external-bridges.md`: Directives for Web 2.0 data ingestion and Model Context Protocol (MCP) integrations.
 - `solid-web-annotations.md`: Directives for modeling user-generated content using W3C Web Annotations.
 - `solid-client-architecture.md`: Architectural rules for offline-first resilience and on-device Ethical ML.
+- `solid-antigravity.md`: Directives governing the Antigravity agent's planning workflows, task tracking, and subagent delegation.
 
 ### Target Platform Rules
 - `target-platforms/01-static-web.md`: Mandates standard CORS handling and standard WebCrypto DPoP flows.

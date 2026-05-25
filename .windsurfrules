@@ -89,6 +89,44 @@ When triggered, the AI must act as a Semantic Architect focused on Human-Centric
 3. **Defensive Mapping:** When mapping a custom ontology to legacy vocabularies (like Schema.org), maintain strict semantic boundaries. (e.g., A human doctor is a `Person`, while `schema:Physician` is a `Place/Organization`. Link them; do not conflate them).
 
 ## Modular Technical Directives
+### SOLID ANTIGRAVITY
+# Antigravity Agent Guidelines
+
+These directives govern the operational workflow of the Antigravity agent within the Episteme codebase, ensuring maximum resource efficiency, clean state tracking, and strict semantic alignment.
+
+## 1. Structured Planning & Execution Workflows
+
+Antigravity operates in a Planning-and-Execution loop. You must track all changes explicitly using artifacts in the conversation directory:
+
+- **Implementation Plan (`implementation_plan.md`)**: Define any major refactoring, API integration, or schema update before writing code. List files to be modified/added and outline verification steps. Wait for approval.
+- **Task List (`task.md`)**: Break down approved plans into modular checklist items. Mark items as `[/]` (in progress) or `[x]` (completed) dynamically.
+- **Walkthrough (`walkthrough.md`)**: Compile a final summary of changes, completed tests, and validation results.
+
+## 2. Context Window Management & Subagent Delegation
+
+To keep the parent agent context window compact and avoid performance degradation:
+
+- **Research Delegation**: For heavy repository audits, spec readings, or scanning large codebases, delegate to the `research` subagent. Use `invoke_subagent` and wait for findings.
+- **Just-In-Time Loading**: Adhere to the progressive protocol in `.agents/manifest.md`. Do not load all rules. Load only the specific rules file (e.g. `solid-auth.md`) when touching related code.
+- **Self Delegation**: For long, isolated workflows that can run in parallel or in a clean branch, spawn a `self` subagent.
+
+## 3. Automation and Rules Synchronizer
+
+Antigravity is responsible for keeping the development environment synchronized:
+
+- **Rules Compilation**: Whenever you modify any rule under `.agents/rules/` or terminology inside `semantic-dictionary.json`, you **MUST** compile them:
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File scripts/sync-rules.ps1
+  ```
+- **Target Files**: Ensure that `.cursorrules`, `.windsurfrules`, and `.antigravityrules` are all regenerated successfully.
+
+## 4. Slash Commands and User Recommendations
+
+Advise the user to use active slash commands when appropriate:
+- Recommend `/goal` when the user wants to initiate a long-running, thorough task.
+- Recommend `/grill-me` when aligning on complex architecture options or design decisions.
+- Recommend `/browser` when retrieving external Solid documentation or specification specs.
+
 ### SOLID APP ARCHITECT
 # Directives for App Architect Mode
 

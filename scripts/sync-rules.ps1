@@ -175,5 +175,6 @@ $finalContent = "$rootHeader`n$semanticDictText`n$systemModesText`n$modularDirec
 
 Set-Content -Path ".cursorrules" -Value $finalContent -Encoding UTF8
 Set-Content -Path ".windsurfrules" -Value $finalContent -Encoding UTF8
+Set-Content -Path ".antigravityrules" -Value $finalContent -Encoding UTF8
 
-Write-Host "Compiled .cursorrules and .windsurfrules successfully."
+Write-Host "Compiled .cursorrules, .windsurfrules, and .antigravityrules successfully."
