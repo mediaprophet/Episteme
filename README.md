@@ -81,20 +81,53 @@ git clone https://github.com/mediaprophet/Episteme.git my-solid-app
 cd my-solid-app
 ```
 
-### Step 2: Declare the Stack
-Open `AGENTS.md` and declare your technological stack so the AI knows exactly what libraries to generate code for. For example:
-- **Authentication:** `@inrupt/solid-client-authn-browser`
-- **Data Manipulation:** `@ldo/solid-react`
-- **Deployment Target:** `mobile-native`
+### Step 2: Configure the Stack & Agentic Mode
+Define your technological stack and loading behavior directly in `.agents/config.ttl` (or the JSON mirror `.agents/config.json`).
+For example, in `.agents/config.ttl`:
+```turtle
+config:project
+    config:mode "solid-agent-config" ;
+    config:core "solid-protocol,webid,ldp,odrl" ;
+    config:target-platforms "nextjs,node-solid-server" ;
+    config:custom-addons "my-policy-addon" ;
+    config:context-policy [
+        config:flush-after-config true ;
+        config:reinit-helpers ".agents/helpers/project-context.md,custom-addons/active-rules.md"
+    ] .
+```
 
-### Step 3: Inject the Context into your IDE/AI
+### Step 3: Run Configuration Pre-Flight Validation
+Ensure your configuration is correct and matches the available manifest, knowledge index, and custom overrides:
+```bash
+# Validate workspace configuration and custom addons
+node .agents/utils/validate-config.js
+
+# Verify stack whitelists and view context reinitialization rules
+node .agents/utils/agent-config-loader.js
+```
+
+### Step 4: Load Rules Dynamically (Local vs Solid-Native)
+To minimize context window bloat, the agent follows the hierarchical loading sequence defined in `.agents/manifest.md` and only loads rules on demand:
+*   **Local Filesystem Mode (`local-fs`)**: The loader reads rules locally:
+    ```bash
+    node .agents/utils/agent-loader.js --rule solid-auth
+    ```
+*   **Solid-Native Mode (`solid-native`)**: Rules can be fetched dynamically from a W3C Solid Pod Rules container via LDP:
+    ```bash
+    node .agents/utils/agent-loader.js --rule solid-auth --mode solid-native --pod https://pod.example/rules/
+    ```
+
+### Step 5: Inject the Context into your IDE/AI
 This repository features out-of-the-box support for modern AI-assisted IDEs:
 - **Antigravity:** Native compatibility via modular rules under `.agents/rules/`.
 - **Cursor:** Automatically loads the custom `.mdc` rules files in `.cursor/rules/` (`solid-core.mdc`, `solid-data.mdc`, `solid-auth.mdc`, `solid-modes.mdc`) based on active file extensions, as well as the root-level legacy `.cursorrules` file.
 - **Windsurf:** Automatically reads the root `.windsurfrules` file to apply the core Solid directives and coordinate system modes during code editing.
-- **Other IDEs (VSCode Copilot, Web LLMs, etc.):** Keep `AGENTS.md` open in an active tab and `@-mention` the file or the `.agents/rules/` directory when prompting.
+- **Sync Rules Utility:** To compile all changes in `.agents/rules/` and `semantic-dictionary.json` into `.cursorrules` and `.windsurfrules`, run the synchronizer:
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File scripts/sync-rules.ps1
+  ```
 
-### Step 4: Trigger a Mode
+### Step 6: Trigger a Mode
 Start your conversation.
 - *Starting fresh?* Say: **"Enter Architect Mode"**.
 - *Migrating old code?* Say: **"Webize this project"**.

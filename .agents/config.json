@@ -1,12 +1,12 @@
 {
   "project": {
     "mode": "solid-agent-config",
-    "core": "solid-protocol, webid, ldp, odrl",
-    "target-platforms": "nextjs, node-solid-server",
+    "core": "solid-protocol,webid,ldp,odrl",
+    "target-platforms": "nextjs,node-solid-server",
     "custom-addons": "my-policy-addon",
     "context-policy": {
       "flush-after-config": true,
-      "reinit-helpers": ".agents/helpers/project-context.md, custom-addons/active-rules.md"
+      "reinit-helpers": ".agents/helpers/project-context.md,custom-addons/active-rules.md"
     }
   }
 }

@@ -2,12 +2,23 @@
 
 This project builds Human-Centric applications using W3C Solid. To minimize context window bloat, agents MUST adhere to the progressive loading protocol.
 
-## 🛑 ENTRY POINT & PRE-FLIGHT HOOK
-1. **Begin Session:** You MUST start by reading the loading manifest [.agents/manifest.md](file:///.agents/manifest.md).
-2. **Prior Knowledge Check:** Scan [.agents/knowledge-index.ttl](file:///.agents/knowledge-index.ttl) to verify what W3C specifications are already assumed to be known.
-3. **Parse Config & Stack:** Read [.agents/config.ttl](file:///.agents/config.ttl) to confirm the active core modules, platforms, and custom addons.
-4. **Context Flush Directive:** If `config:flush-after-config` is `true`, parse the active stack, **flush your entire current context window**, and re-initialize using ONLY the helper files listed under `config:reinit-helpers`.
-5. **Custom Addons Priority:** Check the `custom-addons/` directory. Custom addons always take precedence and are loaded first. Core Solid rules must never override custom-addons unless explicitly permitted by the project config.
+## 🛑 GETTING STARTED FOR AGENTS (PRE-FLIGHT CHECKLIST)
+Before executing any tasks or generating code, you **MUST** execute the following sequence:
+
+1.  **Read the Manifest:** Load [.agents/manifest.md](file:///.agents/manifest.md) to understand the hierarchical loading sequence and loader modes (`local-fs` vs `solid-native`).
+2.  **Verify Baseline Knowledge:** Scan [.agents/knowledge-index.ttl](file:///.agents/knowledge-index.ttl). If a specification is listed as `KNOWN` (e.g. `epi:solid-protocol`, `epi:odrl-model`), assume you already possess this knowledge and do not load additional specification documents.
+3.  **Load Active Configuration:** Read [.agents/config.ttl](file:///.agents/config.ttl) (or JSON mirror). Confirm the active core standards, platforms, and context policies.
+4.  **Enforce Precedence:** Inspect the `custom-addons/` directory first. **Custom-addons always take priority** over standard modules. Load `custom-addons/active-rules.md` and any active addon rules before processing core W3C Solid directives.
+5.  **Context Flush & Re-init Flow:**
+    *   If `config:flush-after-config` is `true`, output a notice to the user: `[FLUSH CONTEXT: SUCCESS]`.
+    *   Voluntarily **flush the entire current context window** of all unneeded vanilla rules.
+    *   Re-initialize your reasoning using *only* the helper documents listed in `config:reinit-helpers` (e.g., [.agents/helpers/project-context.md](file:///.agents/helpers/project-context.md)).
+    *   Maintain all subsequent operations strictly scoped within this optimized boundary.
+
+### 🩺 Pre-Flight Validation Utilities
+You (or humans) can run verification tools to check that configuration and stack constraints are satisfied:
+*   **Validate Configuration Structure:** Run `node .agents/utils/validate-config.js` to verify integrity and consistency across `config.json`, `knowledge-index.json`, `semantic-index.json`, and `custom-addons/`.
+*   **Load and Verify Active Stack:** Run `node .agents/utils/agent-config-loader.js` to parse stack declarations, check core modules/platforms against approved whitelists, and log the context flush/re-init policy.
 
 
 ## 🚀 System Modes

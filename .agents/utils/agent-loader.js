@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { fetchRuleFromPod } from './solid-native-loader.js';
 
 const rulesDir = path.resolve('.agents', 'rules');
 
@@ -7,9 +8,14 @@ const rulesDir = path.resolve('.agents', 'rules');
 const args = process.argv.slice(2);
 const queryIndex = args.indexOf('--query');
 const ruleIndex = args.indexOf('--rule');
+const modeIndex = args.indexOf('--mode');
+const podIndex = args.indexOf('--pod');
+
+const isSolidNative = modeIndex !== -1 && args[modeIndex + 1] === 'solid-native';
+const podUrl = podIndex !== -1 ? args[podIndex + 1] : 'https://pod.example/rules/';
 
 if (queryIndex === -1 && ruleIndex === -1) {
-  console.log('Usage: node agent-loader.js --query <keyword> | --rule <rule-name>');
+  console.log('Usage: node agent-loader.js --query <keyword> | --rule <rule-name> [--mode solid-native] [--pod <pod-url>]');
   process.exit(0);
 }
 
@@ -42,7 +48,6 @@ if (queryIndex !== -1) {
     if (content.toLowerCase().includes(keyword)) {
       matchesFound++;
       console.log(`\n=== Match in ${path.relative(rulesDir, file)} ===`);
-      // Print lines containing the keyword with context
       const lines = content.split('\n');
       lines.forEach((line, idx) => {
         if (line.toLowerCase().includes(keyword)) {
@@ -68,14 +73,28 @@ if (ruleIndex !== -1) {
     process.exit(1);
   }
 
-  const allFiles = scanDir(rulesDir);
-  const targetFile = allFiles.find(f => path.basename(f, '.md') === ruleName || path.basename(f, '.md').includes(ruleName));
+  if (isSolidNative) {
+    console.log(`[solid-native] Loading rule "${ruleName}" dynamically from Pod...`);
+    const ruleFile = ruleName.endsWith('.md') ? ruleName : `${ruleName}.md`;
+    fetchRuleFromPod(ruleFile, podUrl)
+      .then(content => {
+        console.log(`\n=== Rule Content (Solid-Native): ${ruleFile} ===`);
+        console.log(content);
+      })
+      .catch(err => {
+        console.error(`❌ ERROR: Failed to fetch rule from Pod: ${err.message}`);
+        process.exit(1);
+      });
+  } else {
+    const allFiles = scanDir(rulesDir);
+    const targetFile = allFiles.find(f => path.basename(f, '.md') === ruleName || path.basename(f, '.md').includes(ruleName));
 
-  if (!targetFile) {
-    console.error(`Error: Rule "${ruleName}" not found under ${rulesDir}`);
-    process.exit(1);
+    if (!targetFile) {
+      console.error(`Error: Rule "${ruleName}" not found under ${rulesDir}`);
+      process.exit(1);
+    }
+
+    console.log(`\n=== Rule Content: ${path.relative(rulesDir, targetFile)} ===`);
+    console.log(fs.readFileSync(targetFile, 'utf8'));
   }
-
-  console.log(`\n=== Rule Content: ${path.relative(rulesDir, targetFile)} ===`);
-  console.log(fs.readFileSync(targetFile, 'utf8'));
 }
