@@ -14,6 +14,12 @@ This repository provides modular rules, specific deployment constraints, and sem
 
 For a detailed review of the core philosophical principles underpinning the Episteme project—including the distinction between objective identifiers and human identity, considerations of epistemology, personal ontology, and the history of W3C Solid development—please refer to the **[Philosophical Design Guide](Philosophica-design.md)**.
 
+**Semantic Enforcement:** This project includes `semantic-dictionary.json` to prevent AI agents from using vague US-tech buzzwords (like "data ownership" or "users as assets"). Instead, agents are forced to use precise human rights and legal terminology (like "Agency", "Dignity", and "Personhood"). The semantic dictionary is designed to adapt dynamically to the nomenclature of your selected project configuration (e.g., `solid` nomenclature vs. `webizen` nomenclature). 
+
+To illustrate these semantic differences:
+*   The **Solid** standards specifications focus strictly on technical and architectural decentralization, avoiding philosophical terms like *"human-centric"* (which is introduced in the **Webizen** edge configuration to represent localized personal agency).
+*   While many Web3/blockchain vendors promote *"identity wallets,"* the Solid paradigm (led by Inrupt) describes a **"data wallet"**—since the objective identity pointer (WebID) is decoupled from the storage container (the Pod) where the personal data graphs reside.
+
 ## 🌐 Vanilla Solid Mode
 
 The vanilla Solid configuration operates strictly within W3C Solid standards using standard HTTP/LDP fetches and standard decentralized protocol layers. This baseline compatibility mode provides support for:
@@ -21,8 +27,6 @@ The vanilla Solid configuration operates strictly within W3C Solid standards usi
 - **Authentication (The Gatekeeper):** Solid-OIDC and cryptographic DPoP tokens prove *possession* and *control* of the identifier. They establish a protocol-level proof of key ownership, not proof of selfhood.
 - **Access Control (WAC/ACP):** Users cryptographically grant, append, or revoke access permissions to their datasets.
 - **Usage Rights (ODRL):** Access is not merely binary; policies explicitly dictate *how* data can be used (e.g., "Academic Research Only").
-
-**Semantic Enforcement:** This project includes `semantic-dictionary.json` to prevent AI agents from using vague US-tech buzzwords (like "data ownership" or "users as assets"). Instead, agents are forced to use precise human rights and legal terminology (like "Agency", "Dignity", and "Personhood").
 
 ---
 
